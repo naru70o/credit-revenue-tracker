@@ -1,5 +1,10 @@
 import React from "react";
 
 export default function PersonDeptsList() {
-  return <div>PersonDeptsList</div>;
+  return (
+    <div className="flex justify-between items-center w-full">
+      <p>kadar</p>
+      <p>66628576</p>
+    </div>
+  );
 }
