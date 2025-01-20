@@ -1,24 +1,35 @@
+import { Menu } from "@/components/menu";
 import PeopleList from "@/components/peopleList";
+import { Button } from "@/components/ui/button";
 import React from "react";
 
 const page = async () => {
-  //   const response = await axios.get("/api/customers");
-  //   console.log(response);
-
   return (
-    <div className=" text-black py-8 px-4 grid justify-center">
-      <div className="flex flex-col justify-center">
-        <h1 className="font-bold text-2xl text-center">
+    <div className="text-black py-16 px-4">
+      <div className="flex flex-col justify-center gap-12">
+        <h1 className="font-bold text-2xl text-start w-1/2">
           Please add new Customer
         </h1>
+        <div className="inline-block self-end">
+          <Button className="bg-blue-500 hover:bg-blue-700">
+            add customer
+          </Button>
+        </div>
       </div>
-      <div className="flex flex-col justify-center items-center mt-8">
-        <div className="flex justify-between items-center w-full">
+      <div className="flex flex-col justify-center items-center mt-8 ">
+        <div className="flex justify-between items-center w-full font-normal px-4">
           <p>name</p>
           <p>phone</p>
+          <p>total dept</p>
         </div>
-        <PeopleList />
+        {/* <PeopleList /> */}
+        <div className="flex justify-between items-center bg-[#D9D9D9] rounded-lg w-full py-2 px-4 mt-8">
+          <p>khadar</p>
+          <p>khadar</p>
+          <p>khadar</p>
+        </div>
       </div>
+      <Menu />
     </div>
   );
 };

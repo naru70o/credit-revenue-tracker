@@ -6,20 +6,18 @@ import axios from "axios";
 interface Customer {
   id: number;
   name: string;
-  number: string;
+  phone: string;
 }
 
 export default function PeopleList() {
   const [customersData, setCustomersData] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  console.log(customersData.map((customer: Customer) => console.log(customer)));
+  console.log(customersData);
 
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
         const response = await axios.get("/api/customers");
-        console.log(response.data);
         setCustomersData(response.data);
         setLoading(false);
       } catch (error) {
@@ -27,24 +25,24 @@ export default function PeopleList() {
       }
     };
     fetchCustomers();
-  }, [setCustomersData]);
-
+  }, [setCustomersData, setLoading]);
 
   if (loading) {
     return <p>Loading...</p>;
   }
 
   return (
-    {
-       customersData.map((customer: Customer) => {
-       return (
-        <div className="flex justify-center items-center" key={customer.id}>
+    <>
+      {customersData.map((customer: Customer) => (
+        // console.log()
+        <div
+          className="flex justify-between w-full items-center"
+          key={customer.id}
+        >
           <p>{customer.name}</p>
-          <p>{customer.number}</p>
+          <p>{customer.phone}</p>
         </div>
-      )
-    }
-      )
-    }
+      ))}
+    </>
   );
 }
