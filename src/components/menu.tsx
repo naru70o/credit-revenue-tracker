@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-// naviagte hook
 
 import { createPortal } from "react-dom";
 import {
@@ -25,16 +24,24 @@ export const Menu = () => {
         >
           <HomeIcon />
         </Link>
-        <Link href="#">
+        <Link
+          href="/depts"
+          className={`${currentPath === "/depts" ? "text-blue-500" : ""}`}
+        >
           <ArrowUpFromLine />
         </Link>
         <Link
           href="/customers"
-          className={`${currentPath === "/dashboard" ? "text-blue-500" : ""}`}
+          className={`${currentPath === "/customers" ? "text-blue-500" : ""}`}
         >
           <UserRoundPlus />
         </Link>
-        <Link href="#">
+        <Link
+          href="/revenue"
+          className={`${
+            currentPath === "/revenue" || "/revenue/add" ? "text-blue-500" : ""
+          }`}
+        >
           <ChartNoAxesColumnIncreasing />
         </Link>
         <Link href="#">

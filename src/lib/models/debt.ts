@@ -26,11 +26,18 @@ const DebtSchema = new mongoose.Schema(
   }
 );
 
+const RevenueSchema = new mongoose.Schema({
+  amount: { type: Number, required: true },
+  date: { type: Date, required: false },
+});
+
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phone: { type: String, required: true },
   debt: [DebtSchema],
 });
 
-export const User = mongoose.models.User || mongoose.model("User", UserSchema);
 export const Debt = mongoose.models.Dept || mongoose.model("Dept", DebtSchema);
+export const Revenue =
+  mongoose.models.Revenue || mongoose.model("Revenue", RevenueSchema);
+export const User = mongoose.models.User || mongoose.model("User", UserSchema);

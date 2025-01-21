@@ -34,7 +34,7 @@ export default function AddPerson() {
   };
 
   return (
-    <div className="bg-blue-300 text-black py-8 px-4 h-screen grid justify-center">
+    <div className="bg-gray-100 text-black py-8 px-4 h-screen grid justify-center">
       <div className="flex flex-col justify-center">
         <h1 className="font-bold text-2xl text-center">
           Please add new Customer

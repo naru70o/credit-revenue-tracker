@@ -1,6 +1,6 @@
 import { Menu } from "@/components/menu";
-import PeopleList from "@/components/peopleList";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import React from "react";
 
 const page = async () => {
@@ -12,7 +12,7 @@ const page = async () => {
         </h1>
         <div className="inline-block self-end">
           <Button className="bg-blue-500 hover:bg-blue-700">
-            add customer
+            <Link href="/customers/add">add customer</Link>
           </Button>
         </div>
       </div>
