@@ -1,12 +1,7 @@
 import AddRevenue from "@/components/addRevenue";
 import React from "react";
-
-const page = () => {
-  return (
-    <>
-      <AddRevenue />
-    </>
-  );
+const Page = () => {
+  return <AddRevenue />;
 };
 
-export default page;
+export default Page;

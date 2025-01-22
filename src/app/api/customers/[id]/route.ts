@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     await connectiondb();
     const customer = await Customer.findById(id);
     if (!customer) {

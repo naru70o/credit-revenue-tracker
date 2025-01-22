@@ -19,8 +19,17 @@ export async function POST(request: Request) {
   try {
     await connectiondb();
     const data = await request.json();
-    console.log(data);
-    const credit = new Credit(data);
+    console.log("Credit data was added and here is it --->", data);
+
+    // Create a new credit document with explicit fields
+    const credit = new Credit({
+      customerId: data.customerId,
+      amount: data.amount,
+      product: data.product,
+      personWhotaken: data.personWhotaken,
+      tookTime: data.tookTime || new Date(),
+    });
+
     await credit.save();
     return NextResponse.json({
       message: "Credit added successfully",
@@ -29,7 +38,6 @@ export async function POST(request: Request) {
   } catch (error) {
     return NextResponse.json({
       error: "Error adding credit",
-      error,
       status: 401,
     });
   }
