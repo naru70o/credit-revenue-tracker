@@ -2,17 +2,18 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 interface Customer {
-  id: number;
+  _id: string;
   name: string;
-  phone: string;
+  phoneNumber: string;
 }
 
-export default function PeopleList() {
+export default function CustomersList() {
   const [customersData, setCustomersData] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log(customersData);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -34,13 +35,13 @@ export default function PeopleList() {
   return (
     <>
       {customersData.map((customer: Customer) => (
-        // console.log()
-        <div
-          className="flex justify-between w-full items-center"
-          key={customer.id}
-        >
-          <p>{customer.name}</p>
-          <p>{customer.phone}</p>
+        <div key={customer._id}>
+          <Link href={`/customers/${customer._id}`}>
+            <div className="flex justify-between items-center bg-[#D9D9D9] rounded-lg w-full py-2 px-4 cursor-pointer hover:bg-gray-300">
+              <p>{customer.name}</p>
+              <p>{customer.phoneNumber}</p>
+            </div>
+          </Link>
         </div>
       ))}
     </>

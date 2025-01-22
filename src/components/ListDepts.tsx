@@ -37,7 +37,7 @@ const ListDept = () => {
 
   const totalRevenue = revenueData.reduce((acc, curr) => acc + curr.amount, 0);
   return (
-    <div className="text-black py-16 px-4">
+    <div className="text-gray-700 py-16 px-4">
       <div className="flex flex-col justify-center gap-12">
         <div>
           <h1 className="font-bold text-2xl text-start w-1/2">

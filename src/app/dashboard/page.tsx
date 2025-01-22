@@ -1,9 +1,12 @@
 import { Menu } from "@/components/menu";
+import { RevenueChart } from "@/components/revenueChart";
 import React from "react";
 
 const Dashboard: React.FC = () => {
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-8 px-4">
+      <RevenueChart />
+
       {/* Toggle Buttons */}
       <div className="flex items-center gap-2 mb-6">
         <button className="px-4 py-2 bg-gray-300 rounded-full text-sm font-medium">

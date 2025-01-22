@@ -19,7 +19,7 @@ export default function AddPerson() {
     try {
       const response = await axios.post("/api/customers", {
         name: personName,
-        phone: personNumber,
+        phoneNumber: personNumber,
       });
 
       console.log(response.data);

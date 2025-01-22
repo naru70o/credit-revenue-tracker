@@ -1,4 +1,4 @@
-import { Revenue, connectiondb } from "@/lib/models/debt";
+import { Revenue, connectiondb } from "@/lib/database/models";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

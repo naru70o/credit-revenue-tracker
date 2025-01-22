@@ -1,20 +1,26 @@
 import React from "react";
 import { Menu } from "@/components/menu";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import CustomersList from "@/components/customersList";
 
-const page = async () => {
+import axios from "axios";
+import { DeleteCustomer } from "@/components/deleteCustomer";
+
+const page = async ({ params }: { params: { customerID: string } }) => {
+  const customer = params.customerID;
+  const response = await axios.get(
+    `http://localhost:3000/api/customers/${customer}`
+  );
+
+  console.log(response.data);
+  const { name, phoneNumber, _id } = response.data;
+
   return (
     <div className="text-gray-700 py-16 px-4">
       <div className="flex flex-col justify-center gap-12">
         <h1 className="font-bold text-2xl text-start w-1/2">
-          Please add new Customer
+          here is you dear customer {name}
         </h1>
         <div className="inline-block self-end">
-          <Button className="bg-blue-500 hover:bg-blue-700">
-            <Link href="/customers/add">add customer</Link>
-          </Button>
+          <DeleteCustomer _id={_id} />
         </div>
       </div>
       <div className="flex flex-col justify-center items-center mt-8 ">
@@ -24,9 +30,6 @@ const page = async () => {
           <p>total dept</p>
         </div>
         {/* customers List */}
-        <div className="mt-4 w-full flex flex-col gap-4">
-          <CustomersList />
-        </div>
       </div>
       <Menu />
     </div>
