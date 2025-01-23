@@ -1,41 +1,108 @@
 "use client";
 
-import { Details } from "@/components/details";
 import { Menu } from "@/components/menu";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { CreditDetails } from "./creditDetails";
+import { formatDate } from "@/lib/utils";
 
-interface Revenue {
+interface CreditData {
+  _id: string;
+  customerId: string;
   amount: number;
-  date: string; // Assuming date is in the format "DD/MMM/YYYY"
-  id: number;
+  product: string;
+  personWhotaken: string;
+  tookTime: string;
+  isPaid: boolean;
+  __v: number;
 }
 
-const revenuesData: Revenue[] = [
-  { amount: 1200, date: "15/Oct/2025", id: 1 },
-  { amount: 950, date: "22/Nov/2025", id: 2 },
-  { amount: 3000, date: "05/Dec/2025", id: 3 },
-  { amount: 750, date: "10/Jan/2026", id: 4 },
-  { amount: 1800, date: "25/Feb/2026", id: 5 },
-];
+interface CustomerData {
+  _id: string;
+  name: string;
+  phoneNumber: string;
+  createdAt: string;
+}
+
+async function credits(): Promise<CreditData[]> {
+  try {
+    const response = await axios.get("/api/credits");
+    return response.data; // Assuming the API returns { data: CreditData[] }
+  } catch (error) {
+    console.error("Error fetching credits:", error);
+    throw error; // Re-throw the error to handle it elsewhere
+  }
+}
+
+async function customer(): Promise<CustomerData[]> {
+  try {
+    const response = await axios.get(`/api/customers`);
+    return response.data; // Return only the data
+  } catch (error) {
+    console.error("Error fetching customer:", error);
+    throw new Error("Failed to fetch customers"); // Correctly throw an error
+  }
+}
 
 const ListDept = () => {
-  const [revenueData, setRevenueData] = useState(revenuesData);
+  const [customers, setCustomers] = useState<CustomerData[]>([]);
+  const [creditData, setCreditData] = useState<CreditData[]>([]);
   const [openId, setOpenId] = useState<number | null>(null);
+  const [loading, setIsLoading] = useState(false);
 
   const handleOpen = (id: number) => {
     setOpenId((prevId) => (prevId === id ? null : id));
   };
 
-  //   Delete
-
-  function handleDelete(id: number) {
-    const updatedData = revenueData.filter((item) => item.id !== id);
-    setRevenueData(updatedData);
+  async function fetchData() {
+    try {
+      const creditsData = await credits(); // Await the promise
+      console.log("here is the credits data", creditsData);
+      return creditsData.credits;
+    } catch (error) {
+      console.error("Failed to fetch credits:", error);
+    }
   }
 
-  const totalRevenue = revenueData.reduce((acc, curr) => acc + curr.amount, 0);
+  async function fetchCustomers() {
+    try {
+      const customersData = await customer(); // Await the promise
+      console.log("here is the customers data", customersData);
+      return customersData;
+    } catch (error) {
+      throw Error("Failed to fetch customers:");
+    }
+  }
+
+  useEffect(() => {
+    const fetchCredits = async () => {
+      try {
+        const creditsData = await fetchData();
+        setCreditData(creditsData);
+        const customersData = await fetchCustomers();
+        setCustomers(customersData);
+        console.log("Customers Data:", customersData);
+        setIsLoading(true);
+      } catch (error) {
+        console.error("Failed to fetch credits:", error);
+      }
+    };
+    fetchCredits();
+  }, []);
+
+  // console.log("Customers Data:", customers);
+
+  if (!loading) {
+    return <div>Loading...</div>;
+  }
+
+  const totalAmountCredits = creditData.reduce(
+    (total, credit) => total + credit.amount,
+    0
+  );
+
   return (
     <div className="text-gray-700 py-16 px-4">
       <div className="flex flex-col justify-center gap-12">
@@ -43,7 +110,7 @@ const ListDept = () => {
           <h1 className="font-bold text-2xl text-start w-1/2">
             Check your depts
           </h1>
-          <p>your total owes to people {totalRevenue}</p>
+          <p>your total owes to people {totalAmountCredits}</p>
         </div>
         <div className="inline-block self-end">
           <Button className="bg-blue-500 hover:bg-blue-700">
@@ -52,34 +119,30 @@ const ListDept = () => {
         </div>
       </div>
       <div className="flex flex-col justify-center items-center mt-8 ">
-        <div className="flex justify-between items-center w-full font-normal px-4">
-          <p>amount</p>
-          <p>date</p>
-          <p>status</p>
-        </div>
+        {creditData.map((credit: CreditData) => {
+          const customerInfo = customers.find(
+            (customer: CustomerData) => customer._id === credit.customerId
+          );
 
-        {/* <revenue list /> */}
+          console.log("Customer Info: this is the final", customerInfo);
 
-        {revenueData.map((revenue) => {
           return (
             <div
-              key={revenue.id}
-              className="bg-[#D9D9D9] rounded-lg w-full py-2 px-4 mt-4"
+              key={credit._id}
+              className="bg-[#D9D9D9] rounded-xl w-full py-2 px-4 mt-4"
             >
               <div
-                onClick={() => handleOpen(revenue.id)}
+                // onClick={() => handleOpen(credit.id)}
                 className="flex justify-between items-center"
               >
                 <div className="flex items-center gap-4">
                   <div className="cursor-pointer">⬇️</div>
-                  <p>{revenue.amount}</p>
+                  <p>{credit.amount}</p>
+                  <p>{customerInfo?.name}</p>
                 </div>
-                <p>{revenue.date}</p>
-                <p>💹</p>
+                <p>{formatDate(credit.tookTime)}</p>
               </div>
-              {openId === revenue.id && (
-                <Details revenue={revenue} onHandleDelete={handleDelete} />
-              )}
+              {/* <CreditDetails /> */}
             </div>
           );
         })}

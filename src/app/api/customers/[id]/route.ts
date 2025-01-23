@@ -6,9 +6,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await params;
     await connectiondb();
-    const customer = await Customer.findById(id);
+    const customer = await Customer.findById(params.id);
     if (!customer) {
       return NextResponse.json(
         { message: "Customer not found" },
