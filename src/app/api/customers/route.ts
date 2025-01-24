@@ -1,6 +1,6 @@
 import { connectiondb, Customer } from "@/lib/database/models";
 import { NextResponse } from "next/server";
-// post using mongoose
+
 export async function POST(request: Request) {
   try {
     await connectiondb();
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   }
 }
 
-// delete using mongoose
+// delete
 export async function DELETE(request: Request) {
   try {
     await connectiondb();

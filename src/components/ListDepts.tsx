@@ -2,11 +2,10 @@
 
 import { Menu } from "@/components/menu";
 import { Button } from "@/components/ui/button";
+import { formatDate } from "@/lib/utils";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { CreditDetails } from "./creditDetails";
-import { formatDate } from "@/lib/utils";
 
 interface CreditData {
   _id: string;
@@ -92,12 +91,12 @@ const ListDept = () => {
     fetchCredits();
   }, []);
 
-  // console.log("Customers Data:", customers);
-
+  // while the loading state is false, show a loading message
   if (!loading) {
     return <div>Loading...</div>;
   }
 
+  // this will show the total  of credits
   const totalAmountCredits = creditData.reduce(
     (total, credit) => total + credit.amount,
     0

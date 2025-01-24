@@ -18,8 +18,6 @@ export default function AddRevenue() {
     console.log("Selected Date:", date); // Log the selected date
   };
 
-  const router = useRouter();
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
