@@ -32,10 +32,12 @@ export default function AddRevenue() {
     }
 
     try {
-      //   revenueArray.push({
-      //     date: selectedDate,
-      //     revenue: revenue,
-      //   });
+      const response = await axios.post("/api/revenue", {
+        amount: revenue,
+        date: selectedDate,
+      });
+
+      console.log("Revenue added successfully:", response.data);
 
       setSelectedDate(undefined);
       setRevenue("");
@@ -69,9 +71,16 @@ export default function AddRevenue() {
               />
             </div>
             <div className="flex flex-col justify-center w-[80%]">
-              <DatePicker value={selectedDate} onChange={handleDateChange} />{" "}
+              <DatePicker
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e)}
+              />{" "}
             </div>
-            <Button type="submit" className="mt-4 inline w-32 self-center">
+            <Button
+              onClick={(e) => handleSubmit(e)}
+              type="submit"
+              className="mt-4 inline w-32 self-center"
+            >
               Add revenue
             </Button>
           </form>

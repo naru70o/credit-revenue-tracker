@@ -18,11 +18,6 @@ const page = async () => {
         </div>
       </div>
       <div className="flex flex-col justify-center items-center mt-8 ">
-        <div className="flex justify-between items-center w-full font-normal px-4">
-          <p>name</p>
-          <p>phone</p>
-          <p>total dept</p>
-        </div>
         {/* customers List */}
         <div className="mt-4 w-full flex flex-col gap-4">
           <CustomersList />

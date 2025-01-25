@@ -2,6 +2,7 @@ import { Menu } from "@/components/menu";
 import { NewCredit } from "@/components/newCredit";
 import axios from "axios";
 import { formatDate } from "@/lib/utils";
+import { Dropdown } from "@/components/ui/droppMenu";
 
 interface CreditData {
   amount: number;
@@ -21,19 +22,18 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
     `http://localhost:3000/api/customers/${customer}`
   );
 
-  // Loading all the credits
+  // selecting all the credits
   const credits = await axios.get(`http://localhost:3000/api/credits`);
   const creditsData = credits.data.credits;
-  console.log("This is the credits data", creditsData);
 
   // Filtering the credits by customer id
   const filteredData = creditsData.filter((item: CreditData) =>
     customer.includes(item.customerId)
   );
 
-  console.log(
-    "This is the filtered data",
-    filteredData.map((item: CreditData) => console.log(item))
+  const totalCredits = filteredData.reduce(
+    (acc: number, item: CreditData) => acc + item.amount,
+    0
   );
 
   const { name, phoneNumber, _id } = response.data;
@@ -42,21 +42,23 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
     <div className="text-gray-700 py-16 px-4 overflow-y-scroll">
       <div className="flex flex-col justify-center">
         <h1 className="font-bold text-2xl text-start w-1/2">
-          Here is your data, dear customer {name}
+          {name} total depts of {totalCredits}
         </h1>
         <NewCredit _id={_id} />
         {filteredData.map((credit: CreditData) => (
           <div
-            className="flex justify-between items-center bg-[#D9D9D9] rounded-lg w-full py-2 px-4 cursor-pointer hover:bg-gray-300 mb-2"
+            className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer hover:bg-gray-300 mb-2"
             key={credit._id}
           >
             <div className="flex flex-col">
-              <h1 className="font-bold text-lg">{credit.personWhotaken}</h1>
+              <h1 className="font-bold text-lg">
+                {credit.amount} : {credit.personWhotaken}
+              </h1>
               <p>
                 Took {credit.product} at {formatDate(credit.tookTime)}
               </p>
             </div>
-            <div className="">{credit.amount}</div>
+            <Dropdown creditData={credit} />
           </div>
         ))}
         <Menu />

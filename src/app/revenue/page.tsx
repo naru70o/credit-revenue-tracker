@@ -1,10 +1,12 @@
 "use client";
 
-import { Details } from "@/components/details";
 import { Menu } from "@/components/menu";
 import { Button } from "@/components/ui/button";
+import { Dropdown } from "@/components/ui/droppMenu";
+import { formatDate } from "@/lib/utils";
+import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Revenue {
   amount: number;
@@ -20,9 +22,31 @@ const revenuesData: Revenue[] = [
   { amount: 1800, date: "25/Feb/2026", id: 5 },
 ];
 
+async function revenueFetcher() {
+  try {
+    const response = await axios.get("/api/revenue");
+    const data = response.data;
+    console.log("here is your revenue data", data);
+    return data;
+  } catch (error) {
+    throw new Error("Failed to fetch revenue data");
+  }
+}
+
 const Page = () => {
   const [revenueData, setRevenueData] = useState(revenuesData);
+  const [isLoading, setIsLoading] = useState(true);
   const [openId, setOpenId] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function fetchAllData() {
+      const revenueData = await revenueFetcher();
+      setRevenueData(revenueData.revenues);
+      console.log(revenueData);
+      setIsLoading(false);
+    }
+    fetchAllData();
+  }, []);
 
   const handleOpen = (id: number) => {
     setOpenId((prevId) => (prevId === id ? null : id));
@@ -35,7 +59,12 @@ const Page = () => {
     setRevenueData(updatedData);
   }
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   const totalRevenue = revenueData.reduce((acc, curr) => acc + curr.amount, 0);
+
   return (
     <div className="text-black py-16 px-4 bg-gray-100">
       <div className="flex flex-col justify-center gap-12">
@@ -52,34 +81,26 @@ const Page = () => {
         </div>
       </div>
       <div className="flex flex-col justify-center items-center mt-8 ">
-        <div className="flex justify-between items-center w-full font-normal px-4">
-          <p>amount</p>
-          <p>date</p>
-          <p>status</p>
-        </div>
-
         {/* <revenue list /> */}
 
         {revenueData.map((revenue) => {
           return (
             <div
               key={revenue.id}
-              className="bg-gray-300 rounded-lg w-full py-2 px-4 mt-4"
+              className="bg-gray-300 rounded-xl w-full py-2 px-4 mt-4"
             >
               <div
                 onClick={() => handleOpen(revenue.id)}
                 className="flex justify-between items-center"
               >
-                <div className="flex items-center gap-4">
-                  <div className="cursor-pointer">⬇️</div>
-                  <p>{revenue.amount}</p>
+                <div className="flex flex-col items-start gap-1">
+                  <div>{revenue.amount}</div>
+                  <div className="cursor-pointer">
+                    your revenue {formatDate(revenue.date)}
+                  </div>
                 </div>
-                <p>{revenue.date}</p>
-                <p>💹</p>
+                <Dropdown />
               </div>
-              {openId === revenue.id && (
-                <Details revenue={revenue} onHandleDelete={handleDelete} />
-              )}
             </div>
           );
         })}

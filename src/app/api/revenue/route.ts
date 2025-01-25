@@ -10,7 +10,7 @@ export async function POST(req: Request) {
       date,
     });
     await revenue.save();
-
+    console.log("Revenue saved successfully");
     return NextResponse.json({
       message: "Revenue saved successfully",
       status: 200,
@@ -18,6 +18,23 @@ export async function POST(req: Request) {
   } catch (error) {
     return NextResponse.json({
       message: "Error saving revenue",
+      status: 500,
+    });
+  }
+}
+
+export async function GET() {
+  try {
+    await connectiondb();
+    const revenues = await Revenue.find();
+    return NextResponse.json({
+      revenues,
+      status: 200,
+      message: "Revenues retrieved successfully",
+    });
+  } catch (error) {
+    return NextResponse.json({
+      message: "Error getting revenues",
       status: 500,
     });
   }

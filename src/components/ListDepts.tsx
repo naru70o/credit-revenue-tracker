@@ -3,9 +3,12 @@
 import { Menu } from "@/components/menu";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
+// import { Dialog, DialogDescription } from "@radix-ui/react-dialog";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+
+import { CreditDetailsModal } from "./creditDetailsModal";
 
 interface CreditData {
   _id: string;
@@ -45,14 +48,31 @@ async function customer(): Promise<CustomerData[]> {
   }
 }
 
+async function fetchCustomers() {
+  try {
+    const customersData = await customer(); // Await the promise
+    console.log("here is the customers data", customersData);
+    return customersData;
+  } catch (error) {
+    throw Error("Failed to fetch customers:");
+  }
+}
+
 const ListDept = () => {
   const [customers, setCustomers] = useState<CustomerData[]>([]);
   const [creditData, setCreditData] = useState<CreditData[]>([]);
-  const [openId, setOpenId] = useState<number | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [selectedCredit, setSelectedCredit] = useState<CreditData | null>(null);
   const [loading, setIsLoading] = useState(false);
 
-  const handleOpen = (id: number) => {
-    setOpenId((prevId) => (prevId === id ? null : id));
+  const handleOpen = (credit: CreditData) => {
+    setSelectedCredit(credit);
+    setIsDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsDialogOpen(false);
+    setSelectedCredit(null);
   };
 
   async function fetchData() {
@@ -62,16 +82,6 @@ const ListDept = () => {
       return creditsData.credits;
     } catch (error) {
       console.error("Failed to fetch credits:", error);
-    }
-  }
-
-  async function fetchCustomers() {
-    try {
-      const customersData = await customer(); // Await the promise
-      console.log("here is the customers data", customersData);
-      return customersData;
-    } catch (error) {
-      throw Error("Failed to fetch customers:");
     }
   }
 
@@ -113,7 +123,7 @@ const ListDept = () => {
         </div>
         <div className="inline-block self-end">
           <Button className="bg-blue-500 hover:bg-blue-700">
-            <Link href="/revenue/add">add revenue</Link>
+            <Link href="/revenue/add">filtering</Link>
           </Button>
         </div>
       </div>
@@ -128,6 +138,7 @@ const ListDept = () => {
           return (
             <div
               key={credit._id}
+              onClick={() => handleOpen(credit)}
               className="bg-[#D9D9D9] rounded-xl w-full py-2 px-4 mt-4"
             >
               <div
@@ -135,17 +146,27 @@ const ListDept = () => {
                 className="flex justify-between items-center"
               >
                 <div className="flex items-center gap-4">
-                  <div className="cursor-pointer">⬇️</div>
-                  <p>{credit.amount}</p>
-                  <p>{customerInfo?.name}</p>
+                  <div>
+                    <p>{customerInfo?.name}</p>
+                    <p>
+                      {credit.amount} at {formatDate(credit.tookTime)}
+                    </p>
+                  </div>
                 </div>
                 <p>{formatDate(credit.tookTime)}</p>
               </div>
-              {/* <CreditDetails /> */}
             </div>
           );
         })}
       </div>
+
+      {/* Dialog (Modal) */}
+      <CreditDetailsModal
+        isDialogOpen={isDialogOpen}
+        handleClose={handleClose}
+        selectedCredit={selectedCredit}
+        customers={customers}
+      />
       <Menu />
     </div>
   );
