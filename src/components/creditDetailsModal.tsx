@@ -40,7 +40,7 @@ export const CreditDetailsModal = ({
 }) => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px] rounded-xl">
+      <DialogContent className="sm:max-w-[425px] rounded-xl w-[90%]">
         <DialogHeader>
           <DialogTitle>Credit Details</DialogTitle>
           <DialogDescription>

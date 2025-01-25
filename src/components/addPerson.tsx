@@ -41,7 +41,7 @@ export default function AddPerson() {
         </h1>
         <form
           onSubmit={handleClick}
-          className="flex flex-col items-center justify-center mt-8"
+          className="flex flex-col gap-4 items-center justify-center mt-8"
         >
           {/* name */}
           <div className="flex flex-col justify-center w-[80%]">
@@ -50,7 +50,7 @@ export default function AddPerson() {
               value={personName}
               onChange={(e) => setPersonName(e.target.value)}
               type="text"
-              className="self-center"
+              className="self-center rounded-xl"
               required
             />
           </div>
@@ -61,11 +61,14 @@ export default function AddPerson() {
               value={personNumber}
               onChange={(e) => setPersonNumber(e.target.value)}
               type="text"
-              className="self-center"
+              className="self-center rounded-xl"
               required
             />
           </div>
-          <Button type="submit" className="mt-4 inline w-32 self-center">
+          <Button
+            type="submit"
+            className="mt-4 inline w-32 self-center rounded-xl"
+          >
             Add customer
           </Button>
         </form>
