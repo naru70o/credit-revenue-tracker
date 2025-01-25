@@ -2,7 +2,7 @@
 
 import { Menu } from "@/components/menu";
 import { Button } from "@/components/ui/button";
-import { formatDate } from "@/lib/utils";
+import { formatAmount, formatDate } from "@/lib/utils";
 // import { Dialog, DialogDescription } from "@radix-ui/react-dialog";
 import axios from "axios";
 import Link from "next/link";
@@ -119,7 +119,12 @@ const ListDept = () => {
           <h1 className="font-bold text-2xl text-start w-1/2">
             Check your depts
           </h1>
-          <p>your total owes to people {totalAmountCredits}</p>
+          <p>
+            your total owes to people{" "}
+            <span className="font-medium">
+              {formatAmount(totalAmountCredits)}
+            </span>{" "}
+          </p>
         </div>
         <div className="inline-block self-end">
           <Button className="bg-blue-500 hover:bg-blue-700">
@@ -149,7 +154,10 @@ const ListDept = () => {
                   <div>
                     <p>{customerInfo?.name}</p>
                     <p>
-                      {credit.amount} at {formatDate(credit.tookTime)}
+                      <span className="font-medium">
+                        {formatAmount(credit.amount)}
+                      </span>{" "}
+                      at {formatDate(credit.tookTime)}
                     </p>
                   </div>
                 </div>

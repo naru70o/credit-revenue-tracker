@@ -13,3 +13,14 @@ export const formatDate = (isoDateString: string) => {
   const year = date.getUTCFullYear();
   return `${day}/${month}/${year}`;
 };
+
+/**
+ * Formats a number with commas as thousand separators.
+ * Handles negative numbers and decimals.
+ * Example: -1000 => "-1,000", 1234.56 => "1,234.56"
+ */
+export function formatAmount(number: number): string {
+  const parts = number.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return parts.join(".");
+}
