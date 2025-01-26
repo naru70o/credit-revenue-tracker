@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import { useState } from "react";
-import { Button } from "./button";
+import { UpdateCredit } from "../updateCredit";
 
 export function Dropdown() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -20,7 +20,7 @@ export function Dropdown() {
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <EllipsisVertical />
         </DropdownMenuTrigger>
@@ -30,11 +30,15 @@ export function Dropdown() {
             <Trash strokeWidth={1.5} />
             Delete
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
             <Pencil strokeWidth={1.5} /> Update
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {isDialogOpen && (
+        <UpdateCredit handleClose={handleClose} isDialogOpen={isDialogOpen} />
+      )}
     </>
   );
 }

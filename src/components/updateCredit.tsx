@@ -33,11 +33,9 @@ interface CustomerData {
 }
 
 export const UpdateCredit = ({
-  selectedCredit,
   isDialogOpen,
   handleClose,
 }: {
-  selectedCredit: CreditData;
   isDialogOpen: boolean;
   handleClose: () => void;
 }) => {
@@ -102,13 +100,7 @@ export const UpdateCredit = ({
           </div>
 
           <div className="flex justify-center w-[80%]">
-            <Button
-              variant="secondary"
-              onClick={(e) => {
-                e.preventDefault();
-                handleClose();
-              }}
-            >
+            <Button type="button" variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
             <Button
