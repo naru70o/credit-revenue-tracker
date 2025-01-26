@@ -1,7 +1,6 @@
-import AddPerson from "@/components/addPerson";
+import { Menu } from "@/components/menu";
 import React from "react";
 
 export default async function page() {
-  return <></>;
-  // return <AddPerson />;
+  return <Menu />;
 }

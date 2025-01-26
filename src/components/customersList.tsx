@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Dropdown } from "./ui/droppMenu";
+import { NextResponse } from "next/server";
 interface Customer {
   _id: string;
   name: string;
@@ -19,15 +20,21 @@ export default function CustomersList() {
   const handleDelete = async (_id: string) => {
     try {
       const res = await axios.delete(`/api/customers/${_id}`);
+
+      if (!res) {
+        return NextResponse.json(
+          { message: "Customer not found" },
+          { status: 404 }
+        );
+      }
       // delete this customer based on this id
-      console.log(res.data);
-      router.back();
+      return res;
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleUpdate = async (_id: string) => {};
+  // const handleUpdate = async (_id: string) => {};
 
   useEffect(() => {
     const fetchCustomers = async () => {

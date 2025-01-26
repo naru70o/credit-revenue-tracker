@@ -1,8 +1,8 @@
 import { Menu } from "@/components/menu";
 import { NewCredit } from "@/components/newCredit";
-import axios from "axios";
-import { formatDate } from "@/lib/utils";
 import { Dropdown } from "@/components/ui/droppMenu";
+import { formatAmount, formatDate } from "@/lib/utils";
+import axios from "axios";
 
 interface CreditData {
   amount: number;
@@ -42,22 +42,24 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
     <div className="text-gray-700 py-16 px-4 overflow-y-scroll">
       <div className="flex flex-col justify-center">
         <h1 className="font-bold text-2xl text-start w-1/2">
-          {name} total depts of {totalCredits}
+          {name} total depts of {formatAmount(totalCredits)}
         </h1>
         <NewCredit _id={_id} />
         {filteredData.map((credit: CreditData) => (
           <div
-            className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer hover:bg-gray-300 mb-2"
+            className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer hover:bg-gray-300 mb-2 overflow-clip relative"
             key={credit._id}
           >
+            <div className="absolute left-0 top-0 h-full w-2 bg-[#eb6b6b]"></div>
             <div className="flex flex-col">
               <h1 className="font-bold text-lg">
-                {credit.amount} : {credit.personWhotaken}
+                {formatAmount(credit.amount)} : {credit.personWhotaken}
               </h1>
               <p>
                 Took {credit.product} at {formatDate(credit.tookTime)}
               </p>
             </div>
+
             <Dropdown creditData={credit} />
           </div>
         ))}

@@ -23,14 +23,12 @@ export async function GET(
   }
 }
 
-// DELETE route
 export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     const { id } = params;
-    await connectiondb();
 
     // Validate the ID (optional but recommended)
     if (!id) {
@@ -40,6 +38,10 @@ export async function DELETE(
       );
     }
 
+    // Connect to the database
+    await connectiondb();
+
+    // Delete the customer
     const customer = await Customer.findByIdAndDelete(id);
     if (!customer) {
       return NextResponse.json(
@@ -48,9 +50,10 @@ export async function DELETE(
       );
     }
 
-    return new NextResponse(null, { status: 204 }); // 204 No Content
+    // Return a 204 No Content response
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
-    console.error("Error deleting customer:", error);
+    console.error("Error deleting customer:", error.message || error);
     return NextResponse.json(
       { message: "Error deleting customer" },
       { status: 500 }

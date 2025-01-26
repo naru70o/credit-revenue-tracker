@@ -1,5 +1,4 @@
 "use client";
-import { deleteCredit } from "@/app/actions/actions";
 
 import {
   DropdownMenu,
@@ -8,37 +7,36 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, Pencil, Trash } from "lucide-react";
+import { useState } from "react";
+import { Button } from "./button";
 
-// next js doesm't wanna let me to pass event handler from a server components to a client component
+export function Dropdown() {
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-// solution i'll take the delete div to a client component and pass the event handler from there
+  const handleClose = () => {
+    setIsDialogOpen(false);
+  };
 
-interface CreditData {
-  amount: number;
-  customerId: string;
-  isPaid: boolean;
-  personWhotaken: string;
-  product: string;
-  tookTime: string;
-  __v: number;
-  _id: string;
-}
-
-export function Dropdown({ creditData }: { creditData: CreditData }) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <EllipsisVertical />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-auto inline-block">
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => deleteCredit(creditData._id)}>
-          Delete
-        </DropdownMenuItem>
-        <DropdownMenuItem>Update</DropdownMenuItem>
-        <DropdownMenuItem>paid</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost">
+            <EllipsisVertical />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-auto inline-block">
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Trash strokeWidth={1.5} />
+            Delete
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Pencil strokeWidth={1.5} /> Update
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }

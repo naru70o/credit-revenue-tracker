@@ -35,3 +35,23 @@ export async function DELETE(
     return NextResponse.json({ status: 500, message: "Internal Server Error" });
   }
 }
+
+// update
+export async function PATCH(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const id = params.id;
+    const { isPaid } = await request.json();
+    await connectiondb();
+    const credit = await Credit.findByIdAndUpdate(
+      id,
+      { isPaid },
+      { new: true }
+    );
+    return NextResponse.json(credit);
+  } catch (error) {
+    return NextResponse.json({ status: 500, message: "Internal Server Error" });
+  }
+}

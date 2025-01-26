@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import Link from "next/link";
 import AddCredit from "./addCredit";
 
 export const NewCredit = ({ _id }: { _id: string }) => {
