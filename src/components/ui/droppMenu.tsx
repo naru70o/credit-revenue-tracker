@@ -22,9 +22,7 @@ export function Dropdown() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost">
-            <EllipsisVertical />
-          </Button>
+          <EllipsisVertical />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-auto inline-block">
           <DropdownMenuSeparator />
