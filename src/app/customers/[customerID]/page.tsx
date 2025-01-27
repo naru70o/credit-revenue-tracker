@@ -44,7 +44,7 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
         <h1 className="font-bold text-2xl text-start w-1/2">
           {name} total depts of {formatAmount(totalCredits)}
         </h1>
-        <NewCredit _id={_id} />
+        <NewCredit _id={_id} customerName={name} />
         {filteredData.map((credit: CreditData) => (
           <div
             className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer hover:bg-gray-300 mb-2 overflow-clip relative"

@@ -3,22 +3,24 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 import AddCredit from "./addCredit";
 
-export const NewCredit = ({ _id }: { _id: string }) => {
-  const [openCredit, setOpenCredit] = useState<boolean>(false);
+export const NewCredit = ({ _id,customerName }: { _id: string, customerName: string }) => {
+  const [isDialogOpen, setisDialog] = useState<boolean>(false);
 
-  function handleOpenCredit() {
-    setOpenCredit(!openCredit);
+  function handleClosedialog() {
+    setisDialog(!isDialogOpen);
   }
 
   return (
     <>
       <div className="inline-block self-end ">
-        <Button onClick={handleOpenCredit} variant="default" className="mr-3">
-          {openCredit ? "Close" : "Add Credit"}
+        <Button onClick={handleClosedialog} variant="default" className="mr-3">
+          {isDialogOpen ? "Close" : "Add Credit"}
         </Button>
       </div>
       <div className="flex flex-col justify-center items-center mt-8">
-        {openCredit && <AddCredit customerId={_id} />}
+        {isDialogOpen && (
+          <AddCredit isDialogOpen={isDialogOpen} handleClosedialog={handleClosedialog} customerId={_id}  customerName={customerName}/>
+        )}
         {/* customers List */}
       </div>
     </>
