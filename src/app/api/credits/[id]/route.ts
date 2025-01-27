@@ -36,7 +36,7 @@ export async function DELETE(
   }
 }
 
-// update
+// update the paid
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
@@ -51,6 +51,24 @@ export async function PATCH(
       { new: true }
     );
     return NextResponse.json(credit);
+  } catch (error) {
+    return NextResponse.json({ status: 500, message: "Internal Server Error" });
+  }
+}
+
+// update whole document
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const id = params.id;
+    const credit = await request.json();
+    await connectiondb();
+    const updatedCredit = await Credit.findByIdAndUpdate(id, credit, {
+      new: true,
+    });
+    return NextResponse.json(updatedCredit);
   } catch (error) {
     return NextResponse.json({ status: 500, message: "Internal Server Error" });
   }

@@ -1,19 +1,78 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { DatePicker } from "./ui/datePicker";
+import { updateCredit } from "@/app/actions/actions";
 
-export default function CreditUpdateForm() {
-  const [amount, setAmount] = useState<string>("10000");
-  const [product, setProduct] = useState<string>("");
-  const [personWhotaken, setPersonWhotaken] = useState<string>("");
+interface CreditData {
+  _id: string;
+  customerId: string;
+  amount: number;
+  product: string;
+  personWhotaken: string;
+  tookTime: string;
+  isPaid: boolean;
+  __v: number;
+}
+
+interface UpdatedCreditData {
+  amount: number;
+  product: string;
+  personWhotaken: string;
+  tookTime: string;
+}
+
+export default function CreditUpdateForm({
+  creditData,
+  onhandleClose,
+}: {
+  creditData: CreditData;
+  onhandleClose: () => void;
+}) {
+  const [amount, setAmount] = useState<string>(creditData.amount.toString());
+  const [product, setProduct] = useState<string>(creditData.product);
+  const [personWhotaken, setPersonWhotaken] = useState<string>(
+    creditData.personWhotaken
+  );
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date(creditData.tookTime)
+  );
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    // Prepare the updated data
+    const updatedData = {
+      amount: parseFloat(amount),
+      product,
+      personWhotaken,
+      tookTime: selectedDate?.toISOString(),
+    };
+
+    try {
+      // Call the server action to update the credit
+      await updateCredit(creditData._id, updatedData);
+      onhandleClose(); // Close the form after successful update
+    } catch (error) {
+      setError("Failed to update credit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <form className="flex flex-col gap-3 items-center justify-center mt-8">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-3 items-center justify-center mt-4"
+    >
       {/* Amount */}
-      <div className="flex flex-col justify-center w-[80%]">
+      <div className="flex flex-col justify-center w-full">
         <label htmlFor="amount">Amount</label>
         <Input
           id="amount"
@@ -26,7 +85,7 @@ export default function CreditUpdateForm() {
       </div>
 
       {/* Product */}
-      <div className="flex flex-col justify-center w-[80%]">
+      <div className="flex flex-col justify-center w-full">
         <label htmlFor="product">Product</label>
         <Input
           id="product"
@@ -39,7 +98,7 @@ export default function CreditUpdateForm() {
       </div>
 
       {/* Person Who Taken */}
-      <div className="flex flex-col justify-center w-[80%]">
+      <div className="flex flex-col justify-center w-full">
         <label htmlFor="person">Who took it</label>
         <Input
           id="person"
@@ -52,20 +111,21 @@ export default function CreditUpdateForm() {
       </div>
 
       {/* Date picker */}
-      <div className="flex flex-col justify-center w-[80%]">
-        {/* <DatePicker value={selectedDate} onChange={setSelectedDate} /> */}
+      <div className="flex flex-col justify-center w-full">
+        <DatePicker value={selectedDate} onChange={setSelectedDate} />
       </div>
 
-      <div className="flex justify-center w-[80%]">
-        <Button type="button" variant="secondary" onClick={handleClose}>
+      <div className="flex items-center justify-center w-full">
+        <Button
+          className="flex-1"
+          type="button"
+          variant="secondary"
+          onClick={onhandleClose}
+        >
           Cancel
         </Button>
-        <Button
-          type="submit"
-          className="mt-4 block self-center"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Adding Credit..." : "Add Credit"}
+        <Button type="submit" className="flex-1" disabled={isSubmitting}>
+          {isSubmitting ? "Updating..." : "Add Credit"}
         </Button>
       </div>
 

@@ -79,7 +79,11 @@ export function Dropdown({ creditData }: { creditData: CreditData }) {
       )}
 
       {isDialogOpen && (
-        <UpdateCredit handleClose={handleClose} isDialogOpen={isDialogOpen} />
+        <UpdateCredit
+          creditData={creditData}
+          handleClose={handleClose}
+          isDialogOpen={isDialogOpen}
+        />
       )}
     </>
   );

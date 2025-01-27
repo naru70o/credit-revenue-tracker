@@ -1,18 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
 import {
   Dialog,
-  DialogDescription,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
 
-import { formatDate } from "@/lib/utils";
-import { DatePicker } from "./ui/datePicker";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import CreditUpdateForm from "./creditUpdateForm";
 
 interface CreditData {
   _id: string;
@@ -25,19 +21,14 @@ interface CreditData {
   __v: number;
 }
 
-interface CustomerData {
-  _id: string;
-  name: string;
-  phoneNumber: string;
-  createdAt: string;
-}
-
 export const UpdateCredit = ({
   isDialogOpen,
   handleClose,
+  creditData,
 }: {
   isDialogOpen: boolean;
   handleClose: () => void;
+  creditData: CreditData;
 }) => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleClose}>
@@ -45,10 +36,10 @@ export const UpdateCredit = ({
         <DialogHeader>
           <DialogTitle>Update Credit</DialogTitle>
           <DialogDescription>
-            Details for the selected credit.
+            Details for the selected credit to update.
           </DialogDescription>
         </DialogHeader>
-        {/* form  */}
+        <CreditUpdateForm creditData={creditData} onhandleClose={handleClose} />
       </DialogContent>
     </Dialog>
   );
