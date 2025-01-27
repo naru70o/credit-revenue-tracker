@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { DeleteCustomer } from "@/app/actions/actions";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { Trash2, UserPen } from "lucide-react";
 import Link from "next/link";
-import { Dropdown } from "./ui/droppMenu";
-import { NextResponse } from "next/server";
+import { useEffect, useState } from "react";
+import { AlertDialogModel } from "./AlertDialog";
+
 interface Customer {
   _id: string;
   name: string;
@@ -14,25 +15,9 @@ interface Customer {
 
 export default function CustomersList() {
   const [customersData, setCustomersData] = useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentCustomerId, setCurrentCustomerId] = useState("");
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  const handleDelete = async (_id: string) => {
-    try {
-      const res = await axios.delete(`/api/customers/${_id}`);
-
-      if (!res) {
-        return NextResponse.json(
-          { message: "Customer not found" },
-          { status: 404 }
-        );
-      }
-      // delete this customer based on this id
-      return res;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   // const handleUpdate = async (_id: string) => {};
 
@@ -53,22 +38,32 @@ export default function CustomersList() {
     return <p>Loading...</p>;
   }
 
+  const handleClose = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <>
       {customersData.map((customer: Customer) => (
         <div key={customer._id}>
-          <Link href={`/customers/${customer._id}`}>
-            <div className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer hover:bg-gray-300">
-              <div>
+          <div className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer hover:bg-gray-300">
+            <Link className="flex-1 w-full" href={`/customers/${customer._id}`}>
+              <div className="flex-1">
                 <p>{customer.name}</p>
                 <p>{customer.phoneNumber}</p>
               </div>
-              <Dropdown
-                delete={() => handleDelete(customer._id)}
-                edit={() => handleUpdate(customer._id)}
-              />
+            </Link>
+            <div className="flex gap-2">
+              <Trash2 onClick={() => setIsDialogOpen(true)} strokeWidth={1.5} />
+              <UserPen strokeWidth={1.5} />
             </div>
-          </Link>
+            <AlertDialogModel
+              actionName="Delete"
+              onHandleDeleteClose={handleClose}
+              isDeleteOpen={isDialogOpen}
+              onDeleteHandler={() => DeleteCustomer(customer._id)}
+            />
+          </div>
         </div>
       ))}
     </>

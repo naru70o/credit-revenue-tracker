@@ -7,7 +7,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 export function AlertDialogModel({
@@ -36,7 +35,7 @@ export function AlertDialogModel({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={onDeleteHandler}>
-            Continue
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

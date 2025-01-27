@@ -34,17 +34,14 @@ export default function AddPerson() {
   };
 
   return (
-    <div className="bg-gray-100 text-black py-8 px-4 h-screen grid justify-center">
+    <div className=" text-black py-8 px-4 grid justify-center">
       <div className="flex flex-col justify-center">
-        <h1 className="font-bold text-2xl text-center">
-          Please add new Customer
-        </h1>
         <form
           onSubmit={handleClick}
-          className="flex flex-col gap-4 items-center justify-center mt-8"
+          className="flex flex-col gap-4 items-center justify-center w-full"
         >
           {/* name */}
-          <div className="flex flex-col justify-center w-[80%]">
+          <div className="flex flex-col justify-center">
             <label>Name</label>
             <Input
               value={personName}
@@ -55,7 +52,7 @@ export default function AddPerson() {
             />
           </div>
           {/* phone */}
-          <div className="flex flex-col justify-center w-[80%]">
+          <div className="flex flex-col justify-center">
             <label>Number</label>
             <Input
               value={personNumber}

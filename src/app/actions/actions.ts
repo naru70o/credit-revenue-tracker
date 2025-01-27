@@ -1,6 +1,7 @@
 "use server";
 
 import axios from "axios";
+import { NextResponse } from "next/server";
 
 // Delete credit
 export async function deleteCredit(id: string) {
@@ -57,20 +58,19 @@ export async function updateCredit(
   } catch (error) {
     console.error("Error updating credit:", error);
 
-    // Handle Axios errors
-    if (error.response) {
-      // The request was made, but the server responded with a non-2xx status code
-      throw new Error(
-        `Failed to update credit: ${
-          error.response.data.message || error.response.statusText
-        }`
-      );
-    } else if (error.request) {
-      // The request was made, but no response was received
-      throw new Error("No response received from the server.");
-    } else {
-      // Something happened in setting up the request
-      throw new Error("Error setting up the request.");
-    }
+    // Something happened in setting up the request
+    throw new Error("Error setting up the request.");
   }
 }
+
+// HANDLE DELETE Customer
+export const DeleteCustomer = async (_id: string) => {
+  try {
+    // delete this customer based on this id
+    await axios.delete(`http://localhost:3000/api/customers/${_id}`);
+
+    return { message: "Customer deleted successfully" };
+  } catch (error) {
+    return { message: "Customer not found", status: 404 };
+  }
+};
