@@ -46,14 +46,14 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
     <div className="text-gray-700 py-16 px-4 overflow-y-scroll">
       <div className="flex flex-col justify-center">
         <div className="w-full rounded-xl bg-gradient-to-r from-[#160078] to-[#7226ff] mb-2 p-4 text-gray-300">
-          <h1 className="font-bold text-2xl text-start w-1/2">
+          <h1 className="font-bold text-2xl text-start w-[60%]">
             {name} total Credits of {formatAmount(totalCredits)}
           </h1>
         </div>
         <NewCredit _id={_id} customerName={name} />
         {filteredData.map((credit: CreditData) => (
           <div
-            className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer  mb-2 overflow-clip relative"
+            className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer mt-4 overflow-clip relative"
             key={credit._id}
           >
             <div

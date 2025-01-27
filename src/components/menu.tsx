@@ -38,9 +38,7 @@ export const Menu = () => {
         </Link>
         <Link
           href="/revenue"
-          className={`${
-            currentPath === "/revenue" || "/revenue/add" ? "text-blue-500" : ""
-          }`}
+          className={`${currentPath === "/revenue" ? "text-blue-500" : ""}`}
         >
           <ChartNoAxesColumnIncreasing />
         </Link>
