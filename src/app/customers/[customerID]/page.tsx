@@ -31,26 +31,36 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
     customer.includes(item.customerId)
   );
 
-  const totalCredits = filteredData.reduce(
-    (acc: number, item: CreditData) => acc + item.amount,
-    0
-  );
+  let totalCredits = filteredData
+    .filter((credit: CreditData) => credit.isPaid === false)
+    .reduce((acc: number, item: CreditData) => acc + item.amount, 0);
+
+  // const totalCredits = filteredData.reduce(
+  //   (acc: number, item: CreditData) => acc + item.amount,
+  //   0
+  // );
 
   const { name, phoneNumber, _id } = response.data;
 
   return (
     <div className="text-gray-700 py-16 px-4 overflow-y-scroll">
       <div className="flex flex-col justify-center">
-        <h1 className="font-bold text-2xl text-start w-1/2">
-          {name} total depts of {formatAmount(totalCredits)}
-        </h1>
+        <div className="w-full rounded-xl bg-gradient-to-r from-[#160078] to-[#7226ff] mb-2 p-4 text-gray-300">
+          <h1 className="font-bold text-2xl text-start w-1/2">
+            {name} total Credits of {formatAmount(totalCredits)}
+          </h1>
+        </div>
         <NewCredit _id={_id} customerName={name} />
         {filteredData.map((credit: CreditData) => (
           <div
-            className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer hover:bg-gray-300 mb-2 overflow-clip relative"
+            className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer  mb-2 overflow-clip relative"
             key={credit._id}
           >
-            <div className="absolute left-0 top-0 h-full w-2 bg-[#eb6b6b]"></div>
+            <div
+              className={`absolute left-0 top-0 h-full w-2 ${
+                credit.isPaid === true ? "bg-[#5B913B]" : "bg-[#F72C5B]"
+              } `}
+            ></div>
             <div className="flex flex-col">
               <h1 className="font-bold text-lg">
                 {formatAmount(credit.amount)} : {credit.personWhotaken}

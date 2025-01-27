@@ -18,8 +18,8 @@ export function AlertDialogModel({
 }: {
   actionName: string;
   isDeleteOpen: boolean;
-  onDeleteHandler: () => Promise<void>;
-  onHandleDeleteClose: () => void;
+  onDeleteHandler?: () => Promise<void>;
+  onHandleDeleteClose?: () => void;
 }) {
   return (
     <AlertDialog open={isDeleteOpen} onOpenChange={onHandleDeleteClose}>
