@@ -42,6 +42,11 @@ export default function CustomersList() {
     setIsDialogOpen(false);
   };
 
+  const handleDelete = (_id: string) => {
+    setCurrentCustomerId(_id);
+    setIsDialogOpen(true);
+  };
+
   return (
     <>
       {customersData.map((customer: Customer) => (
@@ -54,18 +59,21 @@ export default function CustomersList() {
               </div>
             </Link>
             <div className="flex gap-2">
-              <Trash2 onClick={() => setIsDialogOpen(true)} strokeWidth={1.5} />
+              <Trash2
+                onClick={() => handleDelete(customer._id)}
+                strokeWidth={1.5}
+              />
               <UserPen strokeWidth={1.5} />
             </div>
-            <AlertDialogModel
-              actionName="Delete"
-              onHandleDeleteClose={handleClose}
-              isDeleteOpen={isDialogOpen}
-              onDeleteHandler={() => DeleteCustomer(customer._id)}
-            />
           </div>
         </div>
       ))}
+      <AlertDialogModel
+        actionName="Delete"
+        onHandleDeleteClose={handleClose}
+        isDeleteOpen={isDialogOpen}
+        onDeleteHandler={() => DeleteCustomer(currentCustomerId)}
+      />
     </>
   );
 }

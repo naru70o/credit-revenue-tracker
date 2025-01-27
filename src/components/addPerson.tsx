@@ -10,6 +10,7 @@ export default function AddPerson() {
   const router = useRouter();
   const [personName, setPersonName] = useState<string>("");
   const [personNumber, setPersonNumber] = useState<string>("");
+  const [isSubmiting, setIsSubmiting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleClick = async (e: React.FormEvent) => {
@@ -17,16 +18,16 @@ export default function AddPerson() {
     setError(null); // Reset error state
 
     try {
-      const response = await axios.post("/api/customers", {
+      await axios.post("/api/customers", {
         name: personName,
         phoneNumber: personNumber,
       });
 
-      console.log(response.data);
-      router.push("/customers");
-      // Optionally, you can reset the form fields here
+      //   reseting the fields after submiting
       setPersonName("");
       setPersonNumber("");
+      setIsSubmiting(true);
+      router.push("/customers");
     } catch (err) {
       setError("Failed to add customer. Please try again.");
       console.error(err);
@@ -64,9 +65,10 @@ export default function AddPerson() {
           </div>
           <Button
             type="submit"
+            disabled={isSubmiting}
             className="mt-4 inline w-32 self-center rounded-xl"
           >
-            Add customer
+            {isSubmiting === true ? "Adding..." : "Add customer"}
           </Button>
         </form>
         {error && <p className="text-red-500 text-center mt-4">{error}</p>}
