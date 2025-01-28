@@ -20,7 +20,10 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
   // Selecting the customer id from the URL
   const customer = params.customerID;
   const response = await fetch(
-    `http://localhost:3000/api/customers/${customer}`
+    `http://localhost:3000/api/customers/${customer}`,
+    {
+      next: { tags: ["credit"] },
+    }
   );
   const customersData = await response.json();
   console.log("what is inside of this ", customersData);
@@ -30,8 +33,13 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
   }
 
   // selecting all the credits
-  const credits = await axios.get(`http://localhost:3000/api/credits`);
-  const creditsData = credits.data.credits;
+  const responseCredits = await fetch(`http://localhost:3000/api/credits`, {
+    next: { tags: ["credit"] },
+  });
+
+  const credits = responseCredits.json();
+  const { credits: creditsData } = await credits;
+  console.log("what is inside of this ", creditsData);
 
   // Filtering the credits by customer id
   const filteredData = creditsData.filter((item: CreditData) =>

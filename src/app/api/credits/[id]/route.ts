@@ -1,4 +1,5 @@
 import { connectiondb, Credit } from "@/lib/database/models";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -30,6 +31,7 @@ export async function DELETE(
     }
 
     const credit = await Credit.findByIdAndDelete(id);
+    revalidateTag("credit");
     return NextResponse.json(credit);
   } catch (error) {
     return NextResponse.json({ status: 500, message: "Internal Server Error" });

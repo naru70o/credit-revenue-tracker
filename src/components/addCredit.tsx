@@ -55,7 +55,6 @@ export default function AddCredit({
         tookTime: selectedDate || new Date(),
       };
 
-      // Make API call using Axios
       const response = await axios.post("/api/credits", creditData);
 
       // Handle success
@@ -66,9 +65,6 @@ export default function AddCredit({
         setPersonWhotaken("");
         setSelectedDate(new Date());
         handleClosedialog(false);
-
-        // Refresh the page to show updated data
-        router.refresh();
       }
     } catch (error) {
       console.error("Error adding credit:", error);
@@ -107,7 +103,6 @@ export default function AddCredit({
           </div>
         </DialogContent>
       </Dialog>
-
     </>
   );
 }
