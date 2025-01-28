@@ -1,11 +1,12 @@
 "use client";
 
-import { DeleteCustomer } from "@/app/actions/actions";
+import { DeleteCustomer, getCustomers } from "@/app/actions/actions";
 import axios from "axios";
 import { Trash2, UserPen } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AlertDialogModel } from "./AlertDialog";
+import Spinner from "./ui/spinner";
 
 interface Customer {
   _id: string;
@@ -13,30 +14,13 @@ interface Customer {
   phoneNumber: string;
 }
 
-export default function CustomersList() {
-  const [customersData, setCustomersData] = useState([]);
+export default function CustomersList({
+  customersData,
+}: {
+  customersData: Customer[];
+}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentCustomerId, setCurrentCustomerId] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  // const handleUpdate = async (_id: string) => {};
-
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get("/api/customers");
-        setCustomersData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching customers:", error);
-      }
-    };
-    fetchCustomers();
-  }, [setCustomersData, setLoading]);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   const handleClose = () => {
     setIsDialogOpen(false);

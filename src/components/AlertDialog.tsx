@@ -35,7 +35,7 @@ export function AlertDialogModel({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={onDeleteHandler}>
-            Delete
+            {actionName}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

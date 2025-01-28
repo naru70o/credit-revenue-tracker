@@ -3,6 +3,15 @@ import { Menu } from "@/components/menu";
 import { AddCustomerButton } from "@/components/ui/AddCustomerButton";
 
 const page = async () => {
+  const response = await fetch("http://localhost:3000/api/customers", {
+    next: { tags: ["customers"] },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch customers");
+  }
+
+  const customersData = await response.json();
   return (
     <>
       <div className="text-gray-700 py-16 px-4">
@@ -19,10 +28,9 @@ const page = async () => {
         <div className="flex flex-col justify-center items-center mt-4">
           {/* customers List */}
           <div className="mt-4 w-full flex flex-col gap-4">
-            <CustomersList />
+            <CustomersList customersData={customersData}/>
           </div>
         </div>
-        <Menu />
       </div>
     </>
   );

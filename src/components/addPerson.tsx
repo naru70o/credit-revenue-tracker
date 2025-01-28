@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
-export default function AddPerson() {
+export default function AddPerson({ setIsDialogOpen }) {
   const router = useRouter();
   const [personName, setPersonName] = useState<string>("");
   const [personNumber, setPersonNumber] = useState<string>("");
@@ -23,10 +23,11 @@ export default function AddPerson() {
         phoneNumber: personNumber,
       });
 
-      //   reseting the fields after submiting
+      //reseting the fields after submiting
       setPersonName("");
       setPersonNumber("");
       setIsSubmiting(true);
+      setIsDialogOpen(false);
       router.push("/customers");
     } catch (err) {
       setError("Failed to add customer. Please try again.");

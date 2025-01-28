@@ -108,7 +108,6 @@ export default function AddCredit({
         </DialogContent>
       </Dialog>
 
-      <Menu />
     </>
   );
 }

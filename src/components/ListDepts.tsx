@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 
 import { CreditDetailsModal } from "./creditDetailsModal";
 import { Credit } from "./credit";
+import FullSpinner from "./ui/FullSpinner";
 
 interface CreditData {
   _id: string;
@@ -62,10 +63,8 @@ async function fetchCustomers() {
 const ListDept = () => {
   const [customers, setCustomers] = useState<CustomerData[]>([]);
   const [creditData, setCreditData] = useState<CreditData[]>([]);
- 
+
   const [loading, setIsLoading] = useState(false);
-
-
 
   async function fetchData() {
     try {
@@ -95,7 +94,7 @@ const ListDept = () => {
 
   // while the loading state is false, show a loading message
   if (!loading) {
-    return <div>Loading...</div>;
+    return <FullSpinner />;
   }
 
   // this will show the total  of credits
@@ -125,8 +124,6 @@ const ListDept = () => {
         </div>
       </div>
       <Credit creditData={creditData} customers={customers} />
-
-      <Menu />
     </div>
   );
 };

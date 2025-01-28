@@ -3,6 +3,7 @@ import { NewCredit } from "@/components/newCredit";
 import { Dropdown } from "@/components/ui/droppMenu";
 import { formatAmount, formatDate } from "@/lib/utils";
 import axios from "axios";
+import { notFound } from "next/navigation";
 
 interface CreditData {
   amount: number;
@@ -18,9 +19,15 @@ interface CreditData {
 const Page = async ({ params }: { params: { customerID: string } }) => {
   // Selecting the customer id from the URL
   const customer = params.customerID;
-  const response = await axios.get(
+  const response = await fetch(
     `http://localhost:3000/api/customers/${customer}`
   );
+  const customersData = await response.json();
+  console.log("what is inside of this ", customersData);
+
+  if (response.status !== 200) {
+    notFound();
+  }
 
   // selecting all the credits
   const credits = await axios.get(`http://localhost:3000/api/credits`);
@@ -31,16 +38,12 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
     customer.includes(item.customerId)
   );
 
-  let totalCredits = filteredData
+  const totalCredits = filteredData
     .filter((credit: CreditData) => credit.isPaid === false)
     .reduce((acc: number, item: CreditData) => acc + item.amount, 0);
 
-  // const totalCredits = filteredData.reduce(
-  //   (acc: number, item: CreditData) => acc + item.amount,
-  //   0
-  // );
-
-  const { name, phoneNumber, _id } = response.data;
+  const { name, phoneNumber, _id } = customersData.customer;
+  console.log(name);
 
   return (
     <div className="text-gray-700 py-16 px-4 overflow-y-scroll">
@@ -73,7 +76,6 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
             <Dropdown creditData={credit} />
           </div>
         ))}
-        <Menu />
       </div>
     </div>
   );

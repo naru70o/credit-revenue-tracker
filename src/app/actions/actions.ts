@@ -3,6 +3,21 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
+// Customers
+
+export async function getCustomers() {
+  try {
+    // Using axios to make the GET request
+    const response = await axios.get("http://localhost:3000/api/customers");
+
+    // Return the data from the response
+    return response.data;
+  } catch (error) {
+    // Return an error message
+    return { error: "Error fetching customers" };
+  }
+}
+
 // Delete credit
 export async function deleteCredit(id: string) {
   try {
@@ -74,3 +89,17 @@ export const DeleteCustomer = async (_id: string) => {
     return { message: "Customer not found", status: 404 };
   }
 };
+
+//////////////////////////////////
+// Revenues
+
+export async function revenueFetcher() {
+  try {
+    const response = await axios.get("http://localhost:3000/api/revenue");
+    const data = response.data;
+    console.log("here is your revenue data", data);
+    return data;
+  } catch (error) {
+    throw new Error("Failed to fetch revenue data");
+  }
+}

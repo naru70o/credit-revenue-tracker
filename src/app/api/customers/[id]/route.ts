@@ -1,4 +1,5 @@
 import { connectiondb, Customer } from "@/lib/database/models";
+import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -9,16 +10,17 @@ export async function GET(
     await connectiondb();
     const customer = await Customer.findById(params.id);
     if (!customer) {
-      return NextResponse.json(
-        { message: "Customer not found" },
-        { status: 400 }
-      );
+      notFound();
     }
-    return NextResponse.json(customer);
+    return NextResponse.json({
+      customer,
+      message: "Customer found",
+      status: 200,
+    });
   } catch (error) {
     return NextResponse.json(
       { message: "Error getting customer" },
-      { status: 500 }
+      { status: 501 }
     );
   }
 }

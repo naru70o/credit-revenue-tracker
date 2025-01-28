@@ -1,4 +1,5 @@
 import { connectiondb, Customer } from "@/lib/database/models";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -7,6 +8,8 @@ export async function POST(request: Request) {
     const { name, phoneNumber } = await request.json();
     const newUser = new Customer({ name, phoneNumber });
     await newUser.save();
+
+    revalidateTag("customers");
 
     return NextResponse.json(newUser, { status: 201 });
   } catch (err) {

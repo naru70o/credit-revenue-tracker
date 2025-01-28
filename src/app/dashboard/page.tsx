@@ -49,8 +49,6 @@ const Dashboard: React.FC = () => {
       <button className="px-4 py-2 mt-4 bg-purple-500 text-white rounded-lg text-sm font-medium">
         More
       </button>
-
-      <Menu />
     </div>
   );
 };
