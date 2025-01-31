@@ -1,3 +1,5 @@
+import AddRevenueButton from "@/components/addRevenueButton";
+import RevenuesList from "@/components/revenuesList";
 import { Button } from "@/components/ui/button";
 import FullSpinner from "@/components/ui/FullSpinner";
 import { formatAmount } from "@/lib/utils";
@@ -12,30 +14,31 @@ interface Revenue {
 const Page = async () => {
   const res = await fetch("http://localhost:3000/api/revenue", {
     next: {
-      tags: ["revenue"],
+      tags: ["revenues"],
     },
   });
 
   const revenueData: Revenue[] = await res.json();
-  console.log(revenueData);
-  // const totalRevenue = revenueData.reduce((acc, curr) => acc + curr.amount, 0);
+  const revenues = revenueData.revenues;
+  const totalRevenue = revenues.reduce(
+    (acc: number, curr: number) => acc + curr.amount,
+    0
+  );
 
   return (
     <div className="text-black py-16 px-4 bg-gray-100">
-      <div className="flex flex-col justify-center gap-12">
-        <div>
+      <div className="flex flex-col justify-center">
+        <div className="w-full rounded-xl bg-gradient-to-r from-[#160078] to-[#7226ff] mb-2 p-4 text-gray-300">
           <h1 className="font-bold text-2xl text-start w-1/2">
-            Check your revenue
+            Check Your Revenue
           </h1>
-          <p>your total revenue is {formatAmount(72327)}</p>
+          <p>Your total revenue is {formatAmount(totalRevenue)}</p>
         </div>
         <div className="inline-block self-end">
-          <Button className="bg-blue-500 hover:bg-blue-700">
-            <Link href="/revenue/add">add revenue</Link>
-          </Button>
+          <AddRevenueButton />
         </div>
       </div>
-      {/*  */}
+      <RevenuesList revenueData={revenues} />
     </div>
   );
 };

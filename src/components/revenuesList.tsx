@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { formatAmount, formatDate } from "@/lib/utils";
 import { Trash2, UserPen } from "lucide-react";
 
 interface Revenue {
@@ -8,21 +8,17 @@ interface Revenue {
   id: number;
 }
 
-const RevenuesList = () => {
-  const [revenueData, setRevenueData] = useState<Revenue[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [openId, setOpenId] = useState<number | null>(null);
+const RevenuesList = ({ revenueData }: { revenueData: Revenue[] }) => {
   return (
     <div className="flex flex-col justify-center items-center mt-8 ">
-      {/* <revenue list /> */}
-      {revenueData.map((revenue) => {
+      {revenueData.map((revenue: Revenue) => {
         return (
           <div
             key={revenue.id}
             className="bg-gray-300 rounded-xl w-full py-2 px-4 mt-4"
           >
             <div
-              onClick={() => handleOpen(revenue.id)}
+              //   onClick={() => handleOpen(revenue.id)}
               className="flex justify-between items-center"
             >
               <div className="flex flex-col items-start gap-1">
@@ -37,7 +33,7 @@ const RevenuesList = () => {
                   strokeWidth={1.5}
                 />
                 <UserPen strokeWidth={1.5} />
-              </div>{" "}
+              </div>
             </div>
           </div>
         );

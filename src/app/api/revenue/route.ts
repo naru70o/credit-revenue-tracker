@@ -1,4 +1,5 @@
 import { Revenue, connectiondb } from "@/lib/database/models";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -11,6 +12,7 @@ export async function POST(req: Request) {
     });
     await revenue.save();
     console.log("Revenue saved successfully");
+    revalidateTag("revenues");
     return NextResponse.json({
       message: "Revenue saved successfully",
       status: 200,
