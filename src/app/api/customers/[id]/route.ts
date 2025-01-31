@@ -1,4 +1,5 @@
 import { connectiondb, Customer } from "@/lib/database/models";
+import { revalidateTag } from "next/cache";
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 
@@ -53,6 +54,7 @@ export async function DELETE(
     }
 
     // Return a 204 No Content response
+    revalidateTag("customers");
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error("Error deleting customer:", error.message || error);
@@ -60,5 +62,33 @@ export async function DELETE(
       { message: "Error deleting customer" },
       { status: 500 }
     );
+  }
+}
+
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { id } = params;
+    const customerData = await request.json();
+    // Validate the ID (optional but recommended)
+    if (!id) {
+      return NextResponse.json(
+        { message: "Customer ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Connect to the database
+    await connectiondb();
+    const customer = await Customer.findByIdAndUpdate(id, customerData, {
+      new: true,
+    });
+
+    revalidateTag("customers");
+    return NextResponse.json(customer);
+  } catch (error) {
+    return NextResponse.json({ status: 501, message: "Could not Update user" });
   }
 }

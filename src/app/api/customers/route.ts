@@ -1,5 +1,5 @@
 import { connectiondb, Customer } from "@/lib/database/models";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {

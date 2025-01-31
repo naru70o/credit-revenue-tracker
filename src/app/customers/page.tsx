@@ -1,5 +1,4 @@
 import CustomersList from "@/components/customersList";
-import { Menu } from "@/components/menu";
 import { AddCustomerButton } from "@/components/ui/AddCustomerButton";
 
 const page = async () => {
@@ -28,7 +27,7 @@ const page = async () => {
         <div className="flex flex-col justify-center items-center mt-4">
           {/* customers List */}
           <div className="mt-4 w-full flex flex-col gap-4">
-            <CustomersList customersData={customersData}/>
+            <CustomersList customersData={customersData} />
           </div>
         </div>
       </div>
