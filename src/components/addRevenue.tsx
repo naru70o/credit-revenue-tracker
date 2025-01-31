@@ -67,7 +67,7 @@ export default function AddRevenue({
       <div className="flex flex-col justify-center w-[80%]">
         <DatePicker value={selectedDate} onChange={(e) => setSelectedDate(e)} />{" "}
       </div>
-      <Button type="submit" className="mt-4 inline w-32 self-center">
+      <Button type="submit" className="mt-4 inline w-32 self-center rounded-xl">
         Add revenue
       </Button>
     </form>
