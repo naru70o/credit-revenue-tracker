@@ -13,7 +13,7 @@ export default function AddRevenueButton() {
   return (
     <>
       <Button
-        className="bg-blue-500 hover:bg-blue-700"
+        className="bg-blue-500 hover:bg-blue-700 rounded-xl"
         onClick={() => setIsDialogOpen(true)}
       >
         Add revenue

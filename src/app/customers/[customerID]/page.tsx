@@ -1,8 +1,6 @@
-import { Menu } from "@/components/menu";
 import { NewCredit } from "@/components/newCredit";
 import { Dropdown } from "@/components/ui/droppMenu";
 import { formatAmount, formatDate } from "@/lib/utils";
-import axios from "axios";
 import { notFound } from "next/navigation";
 
 interface CreditData {
@@ -39,7 +37,6 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
 
   const credits = responseCredits.json();
   const { credits: creditsData } = await credits;
-  console.log("what is inside of this ", creditsData);
 
   // Filtering the credits by customer id
   const filteredData = creditsData.filter((item: CreditData) =>
@@ -51,7 +48,6 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
     .reduce((acc: number, item: CreditData) => acc + item.amount, 0);
 
   const { name, phoneNumber, _id } = customersData.customer;
-  console.log(name);
 
   return (
     <div className="text-gray-700 py-16 px-4 overflow-y-scroll">

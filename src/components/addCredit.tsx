@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
+import { revalidateTag } from "next/cache";
 
 export default function AddCredit({
   customerId,
@@ -33,11 +34,9 @@ export default function AddCredit({
   const [product, setProduct] = useState<string>("");
   const [personWhotaken, setPersonWhotaken] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError(null);
 
     try {
@@ -63,8 +62,8 @@ export default function AddCredit({
         setAmount("");
         setProduct("");
         setPersonWhotaken("");
-        setSelectedDate(new Date());
         handleClosedialog(false);
+        router.refresh();
       }
     } catch (error) {
       console.error("Error adding credit:", error);

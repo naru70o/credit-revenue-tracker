@@ -24,7 +24,7 @@ export const NewCredit = ({
           variant="default"
           className="rounded-xl"
         >
-          {isDialogOpen ? "Close" : "Add Credit"}
+          Add credit
         </Button>
       </div>
       <div className="flex flex-col justify-center items-center mt-8">
@@ -36,7 +36,6 @@ export const NewCredit = ({
             customerName={customerName}
           />
         )}
-        {/* customers List */}
       </div>
     </>
   );

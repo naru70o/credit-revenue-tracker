@@ -1,4 +1,5 @@
 import { Credit, connectiondb } from "@/lib/database/models";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
     });
 
     await credit.save();
+    revalidateTag("credit");
     return NextResponse.json({
       message: "Credit added successfully",
       status: 200,
