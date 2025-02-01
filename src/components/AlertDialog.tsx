@@ -17,7 +17,7 @@ export function AlertDialogModel({
 }: {
   actionName: string;
   isDeleteOpen: boolean;
-  onDeleteHandler?: () => Promise<void>;
+  onDeleteHandler?: () => void;
   onHandleDeleteClose?: () => void;
 }) {
   return (
@@ -33,7 +33,9 @@ export function AlertDialogModel({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={onHandleDeleteClose}>
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction onClick={onDeleteHandler}>
             {actionName}
           </AlertDialogAction>

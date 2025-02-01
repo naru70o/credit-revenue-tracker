@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { DatePicker } from "./ui/datePicker";
 import { Input } from "./ui/input";
 import { revalidateTag } from "next/cache";
+import { useRouter } from "next/navigation";
 
 export default function AddRevenue({
   closeDialog,
@@ -15,6 +16,38 @@ export default function AddRevenue({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [revenue, setRevenue] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+
+  //   if (!selectedDate) {
+  //     setError("Please select a date");
+  //     return;
+  //   }
+
+  //   if (!revenue) {
+  //     setError("Please enter a revenue amount");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post("/api/revenue", {
+  //       amount: revenue,
+  //       date: selectedDate,
+  //     });
+  //     revalidateTag("revenues");
+
+  //     console.log("Revenue added successfully:", response.data);
+
+  //     setSelectedDate(undefined);
+  //     setRevenue("");
+  //     closeDialog();
+  //   } catch (error) {
+  //     console.log("error accured", error);
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,19 +63,32 @@ export default function AddRevenue({
     }
 
     try {
-      const response = await axios.post("/api/revenue", {
-        amount: revenue,
-        date: selectedDate,
+      const response = await fetch("/api/revenue", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: revenue,
+          date: selectedDate,
+        }),
       });
 
-      console.log("Revenue added successfully:", response.data);
+      if (response.ok) {
+        // Revalidate the "revenues" tag by calling a server action or API route
 
-      setSelectedDate(undefined);
-      setRevenue("");
-      revalidateTag("revenues");
-      closeDialog();
+        console.log("Revenue added successfully");
+
+        setSelectedDate(undefined);
+        setRevenue("");
+        // revalidateTag("revenue");
+        closeDialog();
+        router.push("/revenue");
+      } else {
+        console.error("Failed to add revenue");
+      }
     } catch (error) {
-      console.log("error accured", error);
+      console.error("Error occurred:", error);
     }
   };
 

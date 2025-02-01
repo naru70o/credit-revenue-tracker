@@ -117,13 +117,25 @@ export const DeleteCustomer = async (_id: string) => {
 //////////////////////////////////
 // Revenues
 
-export async function revenueFetcher() {
+// export async function revenueFetcher() {
+//   try {
+//     const response = await axios.get("http://localhost:3000/api/revenue");
+//     const data = response.data;
+//     console.log("here is your revenue data", data);
+//     return data;
+//   } catch (error) {
+//     return {message:"Failed to Delete revenue data",status:404};
+//   }
+// }
+
+// Delete 
+export async function deleteRevenue(_id: string) {
   try {
-    const response = await axios.get("http://localhost:3000/api/revenue");
-    const data = response.data;
-    console.log("here is your revenue data", data);
-    return data;
+    await axios.delete(`http://localhost:3000/api/revenue/${_id}`);
+    
+    revalidateTag("revenue");
+    return {message: "Revenue deleted successfully"};
   } catch (error) {
-    throw new Error("Failed to fetch revenue data");
+   return {message:"Failed to Delete revenue data",status:404}
   }
 }

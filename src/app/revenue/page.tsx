@@ -1,20 +1,17 @@
 import AddRevenueButton from "@/components/addRevenueButton";
 import RevenuesList from "@/components/revenuesList";
-import { Button } from "@/components/ui/button";
-import FullSpinner from "@/components/ui/FullSpinner";
 import { formatAmount } from "@/lib/utils";
-import Link from "next/link";
 
 interface Revenue {
   amount: number;
   date: string; // Assuming date is in the format "DD/MMM/YYYY"
-  id: number;
+  _id: string;
 }
 
 const Page = async () => {
   const res = await fetch("http://localhost:3000/api/revenue", {
     next: {
-      tags: ["revenues"],
+      tags: ["revenue"],
     },
   });
 
@@ -38,7 +35,9 @@ const Page = async () => {
           <AddRevenueButton />
         </div>
       </div>
-      <RevenuesList revenueData={revenues} />
+      <div className="flex flex-col justify-center items-center mt-8 ">
+        <RevenuesList revenueData={revenues} />
+      </div>
     </div>
   );
 };

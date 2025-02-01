@@ -88,9 +88,9 @@ export default function CustomersList({
       {isDialogOpen && (
         <AlertDialogModel
           actionName="Delete"
-          onHandleDeleteClose={handleClose}
           isDeleteOpen={isDialogOpen}
           onDeleteHandler={() => DeleteCustomer(currentCustomerId)}
+          onHandleDeleteClose={handleClose}
         />
       )}
     </>
