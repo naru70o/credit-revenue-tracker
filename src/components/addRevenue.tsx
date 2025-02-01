@@ -13,8 +13,8 @@ export default function AddRevenue({
 }: {
   closeDialog: () => void;
 }) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [revenue, setRevenue] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();

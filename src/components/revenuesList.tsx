@@ -4,6 +4,7 @@ import { Trash2, UserPen } from "lucide-react";
 import { useState } from "react";
 import { AlertDialogModel } from "./AlertDialog";
 import { deleteRevenue } from "@/app/actions/actions";
+import { UpdateRevenueModel } from "./updateRevenueModel";
 
 interface Revenue {
   amount: number;
@@ -14,14 +15,31 @@ interface Revenue {
 const RevenuesList = ({ revenueData }: { revenueData: Revenue[] }) => {
   const [currentRevenue, setCurrentRevenue] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+  const [currentRevenueToUpdate, setCurrentRevenueToUpdate] =
+    useState<Revenue | null>(null);
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
   };
 
+  const handleUpdateClose = () => {
+    setIsUpdateDialogOpen(false);
+  };
+
   function handleDeleteRevenue(id: string) {
     setCurrentRevenue(id);
     setIsDialogOpen(true);
+  }
+
+  function handleUpdateRevenue(_id: string, amount: number, date: string) {
+    const revenue: Revenue = {
+      _id,
+      amount,
+      date,
+    };
+    setCurrentRevenueToUpdate(revenue);
+    setIsUpdateDialogOpen(true);
   }
 
   return (
@@ -47,7 +65,12 @@ const RevenuesList = ({ revenueData }: { revenueData: Revenue[] }) => {
                 strokeWidth={1.5}
                 onClick={() => handleDeleteRevenue(revenue._id)}
               />
-              <UserPen strokeWidth={1.5} />
+              <UserPen
+                strokeWidth={1.5}
+                onClick={() =>
+                  handleUpdateRevenue(revenue._id, revenue.amount, revenue.date)
+                }
+              />
             </div>
           </div>
         </div>
@@ -58,6 +81,14 @@ const RevenuesList = ({ revenueData }: { revenueData: Revenue[] }) => {
           isDeleteOpen={isDialogOpen}
           onDeleteHandler={() => deleteRevenue(currentRevenue)}
           onHandleDeleteClose={handleCloseDialog}
+        />
+      )}
+
+      {isUpdateDialogOpen && currentRevenueToUpdate && (
+        <UpdateRevenueModel
+          toggleDialog={isUpdateDialogOpen}
+          currentRevenue={currentRevenueToUpdate}
+          onHandleClose={handleUpdateClose}
         />
       )}
     </>

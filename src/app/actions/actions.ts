@@ -2,7 +2,6 @@
 
 import axios from "axios";
 import { revalidateTag } from "next/cache";
-import { NextResponse } from "next/server";
 
 // Customers
 
@@ -19,7 +18,7 @@ export async function getCustomers() {
   }
 }
 
-// Update Customer 
+// Update Customer
 
 interface Customer {
   name: string;
@@ -27,17 +26,16 @@ interface Customer {
 }
 
 export async function updateCustomerInfo(id: string, data: Customer) {
-  try{
+  try {
     // Using axios to make the PUT request
     await axios.put(`http://localhost:3000/api/customers/${id}`, data);
     revalidateTag("customer");
     // Return a success message
-    revalidateTag("customers")
-    return { success: "Customer updated successfully" };
-  }
-  catch(error) {
+    revalidateTag("customers");
+    return { success: "Customer updated successfully", status: true };
+  } catch (error) {
     // Return an error message
-    return { error: "Error updating customer" };
+    return { message: "Error updating customer", status: false };
   }
 }
 
@@ -86,18 +84,14 @@ export async function updateCredit(
 ) {
   try {
     // Send a PUT request using Axios
-    const response = await axios.put(
+    await axios.put(
       `http://localhost:3000/api/credits/${creditId}`,
       updatedData
     );
 
-    // Axios automatically parses the response data
-    return response.data;
+    return { message: "Credit updated successfully", status: true };
   } catch (error) {
-    console.error("Error updating credit:", error);
-
-    // Something happened in setting up the request
-    throw new Error("Error setting up the request.");
+    return { message: "Failed to update credit", status: false };
   }
 }
 
@@ -108,34 +102,39 @@ export const DeleteCustomer = async (_id: string) => {
     await axios.delete(`http://localhost:3000/api/customers/${_id}`);
     revalidateTag("customers");
 
-    return { message: "Customer deleted successfully" };
+    return { status: true, message: "Customer deleted successfully" };
   } catch (error) {
-    return { message: "Customer not found", status: 404 };
+    return { message: "Customer not found", status: false };
   }
 };
 
 //////////////////////////////////
 // Revenues
 
-// export async function revenueFetcher() {
-//   try {
-//     const response = await axios.get("http://localhost:3000/api/revenue");
-//     const data = response.data;
-//     console.log("here is your revenue data", data);
-//     return data;
-//   } catch (error) {
-//     return {message:"Failed to Delete revenue data",status:404};
-//   }
-// }
-
-// Delete 
+// Delete
 export async function deleteRevenue(_id: string) {
   try {
     await axios.delete(`http://localhost:3000/api/revenue/${_id}`);
-    
+
     revalidateTag("revenue");
-    return {message: "Revenue deleted successfully"};
+    return { message: "Revenue deleted successfully" };
   } catch (error) {
-   return {message:"Failed to Delete revenue data",status:404}
+    return { message: "Failed to Delete revenue data", status: 404 };
+  }
+}
+
+// Update
+interface Revenue {
+  amount: number;
+  date: string;
+}
+
+export async function updateRevenue(_id: string, data: Revenue) {
+  try {
+    await axios.put(`http://localhost:3000/api/revenue/${_id}`, data);
+    revalidateTag("revenue");
+    return { success: true, message: "Revenue updated successfully" };
+  } catch (error) {
+    return { success: false, message: "Failed to update revenue data" };
   }
 }

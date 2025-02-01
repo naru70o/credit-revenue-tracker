@@ -72,7 +72,6 @@ export async function PUT(
   try {
     const { id } = params;
     const customerData = await request.json();
-    // Validate the ID (optional but recommended)
     if (!id) {
       return NextResponse.json(
         { message: "Customer ID is required" },
