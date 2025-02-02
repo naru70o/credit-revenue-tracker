@@ -1,3 +1,4 @@
+"use client";
 import { formatAmount, formatDate } from "@/lib/utils";
 import React, { useState } from "react";
 import { CreditDetailsModal } from "./creditDetailsModal";
@@ -42,12 +43,10 @@ export const Credit = ({
   return (
     <>
       <div className="flex flex-col justify-center items-center mt-8 ">
-        {creditData.map((credit: CreditData) => {
+        {creditData.credits.map((credit: CreditData) => {
           const customerInfo = customers.find(
             (customer: CustomerData) => customer._id === credit.customerId
           );
-
-          console.log("Customer Info: this is the final", customerInfo);
 
           return (
             <div

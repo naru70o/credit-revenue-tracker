@@ -25,8 +25,8 @@ export const Menu = () => {
           <HomeIcon />
         </Link>
         <Link
-          href="/depts"
-          className={`${currentPath === "/depts" ? "text-blue-500" : ""}`}
+          href="/credits"
+          className={`${currentPath === "/credits" ? "text-blue-500" : ""}`}
         >
           <ArrowUpFromLine />
         </Link>

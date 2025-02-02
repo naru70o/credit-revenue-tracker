@@ -6,10 +6,11 @@ export async function GET() {
   try {
     await connectiondb();
     const credits = await Credit.find();
+    revalidateTag("credits");
     return NextResponse.json({
       message: "heres the credits",
       status: 200,
-      credits: credits,
+      credits,
     });
   } catch (error) {
     return NextResponse.json({ error: "Error fetching credits" });
