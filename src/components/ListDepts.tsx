@@ -105,13 +105,13 @@ const ListDept = () => {
 
   return (
     <div className="text-gray-700 py-16 px-4">
-      <div className="flex flex-col justify-center gap-12">
-        <div>
+      <div className="flex flex-col justify-center">
+        <div className="w-full rounded-xl bg-gradient-to-r from-[#160078] to-[#7226ff] mb-2 p-4 text-gray-300">
           <h1 className="font-bold text-2xl text-start w-1/2">
             Check your depts
           </h1>
           <p>
-            your total owes to people{" "}
+            your total Credits{" "}
             <span className="font-medium">
               {formatAmount(totalAmountCredits)}
             </span>{" "}

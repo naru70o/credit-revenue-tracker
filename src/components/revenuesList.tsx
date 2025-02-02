@@ -47,8 +47,11 @@ const RevenuesList = ({ revenueData }: { revenueData: Revenue[] }) => {
       {revenueData.map((revenue: Revenue) => (
         <div
           key={revenue._id}
-          className="bg-gray-300 rounded-xl w-full py-2 px-4 mt-4"
+          className="bg-gray-300 rounded-xl w-full py-2 px-4 mt-4 relative overflow-clip"
         >
+          <div
+            className={`absolute left-0 top-0 h-full w-2 bg-[#7226ff]`}
+          ></div>
           <div
             //   onClick={() => handleOpen(revenue.id)}
             className="flex justify-between items-center"

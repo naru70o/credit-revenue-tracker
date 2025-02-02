@@ -53,8 +53,11 @@ export const Credit = ({
             <div
               key={credit._id}
               onClick={() => handleOpen(credit)}
-              className="bg-[#D9D9D9] rounded-xl w-full py-2 px-4 mt-4"
+              className="bg-[#D9D9D9] rounded-xl w-full py-2 px-4 mt-4 relative overflow-clip"
             >
+              <div
+                className={`absolute left-0 top-0 h-full w-2 bg-[#7226ff]`}
+              ></div>
               <div
                 // onClick={() => handleOpen(credit.id)}
                 className="flex justify-between items-center"
@@ -70,7 +73,6 @@ export const Credit = ({
                     </p>
                   </div>
                 </div>
-                <p>{formatDate(credit.tookTime)}</p>
               </div>
             </div>
           );
