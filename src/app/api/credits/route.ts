@@ -5,7 +5,9 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     await connectiondb();
-    const credits = await Credit.find();
+    const credits = await Credit.find().sort({
+      tookTime: -1,
+    });
     revalidateTag("credits");
     return NextResponse.json({
       message: "heres the credits",
