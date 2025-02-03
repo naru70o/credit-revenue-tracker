@@ -17,7 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
+import { useEffect, useState } from "react";
 
 interface RevenueChart {
   month: string;
@@ -32,11 +32,56 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function RevenueChart({ chartData }: { chartData: RevenueChart[] }) {
+  // const [message, setMessage] = useState<string>("");
+  // const [percentageChange, setPercentageChange] = useState<number>(0);
+
+  const [message, setMessage] = useState("");
+  const [percentageChange, setPercentageChange] = useState<number>(0);
+
+  useEffect(() => {
+    if (chartData.length >= 2) {
+      const [previousMonth, lastMonth] = chartData.slice(-2);
+      const revenueDifference = lastMonth.revenue - previousMonth.revenue;
+
+      // Calculate the percentage change (to display in another state)
+      const percentageChange = (
+        (revenueDifference / previousMonth.revenue) *
+        100
+      ).toFixed(0);
+      setPercentageChange(parseFloat(percentageChange));
+
+      if (revenueDifference > 0) {
+        // Message for increase
+        setMessage(
+          `Macaamiil qaaliga ah, waxaad kordhisay ${revenueDifference.toLocaleString()} bishan marka la barbardhigo ${
+            previousMonth.month
+          }. 🚀`
+        );
+      } else if (revenueDifference < 0) {
+        // Message for decrease
+        setMessage(
+          `Macaamiil qaaliga ah, waxa kugu yimid hoos u dhac dhan ${Math.abs(
+            revenueDifference
+          ).toLocaleString()} markaan barbar dhigno ${previousMonth.month}. 🔻`
+        );
+      } else {
+        // Message for no change
+        setMessage(
+          `Macaamiil qaaliga ah, dakhligaagu wuxuu joogaa isla halkii ${previousMonth.month}. 📊`
+        );
+      }
+    } else {
+      setMessage(
+        `Dakhligaaga dhaqaale ee bishani waa ${lastMonth.revenue.toLocaleString()}`
+      );
+    }
+  }, [chartData]); // Only run the effect when chartData changes
+
   return (
     <Card className="bg-transparent mb-5 w-full shadow-none">
       <CardHeader>
-        <CardTitle>Bar Chart - Label</CardTitle>
-        <CardDescription>January - June 2025</CardDescription>
+        <CardTitle>Your Monthly</CardTitle>
+        <CardDescription>Revenue</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -72,11 +117,10 @@ export function RevenueChart({ chartData }: { chartData: RevenueChart[] }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          {percentageChange > 0 ? "Kor u kac dhan " : "Hoos u dhaca dhan"}{" "}
+          {Math.abs(percentageChange)}% <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
+        <div className="leading-none text-muted-foreground">{message}</div>
       </CardFooter>
     </Card>
   );
