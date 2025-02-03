@@ -17,7 +17,6 @@ export async function getCustomers() {
     return { error: "Error fetching customers" };
   }
 }
-
 // Update Customer
 
 interface Customer {

@@ -18,28 +18,25 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
+
+interface RevenueChart {
+  month: string;
+  revenue: number;
+}
 
 const chartConfig = {
   desktop: {
-    label: "Desktop",
+    label: "revenue",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
-export function RevenueChart() {
+export function RevenueChart({ chartData }: { chartData: RevenueChart[] }) {
   return (
     <Card className="bg-transparent mb-5 w-full shadow-none">
       <CardHeader>
         <CardTitle>Bar Chart - Label</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>January - June 2025</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -62,7 +59,7 @@ export function RevenueChart() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8}>
+            <Bar dataKey="revenue" fill="var(--color-desktop)" radius={8}>
               <LabelList
                 position="top"
                 offset={12}

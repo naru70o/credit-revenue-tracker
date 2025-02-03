@@ -33,6 +33,7 @@ const creditSchema = new mongoose.Schema({
   paidAt: { type: Date }, // Optional, will be set when the credit is paid
 });
 
+
 const revenueSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
   date: { type: Date, default: Date.now },

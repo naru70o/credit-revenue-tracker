@@ -1,11 +1,39 @@
-import { Menu } from "@/components/menu";
 import { RevenueChart } from "@/components/revenueChart";
+import { formatDate, formatMonth } from "@/lib/utils";
 import React from "react";
 
-const page: React.FC = () => {
+interface Revenue {
+  amount: number;
+  date: string; // Assuming date is in the format "DD/MMM/YYYY"
+  _id: string;
+}
+
+const page: React.FC = async () => {
+  const revenueResponse = await fetch("http://localhost:3000/api/revenue", {
+    next: {
+      tags: ["revenue"],
+    },
+  });
+  const revenue = await revenueResponse.json();
+  const revenueData: Revenue[] = revenue.revenues;
+
+  const aggregatedData = revenueData.reduce((acc, { date, amount }) => {
+    const month = formatMonth(date);
+    acc[month] = (acc[month] || 0) + amount;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const chartData = Object.entries(aggregatedData).map(([month, revenue]) => ({
+    month,
+    revenue,
+  }));
+
+  // console.log(chartData);
+  console.log(chartData);
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-8 px-4">
-      <RevenueChart />
+      <RevenueChart chartData={chartData} />
 
       {/* Toggle Buttons */}
       <div className="flex items-center gap-2 mb-6">

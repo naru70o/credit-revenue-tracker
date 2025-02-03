@@ -8,6 +8,8 @@ interface Revenue {
   _id: string;
 }
 
+
+
 const Page = async () => {
   const res = await fetch("http://localhost:3000/api/revenue", {
     next: {

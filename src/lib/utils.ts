@@ -24,3 +24,9 @@ export function formatAmount(number: number): string {
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return parts.join(".");
 }
+
+// formath date For chart
+export const formatMonth = (dateString:string) => {
+  const date = new Date(dateString);
+  return date.toLocaleString("default", { month: "long" }); // Get full month name
+};

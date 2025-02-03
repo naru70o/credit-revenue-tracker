@@ -14,6 +14,17 @@ interface CreditData {
   __v: number;
 }
 
+// interface CreditDetails {
+//     _id: string
+//     customerId: "6791390255f0dd244db6c969",
+//     amount: 100000,
+//     product: "taydh",
+//     personWhotaken: "aniga",
+//     isPaid: false,
+//     tookTime: "2025-01-25T07:18:21.745Z",
+//     __v: 0
+// }
+
 interface CustomerData {
   _id: string;
   name: string;
@@ -35,6 +46,11 @@ export const Credit = ({
     setIsDialogOpen(true);
   };
 
+  const { credits} = creditData as CreditData[];
+  
+
+  console.log(credits);
+
   const handleClose = () => {
     setIsDialogOpen(false);
     setSelectedCredit(null);
@@ -43,7 +59,7 @@ export const Credit = ({
   return (
     <>
       <div className="flex flex-col justify-center items-center mt-8 ">
-        {creditData.credits.map((credit: CreditData) => {
+        {credits.map((credit: CreditData) => {
           const customerInfo = customers.find(
             (customer: CustomerData) => customer._id === credit.customerId
           );

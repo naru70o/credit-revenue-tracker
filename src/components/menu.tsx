@@ -19,8 +19,8 @@ export const Menu = () => {
     <div className="w-full text-gray-700 fixed bottom-0 left-0 py-7 px-4 bg-slate-200 rounded-t-3xl text-end">
       <div className="flex justify-between items-center">
         <Link
-          href="/dashboard"
-          className={`${currentPath === "/dashboard" ? "text-blue-500" : ""}`}
+          href="/"
+          className={`${currentPath === "/" ? "text-blue-500" : ""}`}
         >
           <HomeIcon />
         </Link>
