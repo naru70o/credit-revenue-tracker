@@ -1,3 +1,4 @@
+import { DeptChart } from "@/components/deptChart";
 import { RevenueChart } from "@/components/revenueChart";
 import { formatDate, formatMonth } from "@/lib/utils";
 import React from "react";
@@ -28,13 +29,12 @@ const page: React.FC = async () => {
     revenue,
   }));
 
-  // console.log(chartData);
   console.log(chartData);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-8 px-4">
-      <RevenueChart chartData={chartData} />
-
+      {/* <RevenueChart chartData={chartData} revenueData={revenueData} /> */}
+      <DeptChart />
       {/* Toggle Buttons */}
       <div className="flex items-center gap-2 mb-6">
         <button className="px-4 py-2 bg-gray-300 rounded-full text-sm font-medium">

@@ -28,7 +28,7 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     await connectiondb();
-    const revenues = await Revenue.find();
+    const revenues = await Revenue.find().sort({ date: -1 }); 
     return NextResponse.json({
       revenues,
       status: 200,

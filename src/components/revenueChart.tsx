@@ -24,6 +24,7 @@ interface RevenueChart {
   revenue: number;
 }
 
+
 const chartConfig = {
   desktop: {
     label: "revenue",
@@ -32,11 +33,10 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function RevenueChart({ chartData }: { chartData: RevenueChart[] }) {
-  // const [message, setMessage] = useState<string>("");
-  // const [percentageChange, setPercentageChange] = useState<number>(0);
-
   const [message, setMessage] = useState("");
   const [percentageChange, setPercentageChange] = useState<number>(0);
+
+  console.log(chartData);
 
   useEffect(() => {
     if (chartData.length >= 2) {
@@ -75,7 +75,7 @@ export function RevenueChart({ chartData }: { chartData: RevenueChart[] }) {
         `Dakhligaaga dhaqaale ee bishani waa ${lastMonth.revenue.toLocaleString()}`
       );
     }
-  }, [chartData]); // Only run the effect when chartData changes
+  }, [chartData]);
 
   return (
     <Card className="bg-transparent mb-5 w-full shadow-none">
@@ -117,7 +117,7 @@ export function RevenueChart({ chartData }: { chartData: RevenueChart[] }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          {percentageChange > 0 ? "Kor u kac dhan " : "Hoos u dhaca dhan"}{" "}
+          {percentageChange > 0 ? "Kor u kac dhan " : "Hoos u dhaca dhan"}
           {Math.abs(percentageChange)}% <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">{message}</div>
