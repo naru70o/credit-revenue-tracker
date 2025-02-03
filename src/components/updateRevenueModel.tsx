@@ -27,9 +27,7 @@ export const UpdateRevenueModel = ({
       <DialogContent className="sm:max-w-[425px] rounded-xl w-[90%]">
         <DialogHeader>
           <DialogTitle>Update Customer</DialogTitle>
-          <DialogDescription>
-            Please put the users name and number.
-          </DialogDescription>
+          <DialogDescription>Please put the Amount and date.</DialogDescription>
         </DialogHeader>
         <UpdateRevenueForm
           currentRevenue={currentRevenue}

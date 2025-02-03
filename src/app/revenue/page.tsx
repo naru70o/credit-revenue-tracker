@@ -37,7 +37,7 @@ const Page = async () => {
           <AddRevenueButton />
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center mt-8 ">
+      <div className="flex flex-col justify-center items-center my-8">
         <RevenuesList revenueData={revenues} />
       </div>
     </div>
