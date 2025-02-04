@@ -10,7 +10,7 @@ export default function Error() {
         Oops! This page Couldn't be found.
       </h1>
       <div className="flex justify-center">
-        <Link href="/dashboard">
+        <Link href="/dashboard/revenue">
           <Button variant="destructive">Back to home</Button>
         </Link>
       </div>

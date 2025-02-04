@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/",
-        destination: "/default-path", // Replace with your desired default path
+        destination: "/dashboard/revenue",
         permanent: true,
       },
     ];

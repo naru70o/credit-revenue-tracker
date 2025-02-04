@@ -1,8 +1,6 @@
 import { Credit } from "@/components/credit";
-import ListDept from "@/components/ListDepts";
 import { Button } from "@/components/ui/button";
 import { formatAmount } from "@/lib/utils";
-import React from "react";
 
 interface CreditData {
   _id: string;
