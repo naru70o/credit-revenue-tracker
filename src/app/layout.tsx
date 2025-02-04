@@ -21,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${montserratfont.variable} bg-gray-100 antialiased`}>
+      <body
+        className={`${montserratfont.variable} bg-gray-100 antialiased h-screen`}
+      >
         <main id="charts-toggle">{children}</main>
         <Menu />
       </body>

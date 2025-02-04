@@ -37,7 +37,13 @@ const page = async () => {
 
   const customersData: CustomerData[] = await customersRes.json();
   const creditsData: CreditData[] = await creditsRes.json();
-  console.log(creditsData, customersData);
+  const credits: CreditData[] = creditsData.credits;
+
+  // total amount of un paid credits
+  const totalUnpaidAmount = credits
+    .filter((credit) => !credit.isPaid)
+    .reduce((acc, credit) => acc + credit.amount, 0);
+  console.log(totalUnpaidAmount);
 
   return (
     <div className="text-gray-700 py-16 px-4">
@@ -49,7 +55,7 @@ const page = async () => {
           <p>
             your total Credits{" "}
             <span className="font-medium">
-              {/* {formatAmount(totalAmountCredits)} */}
+              {formatAmount(totalUnpaidAmount)}
             </span>{" "}
           </p>
         </div>

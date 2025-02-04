@@ -46,10 +46,7 @@ export const Credit = ({
     setIsDialogOpen(true);
   };
 
-  const { credits} = creditData as CreditData[];
-  
-
-  console.log(credits);
+  const credits: CreditData[] = creditData.credits;
 
   const handleClose = () => {
     setIsDialogOpen(false);
@@ -58,7 +55,7 @@ export const Credit = ({
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center mt-8 ">
+      <div className="flex flex-col justify-center items-center mt-8">
         {credits.map((credit: CreditData) => {
           const customerInfo = customers.find(
             (customer: CustomerData) => customer._id === credit.customerId
