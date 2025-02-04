@@ -1,6 +1,6 @@
+import DashboardToggleButtons from "@/components/dashboardToggleButtons";
 import { DeptChart } from "@/components/deptChart";
 import { formatAmount, formatDate } from "@/lib/utils";
-import Link from "next/link";
 import React from "react";
 
 interface CreditData {
@@ -86,16 +86,7 @@ const page: React.FC = async () => {
         ))}
       </div>
 
-      <div className="items-center gap-2 mb-6 bg-gray-300 rounded-xl mt-8 h-fit">
-        <Link href="/dashboard/credits">
-          <button className="px-4 py-2 rounded-xl text-sm font-medium">
-            Revenue
-          </button>
-        </Link>
-        <button className="px-4 py-2 bg-purple-500 text-white rounded-xl text-sm font-medium">
-          Depts
-        </button>
-      </div>
+      <DashboardToggleButtons />
     </div>
   );
 };

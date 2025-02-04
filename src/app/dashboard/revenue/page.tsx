@@ -1,3 +1,4 @@
+import DashboardToggleButtons from "@/components/dashboardToggleButtons";
 import { RevenueChart } from "@/components/revenueChart";
 import { formatAmount, formatDate, formatMonth } from "@/lib/utils";
 import Link from "next/link";
@@ -46,8 +47,6 @@ const page: React.FC = async () => {
     revenue,
   }));
 
-  console.log(chartData);
-
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-8 px-4 relative">
       <RevenueChart chartData={chartData} />
@@ -70,16 +69,7 @@ const page: React.FC = async () => {
         ))}
       </div>
 
-      <div className="items-center gap-2 mb-6 bg-gray-300 rounded-xl mt-8 h-fit">
-        <Link href="/dashboard/credits">
-          <button className="px-4 py-2 rounded-xl text-sm font-medium">
-            Revenue
-          </button>
-        </Link>
-        <button className="px-4 py-2 bg-purple-500 text-white rounded-xl text-sm font-medium">
-          Depts
-        </button>
-      </div>
+      <DashboardToggleButtons />
     </div>
   );
 };
