@@ -1,6 +1,6 @@
 import AddRevenueButton from "@/components/addRevenueButton";
 import RevenuesList from "@/components/revenuesList";
-import { formatAmount } from "@/lib/utils";
+import { formatAmount, PUBLIC_URL } from "@/lib/utils";
 
 interface Revenue {
   amount: number;
@@ -8,10 +8,8 @@ interface Revenue {
   _id: string;
 }
 
-
-
 const Page = async () => {
-  const res = await fetch("http://localhost:3000/api/revenue", {
+  const res = await fetch(`${PUBLIC_URL}/api/revenue`, {
     next: {
       tags: ["revenue"],
     },

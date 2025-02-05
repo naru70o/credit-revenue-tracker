@@ -1,6 +1,6 @@
 import { Credit } from "@/components/credit";
 import { Button } from "@/components/ui/button";
-import { formatAmount } from "@/lib/utils";
+import { formatAmount, PUBLIC_URL } from "@/lib/utils";
 
 interface CreditData {
   _id: string;
@@ -21,13 +21,13 @@ interface CustomerData {
 }
 
 const page = async () => {
-  const creditsRes = await fetch("http://localhost:3000/api/credits", {
+  const creditsRes = await fetch(`${PUBLIC_URL}/api/credits`, {
     next: {
       tags: ["credits"],
     },
   });
 
-  const customersRes = await fetch("http://localhost:3000/api/customers", {
+  const customersRes = await fetch(`${PUBLIC_URL}/api/customers`, {
     next: {
       tags: ["customers"],
     },

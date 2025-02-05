@@ -1,6 +1,6 @@
 import { NewCredit } from "@/components/newCredit";
 import { Dropdown } from "@/components/ui/droppMenu";
-import { formatAmount, formatDate } from "@/lib/utils";
+import { formatAmount, formatDate, PUBLIC_URL } from "@/lib/utils";
 import { notFound } from "next/navigation";
 
 interface CreditData {
@@ -17,12 +17,9 @@ interface CreditData {
 const Page = async ({ params }: { params: { customerID: string } }) => {
   // Selecting the customer id from the URL
   const customer = params.customerID;
-  const response = await fetch(
-    `http://localhost:3000/api/customers/${customer}`,
-    {
-      next: { tags: ["credit"] },
-    }
-  );
+  const response = await fetch(`${PUBLIC_URL}/api/customers/${customer}`, {
+    next: { tags: ["credit"] },
+  });
   const customersData = await response.json();
   console.log("what is inside of this ", customersData);
 
@@ -31,7 +28,7 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
   }
 
   // selecting all the credits
-  const responseCredits = await fetch(`http://localhost:3000/api/credits`, {
+  const responseCredits = await fetch(`${PUBLIC_URL}/api/credits`, {
     next: { tags: ["credit"] },
   });
 

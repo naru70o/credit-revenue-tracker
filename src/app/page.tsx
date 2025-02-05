@@ -1,6 +1,6 @@
 import { DeptChart } from "@/components/deptChart";
 import { RevenueChart } from "@/components/revenueChart";
-import { formatDate, formatMonth } from "@/lib/utils";
+import { formatDate, formatMonth, PUBLIC_URL } from "@/lib/utils";
 import React from "react";
 
 interface Revenue {
@@ -10,7 +10,7 @@ interface Revenue {
 }
 
 const page: React.FC = async () => {
-  const revenueResponse = await fetch("http://localhost:3000/api/revenue", {
+  const revenueResponse = await fetch(`${PUBLIC_URL}/api/revenue`, {
     next: {
       tags: ["revenue"],
     },

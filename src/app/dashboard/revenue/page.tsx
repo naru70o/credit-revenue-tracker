@@ -1,6 +1,6 @@
 import DashboardToggleButtons from "@/components/dashboardToggleButtons";
 import { RevenueChart } from "@/components/revenueChart";
-import { formatAmount, formatDate, formatMonth } from "@/lib/utils";
+import { formatAmount, formatDate, formatMonth, PUBLIC_URL } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 
@@ -11,14 +11,14 @@ interface Revenue {
 }
 
 const page: React.FC = async () => {
-  const revenueResponse = await fetch("http://localhost:3000/api/revenue", {
+  const revenueResponse = await fetch(`${PUBLIC_URL}/api/revenue`, {
     next: {
       tags: ["revenue"],
     },
   });
 
   const revenueChartResponse = await fetch(
-    "http://localhost:3000/api/revenue/dashboard",
+    `${PUBLIC_URL}/api/revenue/dashboard`,
     {
       next: {
         tags: ["revenue"],

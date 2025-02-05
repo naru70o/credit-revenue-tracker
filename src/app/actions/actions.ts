@@ -1,5 +1,6 @@
 "use server";
 
+import { PUBLIC_URL } from "@/lib/utils";
 import axios from "axios";
 import { revalidateTag } from "next/cache";
 
@@ -8,7 +9,7 @@ import { revalidateTag } from "next/cache";
 export async function getCustomers() {
   try {
     // Using axios to make the GET request
-    const response = await axios.get("http://localhost:3000/api/customers");
+    const response = await axios.get(`${PUBLIC_URL}/api/customers`);
 
     // Return the data from the response
     return response.data;
@@ -27,7 +28,7 @@ interface Customer {
 export async function updateCustomerInfo(id: string, data: Customer) {
   try {
     // Using axios to make the PUT request
-    await axios.put(`http://localhost:3000/api/customers/${id}`, data);
+    await axios.put(`${PUBLIC_URL}/api/customers/${id}`, data);
     revalidateTag("customer");
     // Return a success message
     revalidateTag("customers");
@@ -42,7 +43,7 @@ export async function updateCustomerInfo(id: string, data: Customer) {
 export async function deleteCredit(id: string) {
   try {
     // Using axios to make the DELETE request
-    await axios.delete(`http://localhost:3000/api/credits/${id}`);
+    await axios.delete(`${PUBLIC_URL}/api/credits/${id}`);
     revalidateTag("credit");
     // Return a success message
     return { success: true, message: "Credit deleted successfully" };
@@ -57,7 +58,7 @@ export async function deleteCredit(id: string) {
 export async function setCreditToPaid(id: string) {
   try {
     // Using axios to make the PATCH request with the update payload
-    await axios.patch(`http://localhost:3000/api/credits/${id}`, {
+    await axios.patch(`${PUBLIC_URL}/api/credits/${id}`, {
       isPaid: true,
     });
 
@@ -83,10 +84,7 @@ export async function updateCredit(
 ) {
   try {
     // Send a PUT request using Axios
-    await axios.put(
-      `http://localhost:3000/api/credits/${creditId}`,
-      updatedData
-    );
+    await axios.put(`${PUBLIC_URL}/api/credits/${creditId}`, updatedData);
 
     return { message: "Credit updated successfully", status: true };
   } catch (error) {
@@ -98,7 +96,7 @@ export async function updateCredit(
 export const DeleteCustomer = async (_id: string) => {
   try {
     // delete this customer based on this id
-    await axios.delete(`http://localhost:3000/api/customers/${_id}`);
+    await axios.delete(`${PUBLIC_URL}/api/customers/${_id}`);
     revalidateTag("customers");
 
     return { status: true, message: "Customer deleted successfully" };
@@ -113,7 +111,7 @@ export const DeleteCustomer = async (_id: string) => {
 // Delete
 export async function deleteRevenue(_id: string) {
   try {
-    await axios.delete(`http://localhost:3000/api/revenue/${_id}`);
+    await axios.delete(`${PUBLIC_URL}/api/revenue/${_id}`);
 
     revalidateTag("revenue");
     return { message: "Revenue deleted successfully" };
@@ -130,7 +128,7 @@ interface Revenue {
 
 export async function updateRevenue(_id: string, data: Revenue) {
   try {
-    await axios.put(`http://localhost:3000/api/revenue/${_id}`, data);
+    await axios.put(`${PUBLIC_URL}/api/revenue/${_id}`, data);
     revalidateTag("revenue");
     return { success: true, message: "Revenue updated successfully" };
   } catch (error) {

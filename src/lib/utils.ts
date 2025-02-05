@@ -30,3 +30,5 @@ export const formatMonth = (dateString:string) => {
   const date = new Date(dateString);
   return date.toLocaleString("default", { month: "long" }); // Get full month name
 };
+
+export const PUBLIC_URL = process.env.PUBLIC_URL;

@@ -1,8 +1,9 @@
 import CustomersList from "@/components/customersList";
 import { AddCustomerButton } from "@/components/ui/AddCustomerButton";
+import { PUBLIC_URL } from "@/lib/utils";
 
 const page = async () => {
-  const response = await fetch("http://localhost:3000/api/customers", {
+  const response = await fetch(`${PUBLIC_URL}/api/customers`, {
     next: { tags: ["customers"] },
   });
 

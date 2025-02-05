@@ -1,6 +1,6 @@
 import DashboardToggleButtons from "@/components/dashboardToggleButtons";
 import { DeptChart } from "@/components/deptChart";
-import { formatAmount, formatDate } from "@/lib/utils";
+import { formatAmount, formatDate, PUBLIC_URL } from "@/lib/utils";
 import React from "react";
 
 interface CreditData {
@@ -21,7 +21,7 @@ interface ChartData {
 }
 
 const page: React.FC = async () => {
-  const creditRes = await fetch("http://localhost:3000/api/credits", {
+  const creditRes = await fetch(`${PUBLIC_URL}/api/credits`, {
     next: {
       tags: ["credits"],
     },
