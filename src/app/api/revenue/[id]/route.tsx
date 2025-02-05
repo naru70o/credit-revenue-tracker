@@ -1,6 +1,6 @@
 import { Revenue, connectiondb } from "@/lib/database/models";
 import { revalidateTag } from "next/cache";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE({ params }: { params: { id: string } }) {
   try {
@@ -42,7 +42,7 @@ export async function DELETE({ params }: { params: { id: string } }) {
 }
 
 export async function PUT(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

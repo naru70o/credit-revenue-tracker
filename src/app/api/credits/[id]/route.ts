@@ -1,8 +1,11 @@
 import { connectiondb, Credit } from "@/lib/database/models";
 import { revalidateTag } from "next/cache";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const id = params.id;
     await connectiondb();

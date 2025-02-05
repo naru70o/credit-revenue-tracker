@@ -1,9 +1,9 @@
 import { connectiondb, Customer } from "@/lib/database/models";
 import { revalidateTag } from "next/cache";
 import { notFound } from "next/navigation";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(request: NextRequest,{ params }: { params: { id: string } }) {
   try {
     await connectiondb();
     const customer = await Customer.findById(params.id);
@@ -61,7 +61,7 @@ export async function DELETE({ params }: { params: { id: string } }) {
 }
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,,
   { params }: { params: { id: string } }
 ) {
   try {
