@@ -32,7 +32,7 @@ interface ChartData {
   fill: string;
 }
 
-export function DeptChart({ chartData }: { chartData: ChartData }) {
+export function DeptChart({ chartData }: { chartData: ChartData | any }) {
   return (
     <Card className="flex flex-col bg-transparent shadow-none w-full">
       <CardHeader className="items-center pb-0">

@@ -11,6 +11,8 @@ export async function GET() {
       message: "Revenues retrieved successfully",
     });
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json({
       message: "Error getting revenues",
       status: 500,

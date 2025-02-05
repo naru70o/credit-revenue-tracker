@@ -14,6 +14,8 @@ export async function getCustomers() {
     // Return the data from the response
     return response.data;
   } catch (error) {
+    console.log(error);
+
     // Return an error message
     return { error: "Error fetching customers" };
   }
@@ -34,6 +36,8 @@ export async function updateCustomerInfo(id: string, data: Customer) {
     revalidateTag("customers");
     return { success: "Customer updated successfully", status: true };
   } catch (error) {
+    console.log(error);
+
     // Return an error message
     return { message: "Error updating customer", status: false };
   }
@@ -65,7 +69,6 @@ export async function setCreditToPaid(id: string) {
     return { success: true, message: "Credit updated successfully" };
   } catch (error) {
     console.error(error);
-
     return { success: false, message: "Failed to piad the credit" };
   }
 }
@@ -88,6 +91,8 @@ export async function updateCredit(
 
     return { message: "Credit updated successfully", status: true };
   } catch (error) {
+    console.log(error);
+
     return { message: "Failed to update credit", status: false };
   }
 }
@@ -101,6 +106,7 @@ export const DeleteCustomer = async (_id: string) => {
 
     return { status: true, message: "Customer deleted successfully" };
   } catch (error) {
+    console.log(error);
     return { message: "Customer not found", status: false };
   }
 };
@@ -116,6 +122,8 @@ export async function deleteRevenue(_id: string) {
     revalidateTag("revenue");
     return { message: "Revenue deleted successfully" };
   } catch (error) {
+    console.log(error);
+
     return { message: "Failed to Delete revenue data", status: 404 };
   }
 }
@@ -132,6 +140,8 @@ export async function updateRevenue(_id: string, data: Revenue) {
     revalidateTag("revenue");
     return { success: true, message: "Revenue updated successfully" };
   } catch (error) {
+    console.log(error);
+
     return { success: false, message: "Failed to update revenue data" };
   }
 }

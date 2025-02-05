@@ -35,6 +35,8 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }
@@ -67,6 +69,8 @@ export async function PUT(
     revalidateTag("revenue");
     return NextResponse.json(revenue, { status: 200 });
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json(
       { message: "Couldn't update revenue" },
       { status: 501 }

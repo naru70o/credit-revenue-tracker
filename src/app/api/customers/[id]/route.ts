@@ -19,6 +19,7 @@ export async function GET(
       status: 200,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { message: "Error getting customer" },
       { status: 501 }
@@ -57,7 +58,7 @@ export async function DELETE(
     revalidateTag("customers");
     return new NextResponse(null, { status: 204 });
   } catch (error) {
-    console.error("Error deleting customer:", error.message || error);
+    console.log(error);
     return NextResponse.json(
       { message: "Error deleting customer" },
       { status: 500 }
@@ -88,6 +89,7 @@ export async function PUT(
     revalidateTag("customers");
     return NextResponse.json(customer);
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ status: 501, message: "Could not Update user" });
   }
 }

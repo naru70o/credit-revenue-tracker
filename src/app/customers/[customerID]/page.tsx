@@ -44,7 +44,7 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
     .filter((credit: CreditData) => credit.isPaid === false)
     .reduce((acc: number, item: CreditData) => acc + item.amount, 0);
 
-  const { name, phoneNumber, _id } = customersData.customer;
+  const { name, _id } = customersData.customer;
 
   return (
     <div className="text-gray-700 py-16 px-4 overflow-y-scroll">

@@ -12,6 +12,8 @@ export async function GET(
     const credit = await Credit.findById(id);
     return NextResponse.json(credit);
   } catch (error) {
+    console.log(error);
+
     NextResponse.json({ status: 500, message: "Internal Server Error" });
   }
 }
@@ -34,6 +36,8 @@ export async function DELETE(
     revalidateTag("credit");
     return NextResponse.json(credit);
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json({ status: 500, message: "Internal Server Error" });
   }
 }
@@ -54,6 +58,8 @@ export async function PATCH(
     );
     return NextResponse.json(credit);
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json({ status: 500, message: "Internal Server Error" });
   }
 }
@@ -72,6 +78,8 @@ export async function PUT(
     });
     return NextResponse.json(updatedCredit);
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json({ status: 500, message: "Internal Server Error" });
   }
 }

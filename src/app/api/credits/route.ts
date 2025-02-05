@@ -15,6 +15,8 @@ export async function GET() {
       credits,
     });
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json({ error: "Error fetching credits" });
   }
 }
@@ -41,6 +43,8 @@ export async function POST(request: Request) {
       status: 200,
     });
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json({
       error: "Error adding credit",
       status: 401,
