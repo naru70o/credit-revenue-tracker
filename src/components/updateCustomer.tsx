@@ -10,6 +10,11 @@ interface Customer {
   phoneNumber: string;
 }
 
+interface UpdateDate {
+  name: string;
+  phoneNumber: string;
+}
+
 const UpdateCustomerForm = ({
   currentCustomer,
   handleCloseDialog,
@@ -18,20 +23,20 @@ const UpdateCustomerForm = ({
   handleCloseDialog: () => void;
 }) => {
   const [personName, setPersonName] = React.useState(currentCustomer.name);
-  const [phoneNumber, setPhoneNumber] = React.useState(
+  const [phoneNumber, setPhoneNumber] = React.useState<string>(
     currentCustomer.phoneNumber
   );
 
   async function handleClick(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const UpdateDate = {
+    const updateData: UpdateDate = {
       name: personName,
-      phoneNumber: parseFloat(phoneNumber),
+      phoneNumber: phoneNumber,
     };
 
     try {
-      await updateCustomerInfo(currentCustomer._id, UpdateDate);
+      await updateCustomerInfo(currentCustomer._id, updateData);
       handleCloseDialog();
     } catch (error) {
       console.log(error);

@@ -1,12 +1,10 @@
 "use client";
 
-import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { DatePicker } from "./ui/datePicker";
 import { Input } from "./ui/input";
-import { revalidateTag } from "next/cache";
-import { useRouter } from "next/navigation";
 
 export default function AddRevenue({
   closeDialog,
@@ -19,35 +17,6 @@ export default function AddRevenue({
 
   const router = useRouter();
 
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   if (!selectedDate) {
-  //     setError("Please select a date");
-  //     return;
-  //   }
-
-  //   if (!revenue) {
-  //     setError("Please enter a revenue amount");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post("/api/revenue", {
-  //       amount: revenue,
-  //       date: selectedDate,
-  //     });
-  //     revalidateTag("revenues");
-
-  //     console.log("Revenue added successfully:", response.data);
-
-  //     setSelectedDate(undefined);
-  //     setRevenue("");
-  //     closeDialog();
-  //   } catch (error) {
-  //     console.log("error accured", error);
-  //   }
-  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
