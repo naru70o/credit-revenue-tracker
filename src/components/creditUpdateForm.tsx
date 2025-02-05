@@ -48,11 +48,14 @@ export default function CreditUpdateForm({
     setError(null);
 
     // Prepare the updated data
-    const updatedData = {
+    const updatedData: UpdatedCreditData = {
       amount: parseFloat(amount),
       product,
       personWhotaken,
-      tookTime: selectedDate?.toISOString(),
+      tookTime:
+        selectedDate instanceof Date
+          ? selectedDate.toISOString()
+          : selectedDate || "",
     };
 
     try {
@@ -60,6 +63,7 @@ export default function CreditUpdateForm({
       await updateCredit(creditData._id, updatedData);
       onhandleClose(); // Close the form after successful update
     } catch (error) {
+      console.log(error);
       setError("Failed to update credit. Please try again.");
     } finally {
       setIsSubmitting(false);
