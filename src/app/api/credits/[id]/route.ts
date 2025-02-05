@@ -2,10 +2,7 @@ import { connectiondb, Credit } from "@/lib/database/models";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET({ params }: { params: { id: string } }) {
   try {
     const id = params.id;
     await connectiondb();
@@ -19,10 +16,7 @@ export async function GET(
 }
 
 // delete
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE({ params }: { params: { id: string } }) {
   try {
     const id = params.id;
     console.log("delete credit id", id);
