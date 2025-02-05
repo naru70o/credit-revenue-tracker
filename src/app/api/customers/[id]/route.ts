@@ -61,7 +61,7 @@ export async function DELETE({ params }: { params: { id: string } }) {
 }
 
 export async function PUT(
-  request: NextRequest,,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
