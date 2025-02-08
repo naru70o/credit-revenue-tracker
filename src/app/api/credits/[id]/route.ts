@@ -28,7 +28,6 @@ export async function GET(
   }
 }
 
-
 // delete
 export async function DELETE({ params }: { params: { id: string } }) {
   try {
