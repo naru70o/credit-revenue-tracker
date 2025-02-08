@@ -76,21 +76,21 @@ export async function PATCH(
 }
 
 // update whole document
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const id = params.id;
-    const credit = await request.json();
-    await connectiondb();
-    const updatedCredit = await Credit.findByIdAndUpdate(id, credit, {
-      new: true,
-    });
-    return NextResponse.json(updatedCredit);
-  } catch (error) {
-    console.log(error);
+// export async function PUT(
+//   request: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   try {
+//     const id = params.id;
+//     const credit = await request.json();
+//     await connectiondb();
+//     const updatedCredit = await Credit.findByIdAndUpdate(id, credit, {
+//       new: true,
+//     });
+//     return NextResponse.json(updatedCredit);
+//   } catch (error) {
+//     console.log(error);
 
-    return NextResponse.json({ status: 500, message: "Internal Server Error" });
-  }
-}
+//     return NextResponse.json({ status: 500, message: "Internal Server Error" });
+//   }
+// }
