@@ -27,7 +27,10 @@ interface Customer {
   phoneNumber: string;
 }
 
-export async function updateCustomerInfo(id: string, data: Customer) {
+export async function updateCustomerInfo(
+  id: string | undefined,
+  data: Customer
+) {
   try {
     // Using axios to make the PUT request
     await axios.put(`${PUBLIC_URL}/api/customers/${id}`, data);

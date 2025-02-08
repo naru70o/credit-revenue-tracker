@@ -19,7 +19,7 @@ export const UpdateCustomerModel = ({
   onhandleClose,
 }: {
   toggleDialog: boolean;
-  currentCustomer: Customer;
+  currentCustomer: Customer | null;
   onhandleClose: () => void;
 }) => {
   return (

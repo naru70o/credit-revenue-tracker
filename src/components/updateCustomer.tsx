@@ -5,27 +5,28 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 interface Customer {
-  _id: string;
-  name: string;
-  phoneNumber: string;
+  _id: string | undefined;
+  name: string | undefined;
+  phoneNumber: string | undefined;
 }
 
 interface UpdateDate {
-  name: string;
-  phoneNumber: string;
+  name: string | undefined;
+  phoneNumber: string | undefined;
 }
 
 const UpdateCustomerForm = ({
   currentCustomer,
   handleCloseDialog,
 }: {
-  currentCustomer: Customer;
+  currentCustomer: Customer | null;
   handleCloseDialog: () => void;
 }) => {
-  const [personName, setPersonName] = React.useState(currentCustomer.name);
-  const [phoneNumber, setPhoneNumber] = React.useState<string>(
-    currentCustomer.phoneNumber
+  const [personName, setPersonName] = React.useState(currentCustomer?.name);
+  const [phoneNumber, setPhoneNumber] = React.useState(
+    currentCustomer?.phoneNumber
   );
+  const [_id, setId] = React.useState<string | undefined>(currentCustomer?._id);
 
   async function handleClick(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,7 +37,7 @@ const UpdateCustomerForm = ({
     };
 
     try {
-      await updateCustomerInfo(currentCustomer._id, updateData);
+      await updateCustomerInfo(_id, updateData);
       handleCloseDialog();
     } catch (error) {
       console.log(error);
