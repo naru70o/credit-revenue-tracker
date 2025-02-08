@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { DatePicker } from "./ui/datePicker";
-import { updateRevenue } from "@/app/actions/actions";
+import { updateRevenue } from "@/app/_actions/actions";
 import { Button } from "./ui/button";
 
 interface Revenue {

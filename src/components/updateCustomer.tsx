@@ -1,5 +1,5 @@
 "use client";
-import { updateCustomerInfo } from "@/app/actions/actions";
+import { updateCustomerInfo } from "@/app/_actions/actions";
 import React from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";

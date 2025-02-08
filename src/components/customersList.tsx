@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteCustomer } from "@/app/actions/actions";
+import { DeleteCustomer } from "@/app/_actions/actions";
 import { Trash2, UserPen } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
