@@ -3,8 +3,8 @@ import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } } // Explicit type definition
+  request: Request,
+  { params }: { params: { id: string } }
 ) {
   try {
     const id = params.id;
@@ -29,7 +29,10 @@ export async function GET(
 }
 
 // delete
-export async function DELETE({ params }: { params: { id: string } }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
     const id = params.id;
     console.log("delete credit id", id);

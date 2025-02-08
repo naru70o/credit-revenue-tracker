@@ -48,7 +48,6 @@ export async function deleteCredit(id: string) {
   try {
     // Using axios to make the DELETE request
     await axios.delete(`${PUBLIC_URL}/api/credits/${id}`);
-    revalidateTag("credit");
     // Return a success message
     return { success: true, message: "Credit deleted successfully" };
   } catch (error) {
@@ -98,10 +97,10 @@ export async function updateCredit(
 }
 
 // HANDLE DELETE Customer
-export const DeleteCustomer = async (_id: string) => {
+export const DeleteCustomer = async (id: string) => {
   try {
     // delete this customer based on this id
-    await axios.delete(`${PUBLIC_URL}/api/customers/${_id}`);
+    await axios.delete(`${PUBLIC_URL}/api/customers/${id}`);
     revalidateTag("customers");
 
     return { status: true, message: "Customer deleted successfully" };
@@ -115,9 +114,9 @@ export const DeleteCustomer = async (_id: string) => {
 // Revenues
 
 // Delete
-export async function deleteRevenue(_id: string) {
+export async function deleteRevenue(id: string) {
   try {
-    await axios.delete(`${PUBLIC_URL}/api/revenue/${_id}`);
+    await axios.delete(`${PUBLIC_URL}/api/revenue/${id}`);
 
     revalidateTag("revenue");
     return { message: "Revenue deleted successfully" };
@@ -134,9 +133,9 @@ interface Revenue {
   date: string;
 }
 
-export async function updateRevenue(_id: string, data: Revenue) {
+export async function updateRevenue(id: string, data: Revenue) {
   try {
-    await axios.put(`${PUBLIC_URL}/api/revenue/${_id}`, data);
+    await axios.put(`${PUBLIC_URL}/api/revenue/${id}`, data);
     revalidateTag("revenue");
     return { success: true, message: "Revenue updated successfully" };
   } catch (error) {

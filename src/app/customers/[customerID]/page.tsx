@@ -21,7 +21,6 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
     next: { tags: ["credit"] },
   });
   const customersData = await response.json();
-  console.log("what is inside of this ", customersData);
 
   if (response.status !== 200) {
     notFound();
