@@ -8,6 +8,16 @@ interface Revenue {
   _id: string;
 }
 
+interface RevenueRasponse {
+  revenues: Revenue[];
+}
+
+interface Revenue {
+  amount: number;
+  date: string; // Assuming date is in the format "DD/MMM/YYYY"
+  _id: string;
+}
+
 const Page = async () => {
   const res = await fetch(`${PUBLIC_URL}/api/revenue`, {
     next: {
@@ -15,12 +25,11 @@ const Page = async () => {
     },
   });
 
-  const revenueData: Revenue[] = await res.json();
-  const revenues = revenueData.revenues;
-  const totalRevenue = revenues.reduce(
-    (acc: number, curr: number) => acc + curr.amount,
-    0
-  );
+  const revenueData: RevenueRasponse = await res.json();
+
+  const revenues: Revenue[] = revenueData.revenues;
+
+  const totalRevenue = revenues.reduce((acc, curr) => acc + curr.amount, 0);
 
   return (
     <div className="text-black py-16 px-4 bg-gray-100">
