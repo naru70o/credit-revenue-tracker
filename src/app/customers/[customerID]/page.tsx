@@ -14,10 +14,14 @@ interface CreditData {
   _id: string;
 }
 
-const Page = async ({ params }: { params: { customerID: string } }) => {
+const Page = async ({
+  params,
+}: {
+  params: Promise<{ customerID: string }>;
+}) => {
   // Selecting the customer id from the URL
-  const customer = params.customerID;
-  const response = await fetch(`${PUBLIC_URL}/api/customers/${customer}`, {
+  const { customerID } = await params;
+  const response = await fetch(`${PUBLIC_URL}/api/customers/${customerID}`, {
     next: { tags: ["credit"] },
   });
   const customersData = await response.json();
@@ -36,7 +40,7 @@ const Page = async ({ params }: { params: { customerID: string } }) => {
 
   // Filtering the credits by customer id
   const filteredData = creditsData.filter((item: CreditData) =>
-    customer.includes(item.customerId)
+    customerID.includes(item.customerId)
   );
 
   const totalCredits = filteredData

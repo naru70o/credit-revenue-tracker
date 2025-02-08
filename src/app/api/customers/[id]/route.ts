@@ -1,12 +1,17 @@
 import { connectiondb, Customer } from "@/lib/database/models";
 import { revalidateTag } from "next/cache";
+import { Params } from "next/dist/server/request/params";
 import { notFound } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest,{ params }: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectiondb();
-    const customer = await Customer.findById(params.id);
+    const { id } = await params;
+    const customer = await Customer.findById(id);
     if (!customer) {
       notFound();
     }
@@ -26,10 +31,10 @@ export async function GET(request: NextRequest,{ params }: { params: { id: strin
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Validate the ID (optional but recommended)
     if (!id) {
@@ -65,10 +70,10 @@ export async function DELETE(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const customerData = await request.json();
     if (!id) {
       return NextResponse.json(
