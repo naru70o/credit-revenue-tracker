@@ -32,10 +32,10 @@ export async function GET(
 // delete
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     console.log("delete credit id", id);
     await connectiondb();
 
@@ -56,10 +56,10 @@ export async function DELETE(
 // update the paid
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const { isPaid } = await request.json();
     await connectiondb();
     const credit = await Credit.findByIdAndUpdate(
@@ -78,10 +78,10 @@ export async function PATCH(
 // update whole document
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const credit = await request.json();
     await connectiondb();
     const updatedCredit = await Credit.findByIdAndUpdate(id, credit, {
