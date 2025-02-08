@@ -4,19 +4,30 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } } // Explicit type definition
 ) {
   try {
     const id = params.id;
     await connectiondb();
     const credit = await Credit.findById(id);
+
+    if (!credit) {
+      return NextResponse.json(
+        { message: "Credit not found" },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json(credit);
   } catch (error) {
-    console.log(error);
-
-    NextResponse.json({ status: 500, message: "Internal Server Error" });
+    console.error(error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
+
 
 // delete
 export async function DELETE({ params }: { params: { id: string } }) {
