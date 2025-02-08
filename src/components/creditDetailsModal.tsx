@@ -35,7 +35,7 @@ export const CreditDetailsModal = ({
 }: {
   isDialogOpen: boolean;
   handleClose: () => void;
-  selectedCredit: CreditData;
+  selectedCredit: CreditData | null;
   customers: CustomerData[];
 }) => {
   return (

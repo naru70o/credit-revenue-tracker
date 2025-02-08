@@ -13,6 +13,10 @@ interface CreditData {
   __v: number;
 }
 
+interface CreditResponse {
+  credits: CreditData[];
+}
+
 interface CustomerData {
   _id: string;
   name: string;
@@ -34,7 +38,7 @@ const page = async () => {
   });
 
   const customersData: CustomerData[] = await customersRes.json();
-  const creditsData: CreditData[] = await creditsRes.json();
+  const creditsData: CreditResponse = await creditsRes.json();
   const credits: CreditData[] = creditsData.credits;
 
   // total amount of un paid credits
@@ -61,7 +65,7 @@ const page = async () => {
           <Button className="bg-blue-500 hover:bg-blue-700">filtering</Button>
         </div>
       </div>
-      <Credit creditData={creditsData} customers={customersData} />
+      <Credit creditData={credits} customers={customersData} />
     </div>
   );
 };
