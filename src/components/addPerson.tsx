@@ -6,7 +6,11 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-export default function AddPerson({ setIsDialogOpen }) {
+export default function AddPerson({
+  setIsDialogOpen,
+}: {
+  setIsDialogOpen: (value: boolean) => void;
+}) {
   const router = useRouter();
   const [personName, setPersonName] = useState<string>("");
   const [personNumber, setPersonNumber] = useState<string>("");

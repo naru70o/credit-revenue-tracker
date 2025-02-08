@@ -80,7 +80,10 @@ export default function AddRevenue({
         />
       </div>
       <div className="flex flex-col justify-center w-[80%]">
-        <DatePicker value={selectedDate} onChange={(e) => setSelectedDate(e)} />{" "}
+        <DatePicker
+          value={selectedDate}
+          onChange={() => setSelectedDate(selectedDate)}
+        />{" "}
       </div>
       <Button type="submit" className="mt-4 inline w-32 self-center rounded-xl">
         Add revenue

@@ -16,6 +16,7 @@ export const AddCustomerModel = ({
 }: {
   isDialogOpen: boolean;
   handleClose: () => void;
+  setIsDialogOpen: (value: boolean) => void;
 }) => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleClose}>
