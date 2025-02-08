@@ -39,8 +39,8 @@ export function RevenueChart({ chartData }: { chartData: RevenueChart[] }) {
   console.log(chartData);
 
   useEffect(() => {
+    const [previousMonth, lastMonth] = chartData.slice(-2);
     if (chartData.length >= 2) {
-      const [previousMonth, lastMonth] = chartData.slice(-2);
       const revenueDifference = lastMonth.revenue - previousMonth.revenue;
 
       // Calculate the percentage change (to display in another state)

@@ -23,8 +23,8 @@ export async function getCustomers() {
 // Update Customer
 
 interface Customer {
-  name: string;
-  phoneNumber: string;
+  name: string | undefined;
+  phoneNumber: string | undefined;
 }
 
 export async function updateCustomerInfo(
