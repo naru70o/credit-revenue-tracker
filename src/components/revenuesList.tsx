@@ -3,7 +3,7 @@ import { formatAmount, formatDate } from "@/lib/utils";
 import { Trash2, UserPen } from "lucide-react";
 import { useState } from "react";
 import { AlertDialogModel } from "./AlertDialog";
-import { deleteRevenue } from "@/app/_actions/actions";
+import { deleteRevenue } from "@/_actions/actions";
 import { UpdateRevenueModel } from "./updateRevenueModel";
 
 interface Revenue {

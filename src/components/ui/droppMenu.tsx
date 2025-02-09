@@ -19,7 +19,7 @@ import { useState } from "react";
 import { UpdateCredit } from "../updateCredit";
 import { AlertDialogModel } from "../AlertDialog";
 
-import { deleteCredit, setCreditToPaid } from "@/app/_actions/actions";
+import { deleteCredit, setCreditToPaid } from "@/_actions/actions";
 
 interface CreditData {
   amount: number;
