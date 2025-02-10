@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteCredit } from "@/app/_actions/actions";
+import { deleteCredit } from "../app/_actions/actions";
 import { Pencil, Trash2 } from "lucide-react";
 import React from "react";
 
