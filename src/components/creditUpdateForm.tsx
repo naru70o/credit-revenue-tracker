@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { DatePicker } from "./ui/datePicker";
-import { updateCredit } from "@/_actions/actions";
+import { updateCredit } from "@/app/_actions/actions";
 
 interface CreditData {
   _id: string;

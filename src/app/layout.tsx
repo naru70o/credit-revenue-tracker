@@ -1,8 +1,7 @@
+import Menu from "@/components/menu";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { Menu } from "@/components/menu";
-
 const montserratfont = Montserrat({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"], // Choose desired font weights
