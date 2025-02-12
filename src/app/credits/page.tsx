@@ -1,6 +1,12 @@
 import { Credit } from "@/components/credit";
 import { Button } from "@/components/ui/button";
-import { formatAmount, PUBLIC_URL } from "@/lib/utils";
+import {
+  connectiondb,
+  Credit as CreditModel,
+  Customer,
+} from "@/lib/database/models";
+import { formatAmount } from "@/lib/utils";
+import { Types } from "mongoose";
 
 interface CreditData {
   _id: string;
@@ -25,27 +31,39 @@ interface CustomerData {
 }
 
 const page = async () => {
-  const creditsRes = await fetch(`${PUBLIC_URL}/api/credits`, {
-    next: {
-      tags: ["credits"],
-    },
-  });
+  // selecting all the credits
+  await connectiondb();
 
-  const customersRes = await fetch(`${PUBLIC_URL}/api/customers`, {
-    next: {
-      tags: ["customers"],
-    },
-  });
+  // fetching all the credits from the database
+  const creditsData = (
+    await CreditModel.find()
+      .sort({
+        tookTime: -1,
+      })
+      .lean()
+  ).map((credit) => ({
+    amount: credit.amount,
+    customerId: (credit.customerId as Types.ObjectId).toString(),
+    isPaid: credit.isPaid,
+    personWhotaken: credit.personWhotaken,
+    product: credit.product,
+    tookTime: credit.tookTime,
+    __v: credit.__v,
+    _id: (credit._id as Types.ObjectId).toString(),
+  })) as CreditData[];
 
-  const customersData: CustomerData[] = await customersRes.json();
-  const creditsData: CreditResponse = await creditsRes.json();
-  const credits: CreditData[] = creditsData.credits;
+  // fetching Customers data from the database
+  const customersData = (await Customer.find().lean()).map((customer) => ({
+    _id: (customer._id as Types.ObjectId).toString(),
+    name: customer.name,
+    phoneNumber: customer.phoneNumber,
+    createdAt: customer.createdAt.toISOString(),
+  })) as CustomerData[];
 
   // total amount of un paid credits
-  const totalUnpaidAmount = credits
+  const totalUnpaidAmount = creditsData
     .filter((credit) => !credit.isPaid)
     .reduce((acc, credit) => acc + credit.amount, 0);
-  console.log(totalUnpaidAmount);
 
   return (
     <div className="text-gray-700 py-16 px-4">
@@ -63,7 +81,7 @@ const page = async () => {
           <Button className="bg-blue-500 hover:bg-blue-700">filtering</Button>
         </div>
       </div>
-      <Credit creditData={credits} customers={customersData} />
+      <Credit creditData={creditsData} customers={customersData} />
     </div>
   );
 };
