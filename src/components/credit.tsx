@@ -46,7 +46,7 @@ export const Credit = ({
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center mt-8">
+      <div className="flex flex-col justify-center items-center my-8">
         {creditData.map((credit: CreditData) => {
           const customerInfo = customers.find(
             (customer: CustomerData) => customer._id === credit.customerId
