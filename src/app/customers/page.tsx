@@ -1,19 +1,29 @@
 import CustomersList from "@/components/customersList";
 import { AddCustomerButton } from "@/components/ui/AddCustomerButton";
+import { connectiondb, Customer } from "@/lib/database/models";
 import { PUBLIC_URL } from "@/lib/utils";
+import { Types } from "mongoose"; // Import Types from mongoose
 
-
+interface Customer {
+  _id: string;
+  name: string;
+  phoneNumber: string;
+  _v: number;
+}
 
 const page = async () => {
-  const response = await fetch(`${PUBLIC_URL}/api/customers`, {
-    next: { tags: ["customers"] },
-  });
+  await connectiondb();
+  const CustomerData: Customer[] = (await Customer.find().lean()).map(
+    (cus) => ({
+      _id: (cus._id as Types.ObjectId).toString(),
+      name: cus.name,
+      phoneNumber: cus.phoneNumber,
+      _v: cus.__v, // Ensure _v matches your interface
+    })
+  );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch customers");
-  }
+  console.log(CustomerData);
 
-  const customersData = await response.json();
   return (
     <>
       <div className="text-gray-700 py-16 px-4">
@@ -30,7 +40,7 @@ const page = async () => {
         <div className="flex flex-col justify-center items-center mt-4">
           {/* customers List */}
           <div className="mt-4 w-full flex flex-col gap-4">
-            <CustomersList customersData={customersData} />
+            <CustomersList customersData={CustomerData} />
           </div>
         </div>
       </div>

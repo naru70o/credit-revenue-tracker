@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { DatePicker } from "./ui/datePicker";
 import { Input } from "./ui/input";
+import { PUBLIC_URL } from "@/lib/utils";
+import axios from "axios";
 
 export default function AddRevenue({
   closeDialog,
@@ -12,11 +14,12 @@ export default function AddRevenue({
   closeDialog: () => void;
 }) {
   const [revenue, setRevenue] = useState<string>("");
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
+  );
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
-
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,30 +35,15 @@ export default function AddRevenue({
     }
 
     try {
-      const response = await fetch("/api/revenue", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: revenue,
-          date: selectedDate,
-        }),
+      await axios.post(`/api/revenue`, {
+        amount: revenue,
+        date: selectedDate,
       });
 
-      if (response.ok) {
-        // Revalidate the "revenues" tag by calling a server action or API route
-
-        console.log("Revenue added successfully");
-
-        setSelectedDate(undefined);
-        setRevenue("");
-        // revalidateTag("revenue");
-        closeDialog();
-        router.push("/revenue");
-      } else {
-        console.error("Failed to add revenue");
-      }
+      // Revalidate the "revenues" tag by calling a server action or API route
+      console.log("Revenue added successfully");
+      closeDialog();
+      router.refresh();
     } catch (error) {
       console.error("Error occurred:", error);
     }
@@ -80,10 +68,7 @@ export default function AddRevenue({
         />
       </div>
       <div className="flex flex-col justify-center w-[80%]">
-        <DatePicker
-          value={selectedDate}
-          onChange={() => setSelectedDate(selectedDate)}
-        />{" "}
+        <DatePicker value={selectedDate} onChange={setSelectedDate} />{" "}
       </div>
       <Button type="submit" className="mt-4 inline w-32 self-center rounded-xl">
         Add revenue

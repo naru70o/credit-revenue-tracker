@@ -24,7 +24,6 @@ interface RevenueChart {
   revenue: number;
 }
 
-
 const chartConfig = {
   desktop: {
     label: "revenue",

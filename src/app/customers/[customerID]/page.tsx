@@ -1,6 +1,8 @@
 import { NewCredit } from "@/components/newCredit";
 import { Dropdown } from "@/components/ui/droppMenu";
+import { connectiondb, Credit, Customer } from "@/lib/database/models";
 import { formatAmount, formatDate, PUBLIC_URL } from "@/lib/utils";
+import { Types } from "mongoose";
 import { notFound } from "next/navigation";
 
 interface CreditData {
@@ -14,6 +16,11 @@ interface CreditData {
   _id: string;
 }
 
+interface Customer {
+  _id: string;
+  name: string;
+}
+
 const Page = async ({
   params,
 }: {
@@ -21,22 +28,38 @@ const Page = async ({
 }) => {
   // Selecting the customer id from the URL
   const { customerID } = await params;
-  const response = await fetch(`${PUBLIC_URL}/api/customers/${customerID}`, {
-    next: { tags: ["credit"] },
-  });
-  const customersData = await response.json();
 
-  if (response.status !== 200) {
-    notFound();
-  }
+  await connectiondb();
+  const customers: Customer[] = (
+    await Customer.find({ _id: customerID }).lean()
+  ).map((customer) => ({
+    _id: (customer._id as Types.ObjectId).toString(),
+    name: customer.name,
+  }));
+
+  console.log(
+    `this is server idCustomer ${customers.map((c) =>
+      console.log(c)
+    )} | and this is fetch guy`
+  );
 
   // selecting all the credits
-  const responseCredits = await fetch(`${PUBLIC_URL}/api/credits`, {
-    next: { tags: ["credit"] },
-  });
-
-  const credits = responseCredits.json();
-  const { credits: creditsData } = await credits;
+  const creditsData = (
+    await Credit.find()
+      .sort({
+        tookTime: -1,
+      })
+      .lean()
+  ).map((credit) => ({
+    amount: credit.amount,
+    customerId: (credit.customerId as Types.ObjectId).toString(),
+    isPaid: credit.isPaid,
+    personWhotaken: credit.personWhotaken,
+    product: credit.product,
+    tookTime: credit.tookTime,
+    __v: credit.__v,
+    _id: (credit._id as Types.ObjectId).toString(),
+  })) as CreditData[];
 
   // Filtering the credits by customer id
   const filteredData = creditsData.filter((item: CreditData) =>
@@ -47,7 +70,7 @@ const Page = async ({
     .filter((credit: CreditData) => credit.isPaid === false)
     .reduce((acc: number, item: CreditData) => acc + item.amount, 0);
 
-  const { name, _id } = customersData.customer;
+  const [{ name, _id }] = customers || [{} as Customer];
 
   return (
     <div className="text-gray-700 py-16 px-4 overflow-y-scroll">
@@ -72,9 +95,9 @@ const Page = async ({
               <h1 className="font-bold text-lg">
                 {formatAmount(credit.amount)} : {credit.personWhotaken}
               </h1>
-              <p>
+              <div>
                 Took {credit.product} at {formatDate(credit.tookTime)}
-              </p>
+              </div>
             </div>
 
             <Dropdown creditData={credit} />

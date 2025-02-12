@@ -54,12 +54,10 @@ const page = async () => {
           <h1 className="font-bold text-2xl text-start w-1/2">
             Check your depts
           </h1>
-          <p>
+          <div>
             your total Credits{" "}
-            <span className="font-medium">
-              {formatAmount(totalUnpaidAmount)}
-            </span>{" "}
-          </p>
+            <div className="font-medium">{formatAmount(totalUnpaidAmount)}</div>{" "}
+          </div>
         </div>
         <div className="inline-block self-end">
           <Button className="bg-blue-500 hover:bg-blue-700">filtering</Button>

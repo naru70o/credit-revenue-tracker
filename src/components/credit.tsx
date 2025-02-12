@@ -67,13 +67,13 @@ export const Credit = ({
               >
                 <div className="flex items-center gap-4">
                   <div>
-                    <p>{customerInfo?.name}</p>
-                    <p>
+                    <div>{customerInfo?.name}</div>
+                    <div>
                       <span className="font-medium">
                         {formatAmount(credit.amount)}
                       </span>{" "}
                       at {formatDate(credit.tookTime)}
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>

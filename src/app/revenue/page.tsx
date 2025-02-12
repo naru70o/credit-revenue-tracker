@@ -1,35 +1,28 @@
 import AddRevenueButton from "@/components/addRevenueButton";
 import RevenuesList from "@/components/revenuesList";
 import { formatAmount, PUBLIC_URL } from "@/lib/utils";
+import { connectiondb, Revenue } from "@/lib/database/models";
+import { Types } from "mongoose"; // Import Types from mongoose
 
 interface Revenue {
-  amount: number;
-  date: string; // Assuming date is in the format "DD/MMM/YYYY"
   _id: string;
-}
-
-interface RevenueRasponse {
-  revenues: Revenue[];
-}
-
-interface Revenue {
   amount: number;
-  date: string; // Assuming date is in the format "DD/MMM/YYYY"
-  _id: string;
+  date: string;
+  __v: number;
 }
 
 const Page = async () => {
-  const res = await fetch(`${PUBLIC_URL}/api/revenue`, {
-    next: {
-      tags: ["revenue"],
-    },
-  });
+  await connectiondb();
+  const revenueData: Revenue[] = (await Revenue.find().sort({ date: 1 }).lean()) // Converts to plain objects but keeps _id as an ObjectId
+    .map((rev) => ({
+      ...rev,
+      _id: (rev._id as Types.ObjectId).toString(), // Explicitly cast _id
+      date: new Date(rev.date).toISOString(), // Ensure date is a string
+    })) as Revenue[];
 
-  const revenueData: RevenueRasponse = await res.json();
+  console.log(typeof revenueData, "from the server");
 
-  const revenues: Revenue[] = revenueData.revenues;
-
-  const totalRevenue = revenues.reduce((acc, curr) => acc + curr.amount, 0);
+  const totalRevenue = revenueData.reduce((acc, curr) => acc + curr.amount, 0);
 
   return (
     <div className="text-black py-16 px-4 bg-gray-100">
@@ -38,14 +31,14 @@ const Page = async () => {
           <h1 className="font-bold text-2xl text-start w-1/2">
             Check Your Revenue
           </h1>
-          <p>Your total revenue is {formatAmount(totalRevenue)}</p>
+          <div>Your total revenue is {formatAmount(totalRevenue)}</div>
         </div>
         <div className="inline-block self-end">
           <AddRevenueButton />
         </div>
       </div>
       <div className="flex flex-col justify-center items-center my-8">
-        <RevenuesList revenueData={revenues} />
+        <RevenuesList revenueData={revenueData} />
       </div>
     </div>
   );

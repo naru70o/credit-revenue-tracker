@@ -29,7 +29,7 @@ export async function DELETE(request: Request) {
   }
 }
 
-// get all users
+// get all Customers
 export async function GET() {
   try {
     await connectiondb();

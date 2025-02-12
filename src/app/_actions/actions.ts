@@ -20,6 +20,7 @@ export async function getCustomers() {
     return { error: "Error fetching customers" };
   }
 }
+
 // Update Customer
 
 interface Customer {
@@ -116,6 +117,9 @@ export const DeleteCustomer = async (id: string) => {
 //////////////////////////////////
 // Revenues
 
+// Add Revenue
+
+
 // Delete
 export async function deleteRevenue(id: string) {
   try {
@@ -147,3 +151,4 @@ export async function updateRevenue(id: string, data: Revenue) {
     return { success: false, message: "Failed to update revenue data" };
   }
 }
+

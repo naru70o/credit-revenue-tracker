@@ -1,7 +1,8 @@
+import React from "react";
 import DashboardToggleButtons from "@/components/dashboardToggleButtons";
 import { DeptChart } from "@/components/deptChart";
 import { formatAmount, formatDate, PUBLIC_URL } from "@/lib/utils";
-import React from "react";
+import { connectiondb, Credit } from "../../../lib/database/models";
 
 interface CreditData {
   _id: string;
@@ -20,15 +21,15 @@ interface ChartData {
   fill: string;
 }
 
-const page: React.FC = async () => {
-  const creditRes = await fetch(`${PUBLIC_URL}/api/credits`, {
-    next: {
-      tags: ["credits"],
-    },
-  });
+const page = async () => {
+  await connectiondb();
+  const creditsData: CreditData[] = (await Credit.find()
+    .sort({
+      tookTime: -1,
+    })
+    .lean()) as CreditData[];
 
-  const credits = await creditRes.json();
-  const creditsData: CreditData[] = credits.credits;
+  console.log(typeof creditsData);
 
   const getLastTwoMonthsTotals = (transactions: CreditData[]) => {
     const now = new Date();

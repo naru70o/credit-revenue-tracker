@@ -55,8 +55,8 @@ export default function CustomersList({
           <div className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer hover:bg-gray-300">
             <Link className="flex-1 w-full" href={`/customers/${customer._id}`}>
               <div className="flex-1">
-                <p>{customer.name}</p>
-                <p>{customer.phoneNumber}</p>
+                <div>{customer.name}</div>
+                <div>{customer.phoneNumber}</div>
               </div>
             </Link>
             <div className="flex gap-2">
