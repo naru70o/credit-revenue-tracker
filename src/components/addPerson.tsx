@@ -32,7 +32,7 @@ export default function AddPerson({
       setPersonNumber("");
       setIsSubmiting(true);
       setIsDialogOpen(false);
-      router.push("/customers");
+      router.refresh();
     } catch (err) {
       setError("Failed to add customer. Please try again.");
       console.error(err);
