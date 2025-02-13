@@ -74,7 +74,7 @@ const page = async () => {
           </h1>
           <div>
             your total Credits{" "}
-            <div className="font-medium">{formatAmount(totalUnpaidAmount)}</div>{" "}
+            <div className="font-medium">{formatAmount(totalUnpaidAmount)}</div>
           </div>
         </div>
         <div className="inline-block self-end">
