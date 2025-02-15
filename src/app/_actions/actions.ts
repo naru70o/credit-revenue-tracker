@@ -3,6 +3,7 @@
 import { PUBLIC_URL } from "@/lib/utils";
 import axios from "axios";
 import { revalidateTag } from "next/cache";
+import { connectiondb, Customer } from "@/lib/database/models";
 
 // Customers
 
@@ -44,6 +45,24 @@ export async function updateCustomerInfo(
 
     // Return an error message
     return { message: "Error updating customer", status: false };
+  }
+}
+
+// add new customer
+export async function createCustomer(formData: FormData) {
+  try {
+    const rawData = {
+      name: formData.get("name") as string,
+      phoneNumber: formData.get("phoneNumber") as string,
+    };
+
+    // Replace with your actual DB call
+
+    await Customer.create(rawData);
+
+    revalidateTag("customers");
+  } catch (error) {
+    console.error("Failed to create customer:", error);
   }
 }
 

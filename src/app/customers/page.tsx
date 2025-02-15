@@ -1,8 +1,8 @@
 import CustomersList from "@/components/customersList";
 import { AddCustomerButton } from "@/components/ui/AddCustomerButton";
-import { connectiondb, Customer } from "@/lib/database/models";
-import { PUBLIC_URL } from "@/lib/utils";
+import { Customer } from "@/lib/database/models";
 import { Types } from "mongoose"; // Import Types from mongoose
+import { unstable_cache } from "next/cache";
 
 interface Customer {
   _id: string;
@@ -11,16 +11,32 @@ interface Customer {
   _v: number;
 }
 
-const page = async () => {
-  await connectiondb();
-  const CustomerData: Customer[] = (await Customer.find().lean()).map(
-    (cus) => ({
+// Cached data fetcher
+const getCustomers = unstable_cache(
+  async () => {
+    const rawCustomers = await Customer.find().lean();
+    return rawCustomers.map((cus) => ({
       _id: (cus._id as Types.ObjectId).toString(),
       name: cus.name,
       phoneNumber: cus.phoneNumber,
-      _v: cus.__v, // Ensure _v matches your interface
-    })
-  );
+      _v: cus.__v,
+    }));
+  },
+  ["customers"], // Cache key
+  { revalidate: 1000, tags: ["customers"] } // Revalidate every hour + tag
+);
+
+const page = async () => {
+  // await connectiondb();
+  // const CustomerData: Customer[] = (await Customer.find().lean()).map(
+  //   (cus) => ({
+  //     _id: (cus._id as Types.ObjectId).toString(),
+  //     name: cus.name,
+  //     phoneNumber: cus.phoneNumber,
+  //     _v: cus.__v, // Ensure _v matches your interface
+  //   })
+  // );
+  const CustomerData = await getCustomers();
 
   console.log(CustomerData);
 
