@@ -58,6 +58,7 @@ export async function createCustomer(formData: FormData) {
 
     // Replace with your actual DB call
 
+    await connectiondb();
     await Customer.create(rawData);
 
     revalidateTag("customers");

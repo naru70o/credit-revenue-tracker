@@ -1,6 +1,6 @@
 import CustomersList from "@/components/customersList";
 import { AddCustomerButton } from "@/components/ui/AddCustomerButton";
-import { Customer } from "@/lib/database/models";
+import { connectiondb, Customer } from "@/lib/database/models";
 import { Types } from "mongoose"; // Import Types from mongoose
 import { unstable_cache } from "next/cache";
 
@@ -36,6 +36,7 @@ const page = async () => {
   //     _v: cus.__v, // Ensure _v matches your interface
   //   })
   // );
+  await connectiondb();
   const CustomerData = await getCustomers();
 
   console.log(CustomerData);
