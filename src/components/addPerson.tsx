@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { revalidatePath } from "next/cache";
 
 export default function AddPerson({
   setIsDialogOpen,
@@ -32,7 +33,7 @@ export default function AddPerson({
       setPersonNumber("");
       setIsSubmiting(true);
       setIsDialogOpen(false);
-      router.refresh();
+      revalidatePath("/customers");
     } catch (err) {
       setError("Failed to add customer. Please try again.");
       console.error(err);
