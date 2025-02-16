@@ -1,8 +1,9 @@
 "use client";
 import { updateCustomerInfo } from "../app/_actions/actions";
-import React from "react";
+import React, { useTransition } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import Spinner from "./ui/spinner";
 
 interface Customer {
   _id: string | undefined;
@@ -27,43 +28,36 @@ const UpdateCustomerForm = ({
     currentCustomer?.phoneNumber
   );
   const [_id, setId] = React.useState<string | undefined>(currentCustomer?._id);
-
-  async function handleClick(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const updateData: UpdateDate = {
-      name: personName,
-      phoneNumber: phoneNumber,
-    };
-
-    try {
-      await updateCustomerInfo(_id, updateData);
-      handleCloseDialog();
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const [isPending, startTransition] = useTransition();
 
   return (
     <form
-      onSubmit={handleClick}
+      action={async (formData: FormData) => {
+        startTransition(async () => {
+          await updateCustomerInfo(formData, _id);
+        });
+        handleCloseDialog();
+      }}
       className="flex flex-col gap-4 items-center justify-center w-full"
     >
       {/* name */}
       <div className="flex flex-col justify-center">
         <label>Name</label>
         <Input
+          name="personName"
           value={personName}
           onChange={(e) => setPersonName(e.target.value)}
           type="text"
           className="self-center rounded-xl"
           required
         />
+        <Input name="id" type="hidden" value={_id} />
       </div>
       {/* phone */}
       <div className="flex flex-col justify-center">
         <label>Number</label>
         <Input
+          name="phoneNumber"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
           type="text"
@@ -71,8 +65,17 @@ const UpdateCustomerForm = ({
           required
         />
       </div>
-      <Button type="submit" className="mt-4 inline self-center rounded-xl">
-        Update Customer
+      <Button
+        type="submit"
+        className="mt-4 min-w-32 inline self-center rounded-xl"
+      >
+        {isPending ? (
+          <div className="flex justify-center items-center">
+            <Spinner />
+          </div>
+        ) : (
+          "Update Customer"
+        )}
       </Button>
     </form>
   );

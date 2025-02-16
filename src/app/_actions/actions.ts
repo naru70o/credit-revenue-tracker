@@ -30,15 +30,20 @@ interface Customer {
 }
 
 export async function updateCustomerInfo(
-  id: string | undefined,
-  data: Customer
+  formData: FormData,
+  _id: string | undefined
 ) {
   try {
+    const updateData = {
+      name: formData.get("personName"),
+      phoneNumber: formData.get("phoneNumber"),
+    };
+
     // Using axios to make the PUT request
-    await axios.put(`${PUBLIC_URL}/api/customers/${id}`, data);
-    revalidateTag("customer");
+    await axios.put(`${PUBLIC_URL}/api/customers/${_id}`, updateData);
+
     // Return a success message
-    revalidateTag("customers");
+    revalidatePath("/customers");
     return { success: "Customer updated successfully", status: true };
   } catch (error) {
     console.log(error);

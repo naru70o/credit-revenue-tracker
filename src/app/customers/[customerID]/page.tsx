@@ -29,6 +29,10 @@ const Page = async ({
   // Selecting the customer id from the URL
   const { customerID } = await params;
 
+  if (!customerID) {
+    throw new Error("Customer ID is required");
+  }
+
   await connectiondb();
   const customers: Customer[] = (
     await Customer.find({ _id: customerID }).lean()

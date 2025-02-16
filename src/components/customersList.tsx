@@ -3,7 +3,7 @@
 import { DeleteCustomer } from "../app/_actions/actions";
 import { Trash2, UserPen } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { AlertDialogModel } from "./AlertDialog";
 import { UpdateCustomerModel } from "./updateCustomerModel";
 
@@ -18,6 +18,7 @@ export default function CustomersList({
 }: {
   customersData: Customer[];
 }) {
+  const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [currentCustomerId, setCurrentCustomerId] = useState("");
@@ -90,7 +91,11 @@ export default function CustomersList({
           actionName="Delete"
           isDeleteOpen={isDialogOpen}
           onDeleteHandler={() => DeleteCustomer(currentCustomerId)}
-          onHandleDeleteClose={handleClose}
+          onHandleDeleteClose={() =>
+            startTransition(() => {
+              handleClose();
+            })
+          }
         />
       )}
     </>
