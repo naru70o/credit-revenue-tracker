@@ -58,7 +58,10 @@ export async function DELETE(
 
     // Return a 204 No Content response
     revalidateTag("customers");
-    return new NextResponse(null, { status: 204 });
+    return NextResponse.json({
+      status: 204,
+      message: "Customer deleted successfully",
+    });
   } catch (error) {
     console.log(error);
     return NextResponse.json(

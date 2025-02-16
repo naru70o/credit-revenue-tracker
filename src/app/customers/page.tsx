@@ -23,7 +23,7 @@ const getCustomers = unstable_cache(
     }));
   },
   ["customers"], // Cache key
-  { revalidate: 1000, tags: ["customers"] } // Revalidate every hour + tag
+  { revalidate: 1000, tags: ["customers"] } // Revalidate every minute + tag
 );
 
 const page = async () => {
