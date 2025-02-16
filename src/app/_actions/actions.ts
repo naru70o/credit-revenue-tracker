@@ -2,7 +2,7 @@
 
 import { PUBLIC_URL } from "@/lib/utils";
 import axios from "axios";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { connectiondb, Customer } from "@/lib/database/models";
 
 // Customers
@@ -125,7 +125,7 @@ export const DeleteCustomer = async (id: string) => {
   try {
     // delete this customer based on this id
     await axios.delete(`${PUBLIC_URL}/api/customers/${id}`);
-    revalidateTag("customers");
+    revalidatePath("/customers");
 
     return { status: true, message: "Customer deleted successfully" };
   } catch (error) {

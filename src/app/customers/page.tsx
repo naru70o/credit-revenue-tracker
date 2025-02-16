@@ -27,15 +27,6 @@ const getCustomers = unstable_cache(
 );
 
 const page = async () => {
-  // await connectiondb();
-  // const CustomerData: Customer[] = (await Customer.find().lean()).map(
-  //   (cus) => ({
-  //     _id: (cus._id as Types.ObjectId).toString(),
-  //     name: cus.name,
-  //     phoneNumber: cus.phoneNumber,
-  //     _v: cus.__v, // Ensure _v matches your interface
-  //   })
-  // );
   await connectiondb();
   const CustomerData = await getCustomers();
 
