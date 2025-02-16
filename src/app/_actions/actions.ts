@@ -40,7 +40,12 @@ export async function updateCustomerInfo(
     };
 
     // Using axios to make the PUT request
-    await axios.put(`${PUBLIC_URL}/api/customers/${_id}`, updateData);
+    // await axios.put(`${PUBLIC_URL}/api/customers/${_id}`, updateData);
+
+    await connectiondb();
+    await Customer.findByIdAndUpdate(_id, updateData, {
+      new: true,
+    });
 
     // Return a success message
     revalidatePath("/customers");

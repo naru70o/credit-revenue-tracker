@@ -73,12 +73,12 @@ export async function DELETE(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ _id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const { _id } = await params;
     const customerData = await request.json();
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { message: "Customer ID is required" },
         { status: 400 }
@@ -87,7 +87,7 @@ export async function PUT(
 
     // Connect to the database
     await connectiondb();
-    const customer = await Customer.findByIdAndUpdate(id, customerData, {
+    const customer = await Customer.findByIdAndUpdate(_id, customerData, {
       new: true,
     });
 
