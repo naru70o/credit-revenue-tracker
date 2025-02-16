@@ -70,11 +70,11 @@ const page = async () => {
       <div className="flex flex-col justify-center">
         <div className="w-full rounded-xl bg-gradient-to-r from-[#160078] to-[#7226ff] mb-2 p-4 text-gray-300">
           <h1 className="font-bold text-2xl text-start w-1/2">
-            Check your depts
+            Check your depts...
           </h1>
           <div>
             your total Credits{" "}
-            <div className="font-medium">{formatAmount(totalUnpaidAmount)}</div>{" "}
+            <div className="font-medium">{formatAmount(totalUnpaidAmount)}</div>
           </div>
         </div>
         <div className="inline-block self-end">

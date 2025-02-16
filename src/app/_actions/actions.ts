@@ -2,7 +2,8 @@
 
 import { PUBLIC_URL } from "@/lib/utils";
 import axios from "axios";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { connectiondb, Customer } from "@/lib/database/models";
 
 // Customers
 
@@ -29,21 +30,50 @@ interface Customer {
 }
 
 export async function updateCustomerInfo(
-  id: string | undefined,
-  data: Customer
+  formData: FormData,
+  _id: string | undefined
 ) {
   try {
+    const updateData = {
+      name: formData.get("personName"),
+      phoneNumber: formData.get("phoneNumber"),
+    };
+
     // Using axios to make the PUT request
-    await axios.put(`${PUBLIC_URL}/api/customers/${id}`, data);
-    revalidateTag("customer");
+    // await axios.put(`${PUBLIC_URL}/api/customers/${_id}`, updateData);
+
+    await connectiondb();
+    await Customer.findByIdAndUpdate(_id, updateData, {
+      new: true,
+    });
+
     // Return a success message
-    revalidateTag("customers");
+    revalidatePath("/customers");
     return { success: "Customer updated successfully", status: true };
   } catch (error) {
     console.log(error);
 
     // Return an error message
     return { message: "Error updating customer", status: false };
+  }
+}
+
+// add new customer
+export async function createCustomer(formData: FormData) {
+  try {
+    const rawData = {
+      name: formData.get("name") as string,
+      phoneNumber: formData.get("phoneNumber") as string,
+    };
+
+    // Replace with your actual DB call
+
+    await connectiondb();
+    await Customer.create(rawData);
+
+    revalidateTag("customers");
+  } catch (error) {
+    console.error("Failed to create customer:", error);
   }
 }
 
@@ -105,7 +135,7 @@ export const DeleteCustomer = async (id: string) => {
   try {
     // delete this customer based on this id
     await axios.delete(`${PUBLIC_URL}/api/customers/${id}`);
-    revalidateTag("customers");
+    revalidatePath("/customers");
 
     return { status: true, message: "Customer deleted successfully" };
   } catch (error) {
