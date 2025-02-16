@@ -1,7 +1,7 @@
 "use client";
 
 import { createCustomer } from "@/app/_actions/actions";
-import { useState } from "react";
+import { useTransition } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
@@ -10,11 +10,19 @@ export default function AddPerson({
 }: {
   setIsDialogOpen: (value: boolean) => void;
 }) {
+  const [isPending, startTransition] = useTransition();
+  console.log(isPending, "[ this is from the client ]");
+
   return (
     <div className=" text-black py-8 px-4 grid justify-center">
       <div className="flex flex-col justify-center">
         <form
-          action={createCustomer}
+          action={async (formData) => {
+            startTransition(async () => {
+              await createCustomer(formData);
+              setIsDialogOpen(false);
+            });
+          }}
           className="flex flex-col gap-4 items-center justify-center w-full"
         >
           {/* name */}
@@ -40,10 +48,10 @@ export default function AddPerson({
             />
           </div>
           <Button
-            type="submit"
+            disabled={isPending}
             className="mt-4 inline w-32 self-center rounded-xl"
           >
-            Add customer
+            {isPending ? "Adding.." : "Add customer"}
           </Button>
         </form>
       </div>
