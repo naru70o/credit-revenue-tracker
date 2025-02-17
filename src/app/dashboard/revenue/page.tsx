@@ -73,7 +73,7 @@ const page = async () => {
 
       {/* Dept List Header */}
       <div className="text-center mb-4">
-        <p className="text-gray-700 text-sm">sadexdii dhaqaale u dambeeyay</p>
+        <p className="text-gray-700 text-sm">the last three ( 3 ) Revenues</p>
       </div>
 
       {/* Dept List */}
