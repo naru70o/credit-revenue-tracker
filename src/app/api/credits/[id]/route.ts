@@ -43,9 +43,12 @@ export async function DELETE(
       return NextResponse.json({ status: 400, message: "Invalid ID" });
     }
 
-    const credit = await Credit.findByIdAndDelete(id);
+    await Credit.findByIdAndDelete(id);
     revalidateTag("credit");
-    return NextResponse.json(credit);
+    return NextResponse.json({
+      status: 200,
+      message: "Credit deleted successfully",
+    });
   } catch (error) {
     console.log(error);
 

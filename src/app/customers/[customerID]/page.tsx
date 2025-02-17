@@ -41,11 +41,6 @@ const Page = async ({
     name: customer.name,
   }));
 
-  console.log(
-    `this is server idCustomer ${customers.map((c) =>
-      console.log(c)
-    )} | and this is fetch guy`
-  );
 
   // selecting all the credits
   const creditsData = (

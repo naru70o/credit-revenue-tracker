@@ -3,6 +3,7 @@ import DashboardToggleButtons from "@/components/dashboardToggleButtons";
 import { DeptChart } from "@/components/deptChart";
 import { formatAmount, formatDate, PUBLIC_URL } from "@/lib/utils";
 import { connectiondb, Credit } from "../../../lib/database/models";
+import { unstable_cache } from "next/cache";
 
 interface CreditData {
   _id: string;
@@ -21,13 +22,28 @@ interface ChartData {
   fill: string;
 }
 
+const credits = unstable_cache(
+  async () => {
+    const creditsData = await Credit.find()
+      .sort({
+        tookTime: -1,
+      })
+      .lean();
+
+    return creditsData as CreditData[];
+  },
+  ["credits"],
+  { revalidate: 1000, tags: ["credits"] }
+);
+
 const page = async () => {
   await connectiondb();
-  const creditsData: CreditData[] = (await Credit.find()
-    .sort({
-      tookTime: -1,
-    })
-    .lean()) as CreditData[];
+  const creditsData = await credits();
+  // const creditsData: CreditData[] = (await Credit.find()
+  //   .sort({
+  //     tookTime: -1,
+  //   })
+  //   .lean()) as CreditData[];
 
   console.log(typeof creditsData);
 

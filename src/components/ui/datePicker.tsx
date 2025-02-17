@@ -29,7 +29,7 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger className="rounded-xl" asChild>
         <Button
           variant={"outline"}
           className={cn(
@@ -41,7 +41,10 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
           {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 pointer-events-auto" align="start">
+      <PopoverContent
+        className="w-auto p-0 pointer-events-auto rounded-xl"
+        align="start"
+      >
         <Calendar
           mode="single"
           selected={date}

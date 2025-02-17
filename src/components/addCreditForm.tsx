@@ -1,32 +1,32 @@
+"use client";
 import React from "react";
 import { DatePicker } from "./ui/datePicker";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { useState } from "react";
+import { createCredit } from "@/app/_actions/actions";
+import { useTransition } from "react";
+import Spinner from "./ui/spinner";
 
 export const AddCreditForm = ({
-  handleSubmit,
-  amount,
-  setAmount,
-  product,
-  setProduct,
-  personWhotaken,
-  setPersonWhotaken,
-  selectedDate,
-  setSelectedDate,
+  customerId,
+  closeDialog,
 }: {
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  amount: string;
-  setAmount: (amount: string) => void;
-  product: string;
-  setProduct: (product: string) => void;
-  personWhotaken: string;
-  setPersonWhotaken: (personWhotaken: string) => void;
-  selectedDate: Date | undefined;
-  setSelectedDate: (selectedDate: Date | undefined) => void;
+  customerId: string;
+  closeDialog: (value: boolean) => void;
 }) => {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
+  );
+  const [pending, startTransition] = useTransition();
   return (
     <form
-      onSubmit={handleSubmit}
+      action={async (formData) => {
+        startTransition(async () => {
+          await createCredit(formData, customerId);
+          closeDialog(false);
+        });
+      }}
       className="flex flex-col gap-3 items-center justify-center mt-4 w-full"
     >
       {/* Amount */}
@@ -34,10 +34,9 @@ export const AddCreditForm = ({
         <label htmlFor="amount">Amount</label>
         <Input
           id="amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          name="amount"
           type="number"
-          className="self-center"
+          className="self-center rounded-xl"
           required
         />
       </div>
@@ -47,10 +46,9 @@ export const AddCreditForm = ({
         <label htmlFor="product">Product</label>
         <Input
           id="product"
-          value={product}
-          onChange={(e) => setProduct(e.target.value)}
+          name="product"
           type="text"
-          className="self-center"
+          className="self-center rounded-xl"
           required
         />
       </div>
@@ -60,25 +58,37 @@ export const AddCreditForm = ({
         <label htmlFor="person">Who took it</label>
         <Input
           id="person"
-          value={personWhotaken}
-          onChange={(e) => setPersonWhotaken(e.target.value)}
+          name="personWhotaken"
           type="text"
-          className="self-center"
+          className="self-center rounded-xl"
           required
         />
       </div>
 
       {/* Date picker */}
       <div className="flex flex-col justify-center w-full">
+        <label htmlFor="tookTime">Date</label>
         <DatePicker value={selectedDate} onChange={setSelectedDate} />
+        <Input
+          id="tookTime"
+          type="hidden"
+          name="tookTime"
+          value={selectedDate?.toISOString()}
+        />
       </div>
 
       <Button
         type="submit"
-        className="mt-4 block w-full self-center"
-        // disabled={isSubmitting}
+        disabled={pending}
+        className="mt-4 block w-32 self-center rounded-xl"
       >
-        add credit
+        {pending ? (
+          <div className="flex justify-center items-center">
+            <Spinner />
+          </div>
+        ) : (
+          "Add Credit"
+        )}
       </Button>
     </form>
   );

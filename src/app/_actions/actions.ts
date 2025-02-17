@@ -3,7 +3,8 @@
 import { PUBLIC_URL } from "@/lib/utils";
 import axios from "axios";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { connectiondb, Customer } from "@/lib/database/models";
+import { connectiondb, Credit, Customer } from "@/lib/database/models";
+import { NextResponse } from "next/server";
 
 // Customers
 
@@ -74,6 +75,30 @@ export async function createCustomer(formData: FormData) {
     revalidateTag("customers");
   } catch (error) {
     console.error("Failed to create customer:", error);
+  }
+}
+
+/////////// Credits
+
+//  New credit
+export async function createCredit(formData: FormData, customerId: string) {
+  try {
+    const rawData = {
+      customerId,
+      personWhotaken: formData.get("personWhotaken") as string,
+      product: formData.get("product") as string,
+      amount: formData.get("amount") as string,
+      tookTime: formData.get("tookTime") as string,
+    };
+    await connectiondb();
+    await Credit.create(rawData);
+    revalidateTag("credits");
+    return {
+      message: "Credit added successfully",
+      status: true,
+    };
+  } catch (error) {
+    return { message: "Error adding credit", status: false };
   }
 }
 
