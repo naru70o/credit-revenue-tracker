@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { Input } from "./ui/input";
 import { DatePicker } from "./ui/datePicker";
 import { updateRevenue } from "../app/_actions/actions";
 import { Button } from "./ui/button";
+import LoadingSpinner from "./ui/loadingSpinner";
 
 interface Revenue {
   amount: number;
@@ -21,24 +22,15 @@ export default function UpdateRevenueForm({
   const [selectedDate, setSelectedDate] = useState<Date>(
     new Date(currentRevenue.date)
   );
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const updatedRevenue = {
-      amount: parseInt(amount),
-      date: selectedDate?.toDateString(),
-    };
-    try {
-      updateRevenue(currentRevenue._id, updatedRevenue);
-      onHandleClose();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [pending, startTransition] = useTransition();
   return (
     <form
-      onSubmit={handleSubmit}
+      action={async (formData: FormData) => {
+        startTransition(async () => {
+          await updateRevenue(formData, currentRevenue._id);
+          onHandleClose();
+        });
+      }}
       className="flex flex-col gap-3 items-center justify-center mt-8"
     >
       {/* phone */}
@@ -46,6 +38,7 @@ export default function UpdateRevenueForm({
         <label htmlFor="text">amount</label>
         <Input
           value={amount}
+          name="amount"
           onChange={(e) => setAmount(e.target.value)}
           type="text"
           className="self-center"
@@ -57,9 +50,14 @@ export default function UpdateRevenueForm({
           value={selectedDate}
           onChange={() => setSelectedDate(selectedDate)}
         />{" "}
+        <Input value={selectedDate?.toISOString()} name="date" type="hidden" />
       </div>
-      <Button type="submit" className="mt-4 inline w-32 self-center rounded-xl">
-        update
+      <Button
+        type="submit"
+        className="mt-4 inline w-32 self-center rounded-xl"
+        disabled={pending}
+      >
+        {pending ? <LoadingSpinner /> : "Update"}
       </Button>
     </form>
   );

@@ -3,7 +3,7 @@
 import { PUBLIC_URL } from "@/lib/utils";
 import axios from "axios";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { connectiondb, Credit, Customer } from "@/lib/database/models";
+import { connectiondb, Credit, Customer, Revenue } from "@/lib/database/models";
 import { NextResponse } from "next/server";
 
 // Customers
@@ -194,14 +194,34 @@ export const DeleteCustomer = async (id: string) => {
 
 // Add Revenue
 
+export async function addRevenue(formData: FormData) {
+  try {
+    await connectiondb();
+    const rowData = {
+      amount: Number(formData.get("amount")),
+      date: formData.get("date") as string,
+    };
+
+    await Revenue.create(rowData);
+    revalidateTag("revenues");
+    return { message: "Revenue added successfully" };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Failed to add the revenue" };
+  }
+}
 
 // Delete
 export async function deleteRevenue(id: string) {
   try {
-    await axios.delete(`${PUBLIC_URL}/api/revenue/${id}`);
+    if (!id) {
+      return { message: "Revenue not found", status: false };
+    }
+    await connectiondb();
+    await Revenue.findByIdAndDelete(id);
 
-    revalidateTag("revenue");
-    return { message: "Revenue deleted successfully" };
+    revalidateTag("revenues");
+    return { message: "Revenue deleted successfully", status: true };
   } catch (error) {
     console.log(error);
 
@@ -215,10 +235,18 @@ interface Revenue {
   date: string;
 }
 
-export async function updateRevenue(id: string, data: Revenue) {
+export async function updateRevenue(fromDate: FormData, id: string) {
   try {
-    await axios.put(`${PUBLIC_URL}/api/revenue/${id}`, data);
-    revalidateTag("revenue");
+    await connectiondb();
+    const rowData = {
+      amount: Number(fromDate.get("amount")),
+      date: fromDate.get("date") as string,
+    };
+
+    await Revenue.findByIdAndUpdate(id, rowData, {
+      new: true,
+    });
+    revalidateTag("revenues");
     return { success: true, message: "Revenue updated successfully" };
   } catch (error) {
     console.log(error);
