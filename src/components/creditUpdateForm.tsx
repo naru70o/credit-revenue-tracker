@@ -38,41 +38,43 @@ export default function CreditUpdateForm({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date(creditData.tookTime)
   );
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [error, setError] = useState<string | null>(null);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+  //   setError(null);
 
-    // Prepare the updated data
-    const updatedData: UpdatedCreditData = {
-      amount: parseFloat(amount),
-      product,
-      personWhotaken,
-      tookTime:
-        selectedDate instanceof Date
-          ? selectedDate.toISOString()
-          : selectedDate || "",
-    };
+  //   // Prepare the updated data
+  //   const updatedData: UpdatedCreditData = {
+  //     amount: parseFloat(amount),
+  //     product,
+  //     personWhotaken,
+  //     tookTime:
+  //       selectedDate instanceof Date
+  //         ? selectedDate.toISOString()
+  //         : selectedDate || "",
+  //   };
 
-    try {
-      // Call the server action to update the credit
-      await updateCredit(creditData._id, updatedData);
-      onhandleClose(); // Close the form after successful update
-    } catch (error) {
-      console.log(error);
-      setError("Failed to update credit. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  //   try {
+  //     // Call the server action to update the credit
+  //     await updateCredit(creditData._id, updatedData);
+  //     onhandleClose(); // Close the form after successful update
+  //   } catch (error) {
+  //     console.log(error);
+  //     setError("Failed to update credit. Please try again.");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
   return (
     <form
-      onSubmit={handleSubmit}
+      action={async (formData: FormData) => {
+        await updateCredit(formData, creditData._id);
+      }}
       className="flex flex-col gap-3 items-center justify-center mt-4"
     >
       {/* Amount */}
@@ -82,6 +84,7 @@ export default function CreditUpdateForm({
           id="amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
+          name="amount"
           type="number"
           className="self-center"
           required
@@ -95,6 +98,7 @@ export default function CreditUpdateForm({
           id="product"
           value={product}
           onChange={(e) => setProduct(e.target.value)}
+          name="product"
           type="text"
           className="self-center"
           required
@@ -108,6 +112,7 @@ export default function CreditUpdateForm({
           id="person"
           value={personWhotaken}
           onChange={(e) => setPersonWhotaken(e.target.value)}
+          name="personWhotaken"
           type="text"
           className="self-center"
           required
@@ -117,6 +122,7 @@ export default function CreditUpdateForm({
       {/* Date picker */}
       <div className="flex flex-col justify-center w-full">
         <DatePicker value={selectedDate} onChange={setSelectedDate} />
+        <Input type="hidden" name="date" value={selectedDate?.toISOString()} />
       </div>
 
       <div className="flex items-center justify-center w-full">
@@ -128,12 +134,10 @@ export default function CreditUpdateForm({
         >
           Cancel
         </Button>
-        <Button type="submit" className="flex-1" disabled={isSubmitting}>
-          {isSubmitting ? "Updating..." : "Add Credit"}
+        <Button type="submit" className="flex-1">
+          update
         </Button>
       </div>
-
-      {error && <p className="text-red-500 text-center mt-4">{error}</p>}
     </form>
   );
 }

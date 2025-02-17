@@ -102,6 +102,29 @@ export async function createCredit(formData: FormData, customerId: string) {
   }
 }
 
+// update credit
+export async function updateCredit( formData: FormData,id:string) {
+  try {
+    const rawData = {
+      amount: formData.get("amount") as string,
+      product: formData.get("product") as string,
+      personWhotaken: formData.get("personWhotaken") as string,
+      tookTime: formData.get("tookTime") as string,
+    }
+    await connectiondb();
+    await Credit.findByIdAndUpdate(id, rawData,{
+      new: true
+    });
+    revalidateTag("credits");
+    return {
+      message: "Credit updated successfully",
+      status: true,
+    }
+  } catch (error) {
+    return { message: "Error updating credit", status: false };
+  }
+}
+
 // Delete credit
 export async function deleteCredit(id: string) {
   try {
@@ -139,21 +162,21 @@ interface UpdatedCreditData {
   tookTime: string;
 }
 
-export async function updateCredit(
-  creditId: string,
-  updatedData: UpdatedCreditData
-) {
-  try {
-    // Send a PUT request using Axios
-    await axios.put(`${PUBLIC_URL}/api/credits/${creditId}`, updatedData);
+// export async function updateCredit(
+//   creditId: string,
+//   updatedData: UpdatedCreditData
+// ) {
+//   try {
+//     // Send a PUT request using Axios
+//     await axios.put(`${PUBLIC_URL}/api/credits/${creditId}`, updatedData);
 
-    return { message: "Credit updated successfully", status: true };
-  } catch (error) {
-    console.log(error);
+//     return { message: "Credit updated successfully", status: true };
+//   } catch (error) {
+//     console.log(error);
 
-    return { message: "Failed to update credit", status: false };
-  }
-}
+//     return { message: "Failed to update credit", status: false };
+//   }
+// }
 
 // HANDLE DELETE Customer
 export const DeleteCustomer = async (id: string) => {
