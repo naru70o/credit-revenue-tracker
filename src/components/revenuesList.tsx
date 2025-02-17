@@ -49,13 +49,8 @@ const RevenuesList = ({ revenueData }: { revenueData: Revenue[] }) => {
           key={revenue._id}
           className="bg-gray-300 rounded-xl w-full py-2 px-4 mt-4 relative overflow-clip"
         >
-          <div
-            className={`absolute left-0 top-0 h-full w-2 bg-[#7226ff]`}
-          ></div>
-          <div
-            //   onClick={() => handleOpen(revenue.id)}
-            className="flex justify-between items-center"
-          >
+          <div className={`absolute left-0 top-0 h-full w-2 bg-blue-500`}></div>
+          <div className="flex justify-between items-center">
             <div className="flex flex-col items-start gap-1">
               <div>{formatAmount(revenue.amount)}</div>
               <div className="cursor-pointer">
@@ -64,11 +59,13 @@ const RevenuesList = ({ revenueData }: { revenueData: Revenue[] }) => {
             </div>
             <div className="flex gap-2">
               <Trash2
+                className="cursor-pointer text-blue-500"
                 // onClick={() => handleDelete(customer._id)}
                 strokeWidth={1.5}
                 onClick={() => handleDeleteRevenue(revenue._id)}
               />
               <UserPen
+                className="cursor-pointer text-blue-500"
                 strokeWidth={1.5}
                 onClick={() =>
                   handleUpdateRevenue(revenue._id, revenue.amount, revenue.date)

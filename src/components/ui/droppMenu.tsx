@@ -41,8 +41,6 @@ export function Dropdown({ creditData }: { creditData: CreditData }) {
     setIsDialogOpen(false);
   };
 
-  console.log("Checking if this id exist", creditData._id);
-
   const handleCloseDelete = () => {
     setIsDeleteOpen(false);
   };

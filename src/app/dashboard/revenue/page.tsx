@@ -4,6 +4,7 @@ import { RevenueChart } from "@/components/revenueChart";
 import { connectiondb, Revenue } from "@/lib/database/models";
 import { formatAmount, formatDate, formatMonth, PUBLIC_URL } from "@/lib/utils";
 import { Types } from "mongoose";
+import { unstable_cache } from "next/cache";
 
 interface Revenue {
   amount: number;
@@ -11,22 +12,43 @@ interface Revenue {
   _id: string;
 }
 
-const page = async () => {
-  // Last Three revenues
-  await connectiondb();
-  const data = (await Revenue.find().sort({ date: -1 }).lean()).map((rev) => ({
-    amount: rev.amount,
-    date: formatDate(rev.date),
-    _id: (rev._id as Types.ObjectId).toString(),
-  }));
+const allRevenues = unstable_cache(
+  async () => {
+    const data = (await Revenue.find().sort({ date: -1 }).lean()).map(
+      (rev) => ({
+        amount: rev.amount,
+        date: formatDate(rev.date),
+        _id: (rev._id as Types.ObjectId).toString(),
+      })
+    );
+    return data;
+  },
+  ["revenues"],
+  { revalidate: 1000, tags: ["revenues"] }
+);
 
-  const dashboardRevenueData = (
-    await Revenue.find().sort({ date: 1 }).lean()
-  ).map((rev) => ({
-    amount: rev.amount,
-    date: rev.date,
-    _id: (rev._id as Types.ObjectId).toString,
-  }));
+const revenueChart = unstable_cache(
+  async () => {
+    const dashboardRevenueData = (
+      await Revenue.find().sort({ date: 1 }).lean()
+    ).map((rev) => ({
+      amount: rev.amount,
+      date: rev.date,
+      _id: (rev._id as Types.ObjectId).toString,
+    }));
+    return dashboardRevenueData;
+  },
+  ["revenues"],
+  {
+    revalidate: 1000,
+    tags: ["revenues"],
+  }
+);
+
+const page = async () => {
+  await connectiondb();
+  const data = await allRevenues();
+  const dashboardRevenueData = await revenueChart();
 
   //   first three revenues in the array
   const firstThreeRevenues = data.slice(0, 3);
@@ -51,7 +73,7 @@ const page = async () => {
 
       {/* Dept List Header */}
       <div className="text-center mb-4">
-        <p className="text-gray-700 text-sm">sadexdii dhaqaale u dambeeyay</p>
+        <p className="text-gray-700 text-sm">the last three ( 3 ) Revenues</p>
       </div>
 
       {/* Dept List */}

@@ -4,6 +4,7 @@ import { createCustomer } from "@/app/_actions/actions";
 import { useTransition } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import Spinner from "./ui/spinner";
 
 export default function AddPerson({
   setIsDialogOpen,
@@ -51,7 +52,13 @@ export default function AddPerson({
             disabled={isPending}
             className="mt-4 inline w-32 self-center rounded-xl"
           >
-            {isPending ? "Adding.." : "Add customer"}
+            {isPending ? (
+              <div className="flex justify-center items-center">
+                <Spinner />
+              </div>
+            ) : (
+              "Add customer"
+            )}
           </Button>
         </form>
       </div>

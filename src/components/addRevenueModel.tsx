@@ -21,9 +21,9 @@ export default function AddRevenueModel({
     <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
       <DialogContent className="sm:max-w-[425px] rounded-xl w-[90%]">
         <DialogHeader>
-          <DialogTitle>Add Customer</DialogTitle>
+          <DialogTitle>Add Your Today&apos;s Revenue</DialogTitle>
           <DialogDescription>
-            Please put the users name and number.
+            Please put the Amount and the Date.
           </DialogDescription>
         </DialogHeader>
         <AddRevenue closeDialog={closeDialog} />

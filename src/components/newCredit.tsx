@@ -27,7 +27,7 @@ export const NewCredit = ({
           Add credit
         </Button>
       </div>
-      <div className="flex flex-col justify-center items-center mt-8">
+      <div className="flex flex-col justify-center items-center">
         {isDialogOpen && (
           <AddCredit
             isDialogOpen={isDialogOpen}

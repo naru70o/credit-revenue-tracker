@@ -3,7 +3,8 @@
 import { PUBLIC_URL } from "@/lib/utils";
 import axios from "axios";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { connectiondb, Customer } from "@/lib/database/models";
+import { connectiondb, Credit, Customer, Revenue } from "@/lib/database/models";
+import { NextResponse } from "next/server";
 
 // Customers
 
@@ -38,9 +39,6 @@ export async function updateCustomerInfo(
       name: formData.get("personName"),
       phoneNumber: formData.get("phoneNumber"),
     };
-
-    // Using axios to make the PUT request
-    // await axios.put(`${PUBLIC_URL}/api/customers/${_id}`, updateData);
 
     await connectiondb();
     await Customer.findByIdAndUpdate(_id, updateData, {
@@ -77,11 +75,64 @@ export async function createCustomer(formData: FormData) {
   }
 }
 
+///////////////// Credits
+
+//  New credit
+export async function createCredit(formData: FormData, customerId: string) {
+  try {
+    const rawData = {
+      customerId,
+      personWhotaken: formData.get("personWhotaken") as string,
+      product: formData.get("product") as string,
+      amount: formData.get("amount") as string,
+      tookTime: formData.get("tookTime") as string,
+    };
+    await connectiondb();
+    await Credit.create(rawData);
+    revalidateTag("credits");
+    return {
+      message: "Credit added successfully",
+      status: true,
+    };
+  } catch (error) {
+    return { message: "Error adding credit", status: false };
+  }
+}
+
+// update credit
+export async function updateCredit(formData: FormData, id: string) {
+  try {
+    const rawData = {
+      amount: formData.get("amount") as string,
+      product: formData.get("product") as string,
+      personWhotaken: formData.get("personWhotaken") as string,
+      tookTime: formData.get("tookTime") as string,
+    };
+    await connectiondb();
+    await Credit.findByIdAndUpdate(id, rawData, {
+      new: true,
+    });
+    revalidateTag("credits");
+    return {
+      message: "Credit updated successfully",
+      status: true,
+    };
+  } catch (error) {
+    return { message: "Error updating credit", status: false };
+  }
+}
+
 // Delete credit
 export async function deleteCredit(id: string) {
   try {
-    // Using axios to make the DELETE request
-    await axios.delete(`${PUBLIC_URL}/api/credits/${id}`);
+    if (!id) {
+      return { success: false, message: "Credit id is required" };
+    }
+
+    await connectiondb();
+    await Credit.findByIdAndDelete(id);
+    revalidateTag("credits");
+
     // Return a success message
     return { success: true, message: "Credit deleted successfully" };
   } catch (error) {
@@ -94,10 +145,16 @@ export async function deleteCredit(id: string) {
 // Update credit set to paid
 export async function setCreditToPaid(id: string) {
   try {
-    // Using axios to make the PATCH request with the update payload
-    await axios.patch(`${PUBLIC_URL}/api/credits/${id}`, {
-      isPaid: true,
-    });
+    await connectiondb();
+    await Credit.findByIdAndUpdate(
+      id,
+      { isPaid: true },
+      {
+        new: true,
+      }
+    );
+
+    revalidateTag("credits");
 
     return { success: true, message: "Credit updated successfully" };
   } catch (error) {
@@ -114,29 +171,17 @@ interface UpdatedCreditData {
   tookTime: string;
 }
 
-export async function updateCredit(
-  creditId: string,
-  updatedData: UpdatedCreditData
-) {
-  try {
-    // Send a PUT request using Axios
-    await axios.put(`${PUBLIC_URL}/api/credits/${creditId}`, updatedData);
-
-    return { message: "Credit updated successfully", status: true };
-  } catch (error) {
-    console.log(error);
-
-    return { message: "Failed to update credit", status: false };
-  }
-}
-
 // HANDLE DELETE Customer
 export const DeleteCustomer = async (id: string) => {
   try {
-    // delete this customer based on this id
-    await axios.delete(`${PUBLIC_URL}/api/customers/${id}`);
-    revalidatePath("/customers");
+    await connectiondb();
 
+    if (!id) {
+      return { status: false, message: "Customer not found" };
+    }
+
+    await Customer.findByIdAndDelete(id);
+    revalidatePath("/customers");
     return { status: true, message: "Customer deleted successfully" };
   } catch (error) {
     console.log(error);
@@ -149,14 +194,34 @@ export const DeleteCustomer = async (id: string) => {
 
 // Add Revenue
 
+export async function addRevenue(formData: FormData) {
+  try {
+    await connectiondb();
+    const rowData = {
+      amount: Number(formData.get("amount")),
+      date: formData.get("date") as string,
+    };
+
+    await Revenue.create(rowData);
+    revalidateTag("revenues");
+    return { message: "Revenue added successfully" };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Failed to add the revenue" };
+  }
+}
 
 // Delete
 export async function deleteRevenue(id: string) {
   try {
-    await axios.delete(`${PUBLIC_URL}/api/revenue/${id}`);
+    if (!id) {
+      return { message: "Revenue not found", status: false };
+    }
+    await connectiondb();
+    await Revenue.findByIdAndDelete(id);
 
-    revalidateTag("revenue");
-    return { message: "Revenue deleted successfully" };
+    revalidateTag("revenues");
+    return { message: "Revenue deleted successfully", status: true };
   } catch (error) {
     console.log(error);
 
@@ -170,10 +235,18 @@ interface Revenue {
   date: string;
 }
 
-export async function updateRevenue(id: string, data: Revenue) {
+export async function updateRevenue(fromDate: FormData, id: string) {
   try {
-    await axios.put(`${PUBLIC_URL}/api/revenue/${id}`, data);
-    revalidateTag("revenue");
+    await connectiondb();
+    const rowData = {
+      amount: Number(fromDate.get("amount")),
+      date: fromDate.get("date") as string,
+    };
+
+    await Revenue.findByIdAndUpdate(id, rowData, {
+      new: true,
+    });
+    revalidateTag("revenues");
     return { success: true, message: "Revenue updated successfully" };
   } catch (error) {
     console.log(error);

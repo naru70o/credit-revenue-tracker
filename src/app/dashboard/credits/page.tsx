@@ -3,6 +3,7 @@ import DashboardToggleButtons from "@/components/dashboardToggleButtons";
 import { DeptChart } from "@/components/deptChart";
 import { formatAmount, formatDate, PUBLIC_URL } from "@/lib/utils";
 import { connectiondb, Credit } from "../../../lib/database/models";
+import { unstable_cache } from "next/cache";
 
 interface CreditData {
   _id: string;
@@ -21,15 +22,23 @@ interface ChartData {
   fill: string;
 }
 
+const credits = unstable_cache(
+  async () => {
+    const creditsData = await Credit.find()
+      .sort({
+        tookTime: -1,
+      })
+      .lean();
+
+    return creditsData as CreditData[];
+  },
+  ["credits"],
+  { revalidate: 1000, tags: ["credits"] }
+);
+
 const page = async () => {
   await connectiondb();
-  const creditsData: CreditData[] = (await Credit.find()
-    .sort({
-      tookTime: -1,
-    })
-    .lean()) as CreditData[];
-
-  console.log(typeof creditsData);
+  const creditsData = await credits();
 
   const getLastTwoMonthsTotals = (transactions: CreditData[]) => {
     const now = new Date();
@@ -71,7 +80,7 @@ const page = async () => {
 
       {/* Dept List Header */}
       <div className="text-center mb-4 mt-8">
-        <p className="text-gray-700 text-sm">sadexdii dhaqaale u dambeeyay</p>
+        <p className="text-gray-700 text-sm">the last three ( 3 ) credits </p>
       </div>
 
       {/* Dept List */}
