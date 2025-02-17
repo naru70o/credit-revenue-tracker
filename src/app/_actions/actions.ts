@@ -40,9 +40,6 @@ export async function updateCustomerInfo(
       phoneNumber: formData.get("phoneNumber"),
     };
 
-    // Using axios to make the PUT request
-    // await axios.put(`${PUBLIC_URL}/api/customers/${_id}`, updateData);
-
     await connectiondb();
     await Customer.findByIdAndUpdate(_id, updateData, {
       new: true,
@@ -78,7 +75,7 @@ export async function createCustomer(formData: FormData) {
   }
 }
 
-/////////// Credits
+///////////////// Credits
 
 //  New credit
 export async function createCredit(formData: FormData, customerId: string) {
@@ -103,23 +100,23 @@ export async function createCredit(formData: FormData, customerId: string) {
 }
 
 // update credit
-export async function updateCredit( formData: FormData,id:string) {
+export async function updateCredit(formData: FormData, id: string) {
   try {
     const rawData = {
       amount: formData.get("amount") as string,
       product: formData.get("product") as string,
       personWhotaken: formData.get("personWhotaken") as string,
       tookTime: formData.get("tookTime") as string,
-    }
+    };
     await connectiondb();
-    await Credit.findByIdAndUpdate(id, rawData,{
-      new: true
+    await Credit.findByIdAndUpdate(id, rawData, {
+      new: true,
     });
     revalidateTag("credits");
     return {
       message: "Credit updated successfully",
       status: true,
-    }
+    };
   } catch (error) {
     return { message: "Error updating credit", status: false };
   }
@@ -128,8 +125,14 @@ export async function updateCredit( formData: FormData,id:string) {
 // Delete credit
 export async function deleteCredit(id: string) {
   try {
-    // Using axios to make the DELETE request
-    await axios.delete(`${PUBLIC_URL}/api/credits/${id}`);
+    if (!id) {
+      return { success: false, message: "Credit id is required" };
+    }
+
+    await connectiondb();
+    await Credit.findByIdAndDelete(id);
+    revalidateTag("credits");
+
     // Return a success message
     return { success: true, message: "Credit deleted successfully" };
   } catch (error) {
@@ -142,10 +145,16 @@ export async function deleteCredit(id: string) {
 // Update credit set to paid
 export async function setCreditToPaid(id: string) {
   try {
-    // Using axios to make the PATCH request with the update payload
-    await axios.patch(`${PUBLIC_URL}/api/credits/${id}`, {
-      isPaid: true,
-    });
+    await connectiondb();
+    await Credit.findByIdAndUpdate(
+      id,
+      { isPaid: true },
+      {
+        new: true,
+      }
+    );
+
+    revalidateTag("credits");
 
     return { success: true, message: "Credit updated successfully" };
   } catch (error) {
@@ -162,29 +171,17 @@ interface UpdatedCreditData {
   tookTime: string;
 }
 
-// export async function updateCredit(
-//   creditId: string,
-//   updatedData: UpdatedCreditData
-// ) {
-//   try {
-//     // Send a PUT request using Axios
-//     await axios.put(`${PUBLIC_URL}/api/credits/${creditId}`, updatedData);
-
-//     return { message: "Credit updated successfully", status: true };
-//   } catch (error) {
-//     console.log(error);
-
-//     return { message: "Failed to update credit", status: false };
-//   }
-// }
-
 // HANDLE DELETE Customer
 export const DeleteCustomer = async (id: string) => {
   try {
-    // delete this customer based on this id
-    await axios.delete(`${PUBLIC_URL}/api/customers/${id}`);
-    revalidatePath("/customers");
+    await connectiondb();
 
+    if (!id) {
+      return { status: false, message: "Customer not found" };
+    }
+
+    await Customer.findByIdAndDelete(id);
+    revalidatePath("/customers");
     return { status: true, message: "Customer deleted successfully" };
   } catch (error) {
     console.log(error);

@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { DatePicker } from "./ui/datePicker";
 import { updateCredit } from "../app/_actions/actions";
+import LoadingSpinner from "./ui/loadingSpinner";
 
 interface CreditData {
   _id: string;
@@ -38,42 +39,15 @@ export default function CreditUpdateForm({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date(creditData.tookTime)
   );
-  // const [error, setError] = useState<string | null>(null);
-  // const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Handle form submission
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-  //   setError(null);
-
-  //   // Prepare the updated data
-  //   const updatedData: UpdatedCreditData = {
-  //     amount: parseFloat(amount),
-  //     product,
-  //     personWhotaken,
-  //     tookTime:
-  //       selectedDate instanceof Date
-  //         ? selectedDate.toISOString()
-  //         : selectedDate || "",
-  //   };
-
-  //   try {
-  //     // Call the server action to update the credit
-  //     await updateCredit(creditData._id, updatedData);
-  //     onhandleClose(); // Close the form after successful update
-  //   } catch (error) {
-  //     console.log(error);
-  //     setError("Failed to update credit. Please try again.");
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
+  const [pending, startTransition] = useTransition();
 
   return (
     <form
       action={async (formData: FormData) => {
-        await updateCredit(formData, creditData._id);
+        startTransition(async () => {
+          await updateCredit(formData, creditData._id);
+          onhandleClose();
+        });
       }}
       className="flex flex-col gap-3 items-center justify-center mt-4"
     >
@@ -134,8 +108,8 @@ export default function CreditUpdateForm({
         >
           Cancel
         </Button>
-        <Button type="submit" className="flex-1">
-          update
+        <Button type="submit" className="flex-1" disabled={pending}>
+          {pending ? <LoadingSpinner /> : "update"}
         </Button>
       </div>
     </form>

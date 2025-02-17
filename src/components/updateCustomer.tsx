@@ -1,9 +1,9 @@
 "use client";
-import { updateCustomerInfo } from "../app/_actions/actions";
 import React, { useTransition } from "react";
+import { updateCustomerInfo } from "../app/_actions/actions";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import Spinner from "./ui/spinner";
+import LoadingSpinner from "./ui/loadingSpinner";
 
 interface Customer {
   _id: string | undefined;
@@ -69,13 +69,7 @@ const UpdateCustomerForm = ({
         type="submit"
         className="mt-4 min-w-32 inline self-center rounded-xl"
       >
-        {isPending ? (
-          <div className="flex justify-center items-center">
-            <Spinner />
-          </div>
-        ) : (
-          "Update Customer"
-        )}
+        {isPending ? <LoadingSpinner /> : "Update Customer"}
       </Button>
     </form>
   );

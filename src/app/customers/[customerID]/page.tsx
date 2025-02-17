@@ -80,28 +80,30 @@ const Page = async ({
           </h1>
         </div>
         <NewCredit _id={_id} customerName={name} />
-        {filteredData.map((credit: CreditData) => (
-          <div
-            className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer mt-4 overflow-clip relative"
-            key={credit._id}
-          >
+        <div className="my-8">
+          {filteredData.map((credit: CreditData) => (
             <div
-              className={`absolute left-0 top-0 h-full w-2 ${
-                credit.isPaid === true ? "bg-[#5B913B]" : "bg-[#F72C5B]"
-              } `}
-            ></div>
-            <div className="flex flex-col">
-              <h1 className="font-bold text-lg">
-                {formatAmount(credit.amount)} : {credit.personWhotaken}
-              </h1>
-              <div>
-                Took {credit.product} at {formatDate(credit.tookTime)}
+              className="flex justify-between items-center bg-[#D9D9D9] rounded-xl w-full py-2 px-4 cursor-pointer mt-4 overflow-clip relative"
+              key={credit._id}
+            >
+              <div
+                className={`absolute left-0 top-0 h-full w-2 ${
+                  credit.isPaid === true ? "bg-[#5B913B]" : "bg-[#F72C5B]"
+                } `}
+              ></div>
+              <div className="flex flex-col">
+                <h1 className="font-bold text-lg">
+                  {formatAmount(credit.amount)} : {credit.personWhotaken}
+                </h1>
+                <div>
+                  Took {credit.product} at {formatDate(credit.tookTime)}
+                </div>
               </div>
-            </div>
 
-            <Dropdown creditData={credit} />
-          </div>
-        ))}
+              <Dropdown creditData={credit} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
