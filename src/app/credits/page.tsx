@@ -78,7 +78,7 @@ const page = async () => {
           </div>
         </div>
         <div className="inline-block self-end">
-          <Button className="bg-blue-500 hover:bg-blue-700">filtering</Button>
+          {/* <Button className="bg-blue-500 hover:bg-blue-700">filtering</Button> */}
         </div>
       </div>
       <Credit creditData={creditsData} customers={customersData} />
