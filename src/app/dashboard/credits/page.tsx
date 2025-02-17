@@ -39,13 +39,6 @@ const credits = unstable_cache(
 const page = async () => {
   await connectiondb();
   const creditsData = await credits();
-  // const creditsData: CreditData[] = (await Credit.find()
-  //   .sort({
-  //     tookTime: -1,
-  //   })
-  //   .lean()) as CreditData[];
-
-  console.log(typeof creditsData);
 
   const getLastTwoMonthsTotals = (transactions: CreditData[]) => {
     const now = new Date();
