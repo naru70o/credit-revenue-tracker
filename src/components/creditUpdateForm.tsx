@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { DatePicker } from "./ui/datePicker";
 import { updateCredit } from "../app/_actions/actions";
 import LoadingSpinner from "./ui/loadingSpinner";
+import toast from "react-hot-toast";
 
 interface CreditData {
   _id: string;
@@ -45,8 +46,16 @@ export default function CreditUpdateForm({
     <form
       action={async (formData: FormData) => {
         startTransition(async () => {
-          await updateCredit(formData, creditData._id);
+          const { message, status } = await updateCredit(
+            formData,
+            creditData._id
+          );
           onhandleClose();
+          if (status) {
+            toast.success(message);
+          } else {
+            toast.error(message);
+          }
         });
       }}
       className="flex flex-col gap-3 items-center justify-center mt-4"

@@ -15,11 +15,12 @@ import {
   SquareCheckBig,
   Trash,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { UpdateCredit } from "../updateCredit";
 import { AlertDialogModel } from "../AlertDialog";
 
 import { deleteCredit, setCreditToPaid } from "../../app/_actions/actions";
+import toast from "react-hot-toast";
 
 interface CreditData {
   amount: number;
@@ -36,6 +37,7 @@ export function Dropdown({ creditData }: { creditData: CreditData }) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<boolean>(false);
+  const [pending, startTransition] = useTransition();
 
   const handleClose = () => {
     setIsDialogOpen(false);
@@ -87,7 +89,16 @@ export function Dropdown({ creditData }: { creditData: CreditData }) {
           actionName="Delete"
           isDeleteOpen={isDeleteOpen}
           onHandleDeleteClose={handleCloseDelete}
-          onDeleteHandler={() => deleteCredit(creditData._id)}
+          onDeleteHandler={() =>
+            startTransition(async () => {
+              const { status, message } = await deleteCredit(creditData._id);
+              if (status) {
+                toast.success(message);
+              } else {
+                toast.error(message);
+              }
+            })
+          }
         />
       )}
 
@@ -96,7 +107,16 @@ export function Dropdown({ creditData }: { creditData: CreditData }) {
           actionName="Paid"
           isDeleteOpen={isPaid}
           onHandleDeleteClose={handlePaidOpen}
-          onDeleteHandler={() => setCreditToPaid(creditData._id)}
+          onDeleteHandler={() =>
+            startTransition(async () => {
+              const { status, message } = await setCreditToPaid(creditData._id);
+              if (status) {
+                toast.success(message);
+              } else {
+                toast.error(message);
+              }
+            })
+          }
         />
       )}
 

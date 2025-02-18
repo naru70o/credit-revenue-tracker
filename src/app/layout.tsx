@@ -1,7 +1,8 @@
-import Menu from "@/components/menu";
+import "./globals.css";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
-import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import Menu from "@/components/menu";
 const montserratfont = Montserrat({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"], // Choose desired font weights
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body
         className={`${montserratfont.variable} bg-gray-100 antialiased h-screen`}
       >
+        <Toaster />
         <main>{children}</main>
         <Menu />
       </body>

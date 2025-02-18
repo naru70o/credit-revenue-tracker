@@ -23,6 +23,24 @@ export async function getCustomers() {
   }
 }
 
+// HANDLE DELETE Customer
+export const DeleteCustomer = async (id: string) => {
+  try {
+    await connectiondb();
+
+    if (!id) {
+      return { status: false, message: "Customer not found" };
+    }
+
+    await Customer.findByIdAndDelete(id);
+    revalidatePath("/customers");
+    return { status: true, message: "Customer deleted successfully" };
+  } catch (error) {
+    console.log(error);
+    return { message: "Customer not found", status: false };
+  }
+};
+
 // Update Customer
 
 interface Customer {
@@ -47,12 +65,12 @@ export async function updateCustomerInfo(
 
     // Return a success message
     revalidatePath("/customers");
-    return { success: "Customer updated successfully", status: true };
+    return { message: "Customer updated successfully", status: true };
   } catch (error) {
     console.log(error);
 
     // Return an error message
-    return { message: "Error updating customer", status: false };
+    return { message: "Failed updating customer", status: false };
   }
 }
 
@@ -70,8 +88,10 @@ export async function createCustomer(formData: FormData) {
     await Customer.create(rawData);
 
     revalidateTag("customers");
+    return { message: "Customer added successfully", status: true };
   } catch (error) {
     console.error("Failed to create customer:", error);
+    return { message: "Failed adding customer", status: false };
   }
 }
 
@@ -95,7 +115,7 @@ export async function createCredit(formData: FormData, customerId: string) {
       status: true,
     };
   } catch (error) {
-    return { message: "Error adding credit", status: false };
+    return { message: "Failed adding credit", status: false };
   }
 }
 
@@ -118,7 +138,7 @@ export async function updateCredit(formData: FormData, id: string) {
       status: true,
     };
   } catch (error) {
-    return { message: "Error updating credit", status: false };
+    return { message: "Failed updating credit", status: false };
   }
 }
 
@@ -134,11 +154,11 @@ export async function deleteCredit(id: string) {
     revalidateTag("credits");
 
     // Return a success message
-    return { success: true, message: "Credit deleted successfully" };
+    return { status: true, message: "Credit deleted successfully" };
   } catch (error) {
     console.error(error);
     // Return an error message
-    return { success: false, message: "Failed to delete credit" };
+    return { status: false, message: "Failed to delete credit" };
   }
 }
 
@@ -156,10 +176,10 @@ export async function setCreditToPaid(id: string) {
 
     revalidateTag("credits");
 
-    return { success: true, message: "Credit updated successfully" };
+    return { status: true, message: "Credit paided successfully" };
   } catch (error) {
     console.error(error);
-    return { success: false, message: "Failed to piad the credit" };
+    return { status: false, message: "Failed to paid the credit" };
   }
 }
 
@@ -171,23 +191,6 @@ interface UpdatedCreditData {
   tookTime: string;
 }
 
-// HANDLE DELETE Customer
-export const DeleteCustomer = async (id: string) => {
-  try {
-    await connectiondb();
-
-    if (!id) {
-      return { status: false, message: "Customer not found" };
-    }
-
-    await Customer.findByIdAndDelete(id);
-    revalidatePath("/customers");
-    return { status: true, message: "Customer deleted successfully" };
-  } catch (error) {
-    console.log(error);
-    return { message: "Customer not found", status: false };
-  }
-};
 
 //////////////////////////////////
 // Revenues
@@ -204,10 +207,10 @@ export async function addRevenue(formData: FormData) {
 
     await Revenue.create(rowData);
     revalidateTag("revenues");
-    return { message: "Revenue added successfully" };
+    return { message: "Revenue added successfully" ,status: true };
   } catch (error) {
     console.error(error);
-    return { success: false, message: "Failed to add the revenue" };
+    return { status: false, message: "Failed to add the revenue" };
   }
 }
 
@@ -247,11 +250,11 @@ export async function updateRevenue(fromDate: FormData, id: string) {
       new: true,
     });
     revalidateTag("revenues");
-    return { success: true, message: "Revenue updated successfully" };
+    return { status: true, message: "Revenue updated successfully" };
   } catch (error) {
     console.log(error);
 
-    return { success: false, message: "Failed to update revenue data" };
+    return { status: false, message: "Failed to update Revenue" };
   }
 }
 

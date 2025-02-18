@@ -1,8 +1,7 @@
-import React from "react";
 import DashboardToggleButtons from "@/components/dashboardToggleButtons";
 import { RevenueChart } from "@/components/revenueChart";
 import { connectiondb, Revenue } from "@/lib/database/models";
-import { formatAmount, formatDate, formatMonth, PUBLIC_URL } from "@/lib/utils";
+import { formatAmount, formatDate, formatMonth } from "@/lib/utils";
 import { Types } from "mongoose";
 import { unstable_cache } from "next/cache";
 

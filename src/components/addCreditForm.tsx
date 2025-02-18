@@ -7,6 +7,7 @@ import { useState } from "react";
 import { createCredit } from "@/app/_actions/actions";
 import { useTransition } from "react";
 import Spinner from "./ui/spinner";
+import toast from "react-hot-toast";
 
 export const AddCreditForm = ({
   customerId,
@@ -23,8 +24,13 @@ export const AddCreditForm = ({
     <form
       action={async (formData) => {
         startTransition(async () => {
-          await createCredit(formData, customerId);
+          const { message, status } = await createCredit(formData, customerId);
           closeDialog(false);
+          if (status) {
+            toast.success(message);
+          } else {
+            toast.error(message);
+          }
         });
       }}
       className="flex flex-col gap-3 items-center justify-center mt-4 w-full"

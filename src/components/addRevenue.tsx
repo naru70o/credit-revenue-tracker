@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { DatePicker } from "./ui/datePicker";
 import { Input } from "./ui/input";
 import LoadingSpinner from "./ui/loadingSpinner";
+import toast from "react-hot-toast";
 
 export default function AddRevenue({
   closeDialog,
@@ -21,7 +22,12 @@ export default function AddRevenue({
     <form
       action={async (formData) => {
         startTransition(async () => {
-          await addRevenue(formData);
+          const { message, status } = await addRevenue(formData);
+          if (status) {
+            toast.success(message);
+          } else {
+            toast.error(message);
+          }
           closeDialog();
         });
       }}

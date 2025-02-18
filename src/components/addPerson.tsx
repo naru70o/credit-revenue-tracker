@@ -5,6 +5,7 @@ import { useTransition } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import Spinner from "./ui/spinner";
+import toast from "react-hot-toast";
 
 export default function AddPerson({
   setIsDialogOpen,
@@ -20,8 +21,13 @@ export default function AddPerson({
         <form
           action={async (formData) => {
             startTransition(async () => {
-              await createCustomer(formData);
+              const { message, status } = await createCustomer(formData);
               setIsDialogOpen(false);
+              if (status) {
+                toast.success(message);
+              } else {
+                toast.error(message);
+              }
             });
           }}
           className="flex flex-col gap-4 items-center justify-center w-full"

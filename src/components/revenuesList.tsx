@@ -1,10 +1,11 @@
 "use client";
 import { formatAmount, formatDate } from "@/lib/utils";
 import { Trash2, UserPen } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { AlertDialogModel } from "./AlertDialog";
 import { deleteRevenue } from "../app/_actions/actions";
 import { UpdateRevenueModel } from "./updateRevenueModel";
+import toast from "react-hot-toast";
 
 interface Revenue {
   amount: number;
@@ -18,6 +19,7 @@ const RevenuesList = ({ revenueData }: { revenueData: Revenue[] }) => {
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [currentRevenueToUpdate, setCurrentRevenueToUpdate] =
     useState<Revenue | null>(null);
+  const [pending, startTransition] = useTransition();
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
@@ -79,7 +81,16 @@ const RevenuesList = ({ revenueData }: { revenueData: Revenue[] }) => {
         <AlertDialogModel
           actionName="Delete"
           isDeleteOpen={isDialogOpen}
-          onDeleteHandler={() => deleteRevenue(currentRevenue)}
+          onDeleteHandler={() =>
+            startTransition(async () => {
+              const { message, status } = await deleteRevenue(currentRevenue);
+              if (status) {
+                toast.success(message);
+              } else {
+                toast.error(message);
+              }
+            })
+          }
           onHandleDeleteClose={handleCloseDialog}
         />
       )}
