@@ -7,6 +7,7 @@ import {
 } from "@/lib/database/models";
 import { formatAmount } from "@/lib/utils";
 import { Types } from "mongoose";
+import { unstable_cache } from "next/cache";
 
 interface CreditData {
   _id: string;
@@ -30,27 +31,39 @@ interface CustomerData {
   createdAt: string;
 }
 
+const credits = unstable_cache(
+  async () => {
+    const creditsData = (
+      await CreditModel.find()
+        .sort({
+          tookTime: -1,
+        })
+        .lean()
+    ).map((credit) => ({
+      amount: credit.amount,
+      customerId: (credit.customerId as Types.ObjectId).toString(),
+      isPaid: credit.isPaid,
+      personWhotaken: credit.personWhotaken,
+      product: credit.product,
+      tookTime: credit.tookTime,
+      __v: credit.__v,
+      _id: (credit._id as Types.ObjectId).toString(),
+    })) as CreditData[];
+    return creditsData;
+  },
+  ["credits"],
+  {
+    revalidate: 1000,
+    tags: ["credits"],
+  }
+);
+
 const page = async () => {
   // selecting all the credits
   await connectiondb();
 
   // fetching all the credits from the database
-  const creditsData = (
-    await CreditModel.find()
-      .sort({
-        tookTime: -1,
-      })
-      .lean()
-  ).map((credit) => ({
-    amount: credit.amount,
-    customerId: (credit.customerId as Types.ObjectId).toString(),
-    isPaid: credit.isPaid,
-    personWhotaken: credit.personWhotaken,
-    product: credit.product,
-    tookTime: credit.tookTime,
-    __v: credit.__v,
-    _id: (credit._id as Types.ObjectId).toString(),
-  })) as CreditData[];
+  const creditsData = await credits();
 
   // fetching Customers data from the database
   const customersData = (await Customer.find().lean()).map((customer) => ({
