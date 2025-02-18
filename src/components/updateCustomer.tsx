@@ -4,6 +4,7 @@ import { updateCustomerInfo } from "../app/_actions/actions";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import LoadingSpinner from "./ui/loadingSpinner";
+import toast from "react-hot-toast";
 
 interface Customer {
   _id: string | undefined;
@@ -34,9 +35,14 @@ const UpdateCustomerForm = ({
     <form
       action={async (formData: FormData) => {
         startTransition(async () => {
-          await updateCustomerInfo(formData, _id);
+          const { message, status } = await updateCustomerInfo(formData, _id);
+          if (status) {
+            toast.success(message);
+          } else {
+            toast.error(message);
+          }
+          handleCloseDialog();
         });
-        handleCloseDialog();
       }}
       className="flex flex-col gap-4 items-center justify-center w-full"
     >

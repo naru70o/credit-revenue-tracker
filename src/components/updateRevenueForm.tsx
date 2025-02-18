@@ -4,6 +4,7 @@ import { DatePicker } from "./ui/datePicker";
 import { updateRevenue } from "../app/_actions/actions";
 import { Button } from "./ui/button";
 import LoadingSpinner from "./ui/loadingSpinner";
+import toast from "react-hot-toast";
 
 interface Revenue {
   amount: number;
@@ -27,7 +28,15 @@ export default function UpdateRevenueForm({
     <form
       action={async (formData: FormData) => {
         startTransition(async () => {
-          await updateRevenue(formData, currentRevenue._id);
+          const { message, status } = await updateRevenue(
+            formData,
+            currentRevenue._id
+          );
+          if (status) {
+            toast.success(message);
+          } else {
+            toast.error(message);
+          }
           onHandleClose();
         });
       }}
