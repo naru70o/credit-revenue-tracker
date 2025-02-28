@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import Menu from "@/components/menu";
+import { ClerkProvider } from "@clerk/nextjs";
+
+
 const montserratfont = Montserrat({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"], // Choose desired font weights
