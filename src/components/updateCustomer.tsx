@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import LoadingSpinner from "./ui/loadingSpinner";
 import toast from "react-hot-toast";
+import { string } from "zod";
 
 interface Customer {
   _id: string | undefined;
@@ -30,18 +31,31 @@ const UpdateCustomerForm = ({
   );
   const [_id, setId] = React.useState<string | undefined>(currentCustomer?._id);
   const [isPending, startTransition] = useTransition();
+  const [error, setErrors] = React.useState<{
+    name?: string;
+    phoneNumber?: string;
+  }>({});
 
   return (
     <form
       action={async (formData: FormData) => {
         startTransition(async () => {
-          const { message, status } = await updateCustomerInfo(formData, _id);
-          if (status) {
-            toast.success(message);
+          const response = await updateCustomerInfo(formData, _id);
+          if (response.status) {
+            toast.success(response.message ?? "success");
+            handleCloseDialog();
+          } else if (response.errors) {
+            // Display validation errors
+            const newErrors: { name?: string; phoneNumber?: string } = {};
+            response.errors.forEach(
+              (err: { path: string; message: string }) => {
+                newErrors[err.path as "name" | "phoneNumber"] = err.message;
+              }
+            );
+            setErrors(newErrors);
           } else {
-            toast.error(message);
+            toast.error(response.message ?? "error");
           }
-          handleCloseDialog();
         });
       }}
       className="flex flex-col gap-4 items-center justify-center w-full"
@@ -58,6 +72,7 @@ const UpdateCustomerForm = ({
           required
         />
         <Input name="id" type="hidden" value={_id} />
+        {error.name && <p className="text-red-500 text-sm">{error.name}</p>}
       </div>
       {/* phone */}
       <div className="flex flex-col justify-center">
@@ -70,6 +85,7 @@ const UpdateCustomerForm = ({
           className="self-center rounded-xl"
           required
         />
+        {error.name && <p className="text-red-500 text-sm">{error.name}</p>}
       </div>
       <Button
         type="submit"

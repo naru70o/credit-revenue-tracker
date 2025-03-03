@@ -1,10 +1,10 @@
 "use server";
 
+import { connectiondb, Credit, Customer, Revenue } from "@/lib/database/models";
 import { PUBLIC_URL } from "@/lib/utils";
 import axios from "axios";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { connectiondb, Credit, Customer, Revenue } from "@/lib/database/models";
-import { NextResponse } from "next/server";
+import z from "zod";
 
 // Customers
 
@@ -43,16 +43,75 @@ export const DeleteCustomer = async (id: string) => {
 
 // Update Customer
 
-interface Customer {
-  name: string | undefined;
-  phoneNumber: string | undefined;
+const numberkeys = ["63", "67", "65"] as const;
+
+const CustomerSchema = z.object({
+  name: z.string().min(4, "Name must be at least 4 characters").max(14),
+  phoneNumber: z
+    .string()
+    .length(9, "Phone number must be exactly 9 digits")
+    .refine(
+      (phoneNumber) => numberkeys.some((key) => phoneNumber.startsWith(key)),
+      {
+        message:
+          "Phone number must start with one of the valid number keys: 63, 67, 65",
+      }
+    ),
+});
+
+// add new customer
+export async function createCustomer(formData: FormData) {
+  try {
+    const result = CustomerSchema.safeParse({
+      name: formData.get("name"),
+      phoneNumber: formData.get("phoneNumber"),
+    });
+
+    if (!result.success) {
+      return {
+        status: false,
+        errors: result.error.errors.map((err) => ({
+          path: err.path.join("."), // e.g., "name" or "phoneNumber"
+          message: err.message,
+        })),
+      };
+    }
+
+    const rawData = result.data;
+
+    // Replace with your actual DB call
+    await connectiondb();
+    await Customer.create(rawData);
+
+    revalidateTag("customers");
+    return { message: "Customer added successfully", status: true };
+  } catch (error) {
+    console.error("Failed to create customer:", error);
+    return { message: "Failed adding customer", status: false };
+  }
 }
 
+// Update customer info
 export async function updateCustomerInfo(
   formData: FormData,
   _id: string | undefined
 ) {
   try {
+    const result = CustomerSchema.safeParse({
+      name: formData.get("personName"),
+      phoneNumber: formData.get("phoneNumber"),
+    });
+
+    if (!result.success) {
+      return {
+        status: false,
+        errors: result.error.errors.map((err) => ({
+          path: err.path.join("."),
+          message: err.message,
+        })),
+      };
+    }
+
     const updateData = {
       name: formData.get("personName"),
       phoneNumber: formData.get("phoneNumber"),
@@ -71,27 +130,6 @@ export async function updateCustomerInfo(
 
     // Return an error message
     return { message: "Failed updating customer", status: false };
-  }
-}
-
-// add new customer
-export async function createCustomer(formData: FormData) {
-  try {
-    const rawData = {
-      name: formData.get("name") as string,
-      phoneNumber: formData.get("phoneNumber") as string,
-    };
-
-    // Replace with your actual DB call
-
-    await connectiondb();
-    await Customer.create(rawData);
-
-    revalidateTag("customers");
-    return { message: "Customer added successfully", status: true };
-  } catch (error) {
-    console.error("Failed to create customer:", error);
-    return { message: "Failed adding customer", status: false };
   }
 }
 

@@ -59,7 +59,6 @@ const credits = unstable_cache(
 );
 
 const page = async () => {
-  // selecting all the credits
   await connectiondb();
 
   // fetching all the credits from the database
