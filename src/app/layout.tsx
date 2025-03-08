@@ -27,9 +27,11 @@ export default function RootLayout({
       <body
         className={`${montserratfont.variable} bg-gray-100 antialiased h-screen`}
       >
-        <Toaster />
-        <main>{children}</main>
-        <Menu />
+        <ClerkProvider>
+          <Toaster />
+          <main>{children}</main>
+          <Menu />
+        </ClerkProvider>
       </body>
     </html>
   );

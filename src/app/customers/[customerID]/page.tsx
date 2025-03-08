@@ -1,9 +1,8 @@
 import { NewCredit } from "@/components/newCredit";
 import { Dropdown } from "@/components/ui/droppMenu";
 import { connectiondb, Credit, Customer } from "@/lib/database/models";
-import { formatAmount, formatDate, PUBLIC_URL } from "@/lib/utils";
+import { formatAmount, formatDate } from "@/lib/utils";
 import { Types } from "mongoose";
-import { notFound } from "next/navigation";
 
 interface CreditData {
   amount: number;
@@ -41,7 +40,6 @@ const Page = async ({
     name: customer.name,
   }));
 
-
   // selecting all the credits
   const creditsData = (
     await Credit.find()
@@ -65,10 +63,12 @@ const Page = async ({
     customerID.includes(item.customerId)
   );
 
+  // Calculating the total credits
   const totalCredits = filteredData
     .filter((credit: CreditData) => credit.isPaid === false)
     .reduce((acc: number, item: CreditData) => acc + item.amount, 0);
 
+  // Name and user id
   const [{ name, _id }] = customers || [{} as Customer];
 
   return (

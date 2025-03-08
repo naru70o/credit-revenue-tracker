@@ -43,7 +43,10 @@ const Menu = () => {
         >
           <ChartNoAxesColumnIncreasing />
         </Link>
-        <Link href="#">
+        <Link
+          href="/user"
+          className={`${currentPath === "/user" ? "text-blue-500" : ""}`}
+        >
           <CircleUser />
         </Link>
       </div>

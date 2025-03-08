@@ -2,11 +2,9 @@
 
 import React, { useState } from "react";
 
-
-
 const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-
+  
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-sm p-6 sm:bg-white rounded-lg sm:shadow-md">
