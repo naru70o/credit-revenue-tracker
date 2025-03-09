@@ -1,9 +1,11 @@
 import DashboardToggleButtons from "@/components/dashboardToggleButtons";
 import { RevenueChart } from "@/components/revenueChart";
+import { Button } from "@/components/ui/button";
 import { connectiondb, Revenue } from "@/lib/database/models";
 import { formatAmount, formatDate, formatMonth } from "@/lib/utils";
 import { Types } from "mongoose";
 import { unstable_cache } from "next/cache";
+import Link from "next/link";
 
 interface Revenue {
   amount: number;
@@ -49,8 +51,22 @@ const page = async () => {
   const data = await allRevenues();
   const dashboardRevenueData = await revenueChart();
 
-  //   first three revenues in the array
+  // first three revenues in the array
   const firstThreeRevenues = data.slice(0, 3);
+
+  if (!firstThreeRevenues.length || !dashboardRevenueData.length) {
+    return (
+      <div className="grid grid-cols-1 justify-center content-center h-screen px-4">
+        <div className="text-center text-2xl font-bold">
+          {" "}
+          There is no revenue data available.
+        </div>
+        <Button variant="default" className="mt-4">
+          <Link href="/revenue">Add new Revenue</Link>
+        </Button>
+      </div>
+    );
+  }
 
   const aggregatedData = dashboardRevenueData.reduce(
     (acc, { date, amount }) => {

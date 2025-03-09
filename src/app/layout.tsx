@@ -4,6 +4,8 @@ import { Montserrat } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import Menu from "@/components/menu";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Suspense } from "react";
+import FullSpinner from "@/components/ui/FullSpinner";
 
 
 const montserratfont = Montserrat({
@@ -27,11 +29,13 @@ export default function RootLayout({
       <body
         className={`${montserratfont.variable} bg-gray-100 antialiased h-screen`}
       >
-        <ClerkProvider>
-          <Toaster />
-          <main>{children}</main>
-          <Menu />
-        </ClerkProvider>
+        <Suspense fallback={<FullSpinner />}>
+          <ClerkProvider>
+            <Toaster />
+            <main>{children}</main>
+            <Menu />
+          </ClerkProvider>
+        </Suspense>
       </body>
     </html>
   );
