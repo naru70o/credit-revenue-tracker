@@ -3,6 +3,8 @@ import { DeptChart } from "@/components/deptChart";
 import { formatAmount, formatDate } from "@/lib/utils";
 import { unstable_cache } from "next/cache";
 import { connectiondb, Credit } from "../../../lib/database/models";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface CreditData {
   _id: string;
@@ -38,6 +40,23 @@ const credits = unstable_cache(
 const page = async () => {
   await connectiondb();
   const creditsData = await credits();
+
+  if (!creditsData.length) {
+    return (
+      <div className="grid grid-cols-1 justify-center content-center h-screen px-4">
+        <div className="text-center text-2xl font-bold">
+          {" "}
+          There is no Credits data available.
+        </div>
+        <Button variant="default" className="mt-4">
+          <Link href="/revenue">Add new Revenue</Link>
+        </Button>
+        <Button variant="default" className="mt-2">
+          <Link href="/dashboard/revenue">Revenue Dashboard</Link>
+        </Button>
+      </div>
+    );
+  }
 
   const getLastTwoMonthsTotals = (transactions: CreditData[]) => {
     const now = new Date();

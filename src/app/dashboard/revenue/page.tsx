@@ -64,6 +64,9 @@ const page = async () => {
         <Button variant="default" className="mt-4">
           <Link href="/revenue">Add new Revenue</Link>
         </Button>
+        <Button variant="default" className="mt-2">
+          <Link href="/dashboard/credits">Credits Dashboard</Link>
+        </Button>
       </div>
     );
   }
