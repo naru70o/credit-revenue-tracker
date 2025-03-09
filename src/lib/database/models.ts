@@ -39,6 +39,10 @@ const revenueSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
 });
 
+
+  // will be added a mongoose hook
+
+
 export const Revenue =
   mongoose.models.Revenue || mongoose.model("Revenue", revenueSchema);
 
