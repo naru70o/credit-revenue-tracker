@@ -1,4 +1,5 @@
 import { Credit } from "@/components/credit";
+import FilterCredits from "@/components/filterCredits";
 import { Button } from "@/components/ui/button";
 import {
   connectiondb,
@@ -31,9 +32,7 @@ interface CustomerData {
 }
 
 const page = async () => {
-  // selecting all the credits
   await connectiondb();
-
   // fetching all the credits from the database
   const creditsData = (
     await CreditModel.find()
@@ -77,9 +76,7 @@ const page = async () => {
             <div className="font-medium">{formatAmount(totalUnpaidAmount)}</div>
           </div>
         </div>
-        <div className="inline-block self-end">
-          {/* <Button className="bg-blue-500 hover:bg-blue-700">filtering</Button> */}
-        </div>
+        <FilterCredits />
       </div>
       <Credit creditData={creditsData} customers={customersData} />
     </div>
