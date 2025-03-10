@@ -31,8 +31,15 @@ interface CustomerData {
   createdAt: string;
 }
 
-const page = async () => {
+const page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
   await connectiondb();
+  const params = await searchParams;
+  console.log(params);
+
   // fetching all the credits from the database
   const creditsData = (
     await CreditModel.find()

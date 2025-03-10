@@ -1,21 +1,30 @@
-import React from 'react'
-import { Button } from './ui/button'
+"use client";
+import React from "react";
+import { Button } from "./ui/button";
 
 export default function FilterCredits() {
   return (
     <div className="flex items-center self-end">
-    <Button size="sm" className="bg-blue-500 hover:bg-blue-700">
-      unpaid
-    </Button>
+      <FilterButton>unpaid</FilterButton>
+      <FilterButton className="border-x border-x-white">Paid</FilterButton>
+      <FilterButton>highest</FilterButton>
+    </div>
+  );
+}
+
+function FilterButton({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
     <Button
       size="sm"
-      className="bg-blue-500 hover:bg-blue-700 border-x border-x-slate-100"
+      className={`bg-blue-500 hover:bg-blue-700 ${className || ""}`}
     >
-      paid
+      {children}
     </Button>
-    <Button size="sm" className="bg-blue-500 hover:bg-blue-700">
-      expensive
-    </Button>
-  </div>
-  )
+  );
 }
