@@ -37,8 +37,8 @@ const page = async ({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   await connectiondb();
-  const params = await searchParams;
-  console.log(params);
+  const { credit } = await searchParams;
+  console.log(credit);
 
   // fetching all the credits from the database
   const creditsData = (
