@@ -42,13 +42,31 @@ const page = async ({
   const filter = credit?.credit ?? "all";
   console.log(filter);
 
+  type FilterType = Record<string, boolean>;
+  let filteredCredits: FilterType = {};
+
+  let sortedCredits: { [key: string]: 1 | -1 } = { tookTime: -1 };
+
+  if (filter === "all") {
+    filteredCredits = {};
+  }
+
+  if (filter === "paid") {
+    filteredCredits = { isPaid: true };
+  }
+
+  if (filter === "unpaid") {
+    filteredCredits = { isPaid: false };
+  }
+
+  if (filter === "highest") {
+    filteredCredits = {};
+    sortedCredits = { amount: -1 };
+  }
+
   // fetching all the credits from the database
   const creditsData = (
-    await CreditModel.find()
-      .sort({
-        tookTime: -1,
-      })
-      .lean()
+    await CreditModel.find(filteredCredits).sort(sortedCredits).lean()
   ).map((credit) => ({
     amount: credit.amount,
     customerId: (credit.customerId as Types.ObjectId).toString(),
