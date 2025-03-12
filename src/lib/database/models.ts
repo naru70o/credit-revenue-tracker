@@ -39,10 +39,6 @@ const revenueSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
 });
 
-
-  // will be added a mongoose hook
-
-
 export const Revenue =
   mongoose.models.Revenue || mongoose.model("Revenue", revenueSchema);
 
@@ -51,3 +47,15 @@ export const Credit =
 
 export const Customer =
   mongoose.models.Customer || mongoose.model("Customer", customerSchema);
+
+// will be added a mongoose hook
+customerSchema.pre("findOneAndDelete", async function (next) {
+  try {
+    const _id = this.getQuery()._id;
+    await Credit.deleteMany({ customerId: _id });
+    console.log("Deleted all questions with majorId: ", _id);
+    next();
+  } catch (err: unknown) {
+    next(); 
+  }
+});

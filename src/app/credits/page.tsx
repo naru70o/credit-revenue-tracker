@@ -1,4 +1,5 @@
 import { Credit } from "@/components/credit";
+import FilterCredits from "@/components/filterCredits";
 import { Button } from "@/components/ui/button";
 import {
   connectiondb,
@@ -30,17 +31,42 @@ interface CustomerData {
   createdAt: string;
 }
 
-const page = async () => {
-  // selecting all the credits
+const page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
   await connectiondb();
+  const credit = await searchParams;
+
+  const filter = credit?.credit ?? "all";
+  console.log(filter);
+
+  type FilterType = Record<string, boolean>;
+  let filteredCredits: FilterType = {};
+
+  let sortedCredits: { [key: string]: 1 | -1 } = { tookTime: -1 };
+
+  if (filter === "all") {
+    filteredCredits = {};
+  }
+
+  if (filter === "paid") {
+    filteredCredits = { isPaid: true };
+  }
+
+  if (filter === "unpaid") {
+    filteredCredits = { isPaid: false };
+  }
+
+  if (filter === "highest") {
+    filteredCredits = {};
+    sortedCredits = { amount: -1 };
+  }
 
   // fetching all the credits from the database
   const creditsData = (
-    await CreditModel.find()
-      .sort({
-        tookTime: -1,
-      })
-      .lean()
+    await CreditModel.find(filteredCredits).sort(sortedCredits).lean()
   ).map((credit) => ({
     amount: credit.amount,
     customerId: (credit.customerId as Types.ObjectId).toString(),
@@ -77,9 +103,7 @@ const page = async () => {
             <div className="font-medium">{formatAmount(totalUnpaidAmount)}</div>
           </div>
         </div>
-        <div className="inline-block self-end">
-          {/* <Button className="bg-blue-500 hover:bg-blue-700">filtering</Button> */}
-        </div>
+        <FilterCredits />
       </div>
       <Credit creditData={creditsData} customers={customersData} />
     </div>
